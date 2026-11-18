@@ -18,7 +18,8 @@
   },
   "scripts": {
     "build": "node ../../scripts/check-built-siblings.mjs && ng-packagr -p ng-package.json -c tsconfig.lib.json",
-    "typecheck": "ngc -p tsconfig.lib.json --noEmit"
+    "typecheck": "ngc -p tsconfig.lib.json --noEmit",
+    "test": "ng test"
   },
   "dependencies": {
     "@docx-editor.dev/i18n": "^2.39.0",
@@ -30,15 +31,19 @@
     "@docx-editor.dev/core": "~2.39.0"
   },
   "devDependencies": {
+    "@angular/build": "~20.3.0",
+    "@angular/cli": "~20.3.0",
     "@angular/common": "~20.3.0",
     "@angular/compiler": "~20.3.0",
     "@angular/compiler-cli": "~20.3.0",
     "@angular/core": "~20.3.0",
     "@angular/platform-browser": "~20.3.0",
     "@docx-editor.dev/core": "workspace:*",
+    "jsdom": "^26.1.0",
     "ng-packagr": "~20.3.0",
     "rxjs": "~7.8.2",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.4"
   },
   "publishConfig": {
     "access": "public"

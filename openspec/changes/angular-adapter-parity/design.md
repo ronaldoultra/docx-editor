@@ -70,6 +70,12 @@ Angular tests run with Vitest through the Angular CLI unit-test builder (`@angul
 
 Why: the user chose Vitest. The builder compiles components the same way the app build does. Alternative: `@analogjs/vitest-angular` with a plain `vitest.config.ts`. It is the fallback if the builder is unusable with Angular 20 in this workspace (the builder is experimental in Angular 20). The first task proves one or the other.
 
+Result of task 1.1: the builder works with Angular 20.3, Vitest 3, and jsdom 26, and it runs engine layout and paint. The Analog fallback is not used. Details:
+
+- The builder needs an application build target. `packages/angular/angular.json` declares a `build-test` target (`@angular/build:application`) only for the tests.
+- The environment is jsdom, because the builder selects jsdom when no browser is configured. jsdom has no canvas, so `src/test-setup.ts` makes `getContext` return `null`, as a browser without a 2D context does. The engine handles that case.
+- The test bundle resolves `@docx-editor.dev/core` through the package exports, so it reads `packages/core/dist`. `single-engine-copy.spec.ts` asserts one copy.
+
 ### D6. A parity ledger drives the order and the removal gate
 
 `openspec/changes/angular-adapter-parity/parity-ledger.md` lists every Vue public export and every Vue test file. Each row states its Angular counterpart (export name or spec file) and a status: `todo`, `ported`, `dropped` (with a reason, such as "deprecated shell" or "Vue-only mechanism"). A small script, `scripts/check-angular-parity.mjs`, reads the Vue API snapshot and the ledger and fails when a non-deprecated Vue export or a Vue test file has no row. The Vue package can leave only when the ledger has no `todo` row.
@@ -115,5 +121,5 @@ Angular files follow the repository line caps (1000 lines). Each component keeps
 
 ## Open Questions
 
-- Which DOM environment (jsdom or happy-dom) the Angular unit-test builder uses best with the engine's layout code. The harness task decides it; the specs and tasks do not depend on the answer.
+- Resolved in D5: the Angular unit-test builder uses jsdom.
 - Whether the Angular adapter keeps the Vue export names (`DocxEditorToolbar`) or uses Angular-style names (`DocxEditorToolbarComponent`). The ledger records the chosen name per row; the tasks do not change.

@@ -21,7 +21,12 @@ test('fail-fast stops dispatch after the first failure; normal mode reports both
     for (const dir of ['scripts/test', 'packages', 'docs', 'examples', 'benchmarks']) {
       mkdirSync(join(root, dir), { recursive: true });
     }
-    for (const file of ['run-parallel.mjs', 'shard.mjs', 'output-capture.mjs']) {
+    for (const file of [
+      'run-parallel.mjs',
+      'shard.mjs',
+      'output-capture.mjs',
+      'other-runners.mjs',
+    ]) {
       copyFileSync(new URL(file, import.meta.url), join(root, 'scripts/test', file));
     }
     for (const name of ['first', 'second']) {
@@ -165,7 +170,12 @@ test.skipIf(process.platform === 'win32')(
       for (const dir of ['scripts/test', 'packages', 'docs', 'examples', 'benchmarks']) {
         mkdirSync(join(root, dir), { recursive: true });
       }
-      for (const file of ['run-parallel.mjs', 'shard.mjs', 'output-capture.mjs']) {
+      for (const file of [
+        'run-parallel.mjs',
+        'shard.mjs',
+        'output-capture.mjs',
+        'other-runners.mjs',
+      ]) {
         copyFileSync(new URL(file, import.meta.url), join(root, 'scripts/test', file));
       }
       writeFileSync(

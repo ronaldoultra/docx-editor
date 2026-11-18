@@ -11,6 +11,8 @@ root = "./packages"
 # scope are evaluated once per process, so per-file registration made the result depend on
 # file ordering.
 preload = ["./scripts/test/preload-dom.ts", "./packages/vue/test/bun-plugin-jsx.ts"]
+# The Angular specs run with Vitest (`bun run test:angular`); Bun cannot compile them.
+pathIgnorePatterns = ["angular/**", "packages/angular/**"]
 
 [install]
 # Supply-chain defense: require packages to be at least 7 days old before

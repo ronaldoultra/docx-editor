@@ -46,6 +46,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { createOutputCapture } from './output-capture.mjs';
+import { ownedByOtherRunner } from './other-runners.mjs';
 import { selectShard } from './shard.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -442,7 +443,7 @@ async function main() {
     : undefined;
   const queue = selectShard(
     SEARCH_ROOTS.flatMap((searchRoot) => discover(searchRoot)).filter(
-      (file) => !exclude.some((prefix) => file.startsWith(prefix))
+      (file) => !ownedByOtherRunner(file) && !exclude.some((prefix) => file.startsWith(prefix))
     ),
     shard,
     weights

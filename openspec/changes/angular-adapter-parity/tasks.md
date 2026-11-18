@@ -2,13 +2,13 @@
 
 ## 1. Test harness and parity ledger
 
-- [ ] 1.1 Add the Angular unit-test builder (`@angular/build:unit-test`, runner `vitest`) with an `angular.json` in `packages/angular`, and a root `test:angular` script; verify a trivial `docx-editor.component.spec.ts` that mounts `<docx-editor>` with a fixture document passes under `bun run test:angular`
-- [ ] 1.2 If task 1.1 cannot run engine layout under the builder, switch to `@analogjs/vitest-angular` with the same spec file, record the reason in `design.md` D5, and verify the same spec passes
-- [ ] 1.3 Make `scripts/test/run-parallel.mjs` and `scripts/test/changed.mjs` skip `packages/angular`, and print a `test:angular` reminder from `test:changed` when `packages/angular` or `packages/core/src/editor` changed; verify with `bun run test:changed --list` and a script test in `scripts/__tests__/`
-- [ ] 1.4 Add a spec that asserts the Angular tests load one copy of `@docx-editor.dev/core`, and verify it fails when a second copy is aliased in
-- [ ] 1.5 Write `parity-ledger.md` with one row per non-deprecated `@docx-editor.dev/vue` export and per `packages/vue/test` file, every row `todo`; verify the row count matches the API snapshot and the test directory
-- [ ] 1.6 Add `scripts/check-angular-parity.mjs` and a `check:angular-parity` script that fail on a missing ledger row or on an Angular export without a TSDoc release tag; verify with a script test that covers a missing row and a `dropped` row without a reason
-- [ ] 1.7 Add `bun run test:angular` and `bun run check:angular-parity` to the Verify list in `AGENTS.md`, and verify the commands run as written
+- [x] 1.1 Add the Angular unit-test builder (`@angular/build:unit-test`, runner `vitest`) with an `angular.json` in `packages/angular`, and a root `test:angular` script; verify a trivial `docx-editor.component.spec.ts` that mounts `<docx-editor>` with a fixture document passes under `bun run test:angular`
+- [x] 1.2 If task 1.1 cannot run engine layout under the builder, switch to `@analogjs/vitest-angular` with the same spec file, record the reason in `design.md` D5, and verify the same spec passes (not needed: task 1.1 runs engine layout under the builder; see D5)
+- [x] 1.3 Make `scripts/test/run-parallel.mjs` and `scripts/test/changed.mjs` skip `packages/angular`, and print a `test:angular` reminder from `test:changed` when `packages/angular` or `packages/core/src/editor` changed; verify with `bun run test:changed --list` and a script test in `scripts/__tests__/`
+- [x] 1.4 Add a spec that asserts the Angular tests load one copy of `@docx-editor.dev/core`, and verify it fails when a second copy is aliased in
+- [x] 1.5 Write `parity-ledger.md` with one row per non-deprecated `@docx-editor.dev/vue` export and per `packages/vue/test` file, every row `todo`; verify the row count matches the API snapshot and the test directory
+- [x] 1.6 Add `scripts/check-angular-parity.mjs` and a `check:angular-parity` script that fail on a missing ledger row or on an Angular export without a TSDoc release tag; verify with a script test that covers a missing row and a `dropped` row without a reason
+- [x] 1.7 Add `bun run test:angular` and `bun run check:angular-parity` to the Verify list in `AGENTS.md`, and verify the commands run as written
 
 ## 2. Base layer
 

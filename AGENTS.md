@@ -78,10 +78,15 @@ The package compiles with its own TypeScript 5.9, because Angular 20 does not su
 bun run typecheck
 bun run lint
 bun run test
+bun run test:angular
 bun run api:check
+bun run check:angular-parity
 bun run i18n:validate
 openspec validate typed-ooxml-paragraph-editor --strict
 ```
+
+- `bun run test:angular` runs the Angular specs (`packages/angular/src/**/*.spec.ts`) with Vitest through the Angular unit-test builder, in jsdom. Bun cannot compile Angular components, so `bun run test` and `bun run test:changed` skip `packages/angular`. The specs read `@docx-editor.dev/core` from its `dist`, so run `bun run build:packages` first after a core change. `bun run test:changed` prints a reminder when a change touches `packages/angular` or `packages/core/src/editor`.
+- `bun run check:angular-parity` checks `openspec/changes/angular-adapter-parity/parity-ledger.md` against the Vue API snapshot and test files, and checks that each Angular export has a TSDoc release tag.
 
 - `bun run lint` runs oxlint with `.oxlintrc.json`. Its errors are the `max-lines` caps (1000 lines for most files, per-file caps up to 3500 for the handful already past it) and the repository rules in `scripts/oxlint/docx-rules.mjs` (HTML-from-strings sinks in `packages/*/src` non-test code, global `@keyframes` names, varargs array spread in `core/src/{store,layout}`, raw Word compatibility-mode comparisons outside `core/src/layout/compatibility/`) plus the framework-isolation `no-restricted-imports`. Nothing else catches the caps, so adding to a large file passes typecheck and the whole suite. Extract; do not raise the cap — `scripts/check-max-lines-caps.mjs` also fails a cap that drifts more than 150 lines above its file. `scripts/__tests__/oxlint-rules.test.ts` keeps the repository rules firing; extend it when you add one. Lint covers `examples/*/src` as well as `packages/*/src` — the examples hit the same line caps.
 - `bun run test` shards the suite one process per file across a worker pool (`scripts/test/run-parallel.mjs`, `--jobs N` to pin the width). `bun test` still works and is the one to reach for when you want a single file, `-t`, or `--watch`; `bun run test:serial` is the whole suite the old way.

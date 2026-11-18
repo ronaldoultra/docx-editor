@@ -18,13 +18,19 @@ import type { DocumentChange } from '@docx-editor.dev/core/contracts/editor';
 import { createDocxEditor, type DocxEditorInstance } from '@docx-editor.dev/core/editor';
 import en from '@docx-editor.dev/i18n/en';
 
-/** The DOCX bytes that `<docx-editor>` accepts. */
+/**
+ * The DOCX bytes that `<docx-editor>` accepts.
+ *
+ * @public
+ */
 export type DocxEditorDocument = ArrayBuffer | Uint8Array;
 
 /**
  * The host editing mode. `'edit'` allows text edits. `'view'` shows the pages read-only.
  * The engine also has a `'suggesting'` mode, which needs the review module, so this
  * component does not offer it.
+ *
+ * @public
  */
 export type DocxEditorMode = 'edit' | 'view';
 
@@ -40,6 +46,8 @@ export type DocxEditorMode = 'edit' | 'view';
  * ```html
  * <docx-editor [document]="bytes()" mode="edit" (change)="dirty.set(true)" />
  * ```
+ *
+ * @public
  */
 @Component({
   selector: 'docx-editor',

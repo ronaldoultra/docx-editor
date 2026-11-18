@@ -29,6 +29,7 @@ import {
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { affectsAngularTests, ownedByOtherRunner } from './other-runners.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SEARCH_ROOTS = ['packages', 'scripts', 'examples', 'e2e'];
@@ -186,9 +187,19 @@ export function selectTests(changed, files, reverse, read) {
     for (const importer of reverse.get(node) ?? []) queue.push(importer);
   }
   const tests = [...affected]
-    .filter((file) => TEST_FILE.test(file) && SUITE_ROOTS.test(file))
+    .filter((file) => TEST_FILE.test(file) && SUITE_ROOTS.test(file) && !ownedByOtherRunner(file))
     .sort();
   return { all: false, tests };
+}
+
+/** The note that names `bun run test:angular`, or null when no changed file affects it. */
+export function angularReminder(changed) {
+  const touched = changed.filter(affectsAngularTests);
+  if (touched.length === 0) return null;
+  return (
+    `${touched.length} changed files can affect the Angular specs, which Bun does not run. ` +
+    'Also run `bun run test:angular`.'
+  );
 }
 
 function git(...args) {
@@ -242,6 +253,8 @@ function main() {
   };
   const selection = selectTests(changed, files, importers(files, read), read);
   const runner = join(ROOT, 'scripts/test/run-parallel.mjs');
+  const reminder = angularReminder(changed);
+  if (reminder) console.log(reminder);
 
   if (selection.all) {
     console.log(`Running the whole suite: ${selection.reason}.`);
