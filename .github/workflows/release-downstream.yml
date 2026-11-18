@@ -54,7 +54,7 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: scripts/collaboration
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
       # A sent dispatch is not a finished update. This passes only when the site's own sync
