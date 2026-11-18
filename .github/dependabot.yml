@@ -23,8 +23,6 @@ version: 2
 updates:
   - package-ecosystem: 'bun'
     directory: '/'
-    exclude-paths:
-      - 'examples/**'
     schedule:
       interval: 'weekly'
       day: 'monday'
@@ -40,6 +38,11 @@ updates:
       - dependency-name: 'typescript'
         update-types: ['version-update:semver-major']
       - dependency-name: 'tailwindcss'
+        update-types: ['version-update:semver-major']
+      # The Angular adapter supports Angular 19 and 20. A new major is upgrade work.
+      - dependency-name: '@angular/*'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'ng-packagr'
         update-types: ['version-update:semver-major']
 
   - package-ecosystem: 'github-actions'

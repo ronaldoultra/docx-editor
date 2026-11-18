@@ -141,6 +141,36 @@
       "files": ["packages/vue/src/**/*.tsx"],
       "rules": { "docx/vue-function-slots": "error" }
     },
+    // Angular adapter: no React or Vue imports, and none of React's hook rules (Angular's
+    // `input()`, `output()`, and `viewChild()` are not hooks).
+    {
+      "files": ["packages/angular/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "react",
+                  "react/*",
+                  "react-dom",
+                  "react-dom/*",
+                  "vue",
+                  "vue/*",
+                  "@vue/*",
+                  "@docx-editor.dev/vue",
+                  "@docx-editor.dev/vue/*"
+                ],
+                "message": "Angular adapter files cannot import React or Vue. Use @docx-editor.dev/core for shared logic."
+              }
+            ]
+          }
+        ],
+        "react/rules-of-hooks": "off",
+        "react/exhaustive-deps": "off"
+      }
+    },
 
     // Host window (#1312): the editor can be mounted in a pop-out window or an iframe, and can
     // move between windows while mounted. Focus, selection, scroll, resize, pointer release,
@@ -151,7 +181,8 @@
       "files": [
         "packages/core/src/editor/**/*.ts",
         "packages/core/src/output/**/*.ts",
-        "packages/vue/src/**/*.{ts,tsx}"
+        "packages/vue/src/**/*.{ts,tsx}",
+        "packages/angular/src/**/*.ts"
       ],
       "rules": {
         "no-restricted-globals": [

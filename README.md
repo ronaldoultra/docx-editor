@@ -6,6 +6,7 @@ This repository is a fork of [eigenpal/docx-editor](https://github.com/eigenpal/
 
 | Package | Description |
 | --- | --- |
+| [`packages/angular`](packages/angular) | The Angular component `<docx-editor>`: load, show pages, edit text, and save. It has no toolbar, menus, or dialogs. |
 | [`packages/core`](packages/core) | The engine: OOXML read and write, the document tree, layout, paint, and editing. It has no framework dependency. |
 | [`packages/i18n`](packages/i18n) | Interface strings and locale types. |
 | [`packages/fonts`](packages/fonts) | Open-licensed substitutes for common DOCX default fonts. |
@@ -26,6 +27,26 @@ bun run test
 ```
 
 To run only the engine tests, pass the `core` test files to the test runner, or run `bun test packages/core`.
+
+## Angular example
+
+The example in [`examples/angular`](examples/angular) opens a `.docx` file, edits it, and downloads the result. Build the packages, then start it:
+
+```bash
+bun run build:packages
+bun run dev:angular
+```
+
+Open `http://localhost:4200/`. Add `?zone` to the URL to start the app with zone.js. Without it, the app uses zoneless change detection.
+
+The browser tests for the example use Playwright:
+
+```bash
+bun run --filter './examples/angular' build
+bun run test:e2e:angular
+```
+
+To use an installed Google Chrome instead of the Playwright Chromium download, set `PLAYWRIGHT_CHANNEL=chrome`.
 
 ## Translations
 

@@ -1,5 +1,5 @@
-// Adapter authority checks (interactive-paginated-editing task 1.4). Proves React and
-// Vue remain thin hosts: no ProseMirror imports, no document-geometry derivation, and
+// Adapter authority checks (interactive-paginated-editing task 1.4). Proves the Vue and
+// Angular adapters remain thin hosts: no ProseMirror imports, no document-geometry derivation, and
 // no bypass of the public Editor facade (`createDocxEditor` from the composition root).
 
 import { describe, expect, test } from 'bun:test';
@@ -10,7 +10,10 @@ import { PACKAGES_ROOT } from './lane-paths.ts';
 
 const PACKAGES_DIR = PACKAGES_ROOT;
 
-const ADAPTERS = [{ name: '@docx-editor.dev/vue', dir: 'vue' }] as const;
+const ADAPTERS = [
+  { name: '@docx-editor.dev/vue', dir: 'vue' },
+  { name: '@docx-editor.dev/angular', dir: 'angular' },
+] as const;
 
 /** Runtime/package.json deps adapters must never declare. */
 const FORBIDDEN_PACKAGE_ROOTS = [

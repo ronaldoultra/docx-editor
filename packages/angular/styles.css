@@ -1,0 +1,15 @@
+/* Styles for <docx-editor>.
+   The engine stylesheet in @docx-editor.dev/core is the only source of the page,
+   caret, and selection styles. This file adds no rules to the pages. It only
+   sizes the component so that its viewport scrolls the stacked pages. */
+@import '@docx-editor.dev/core/styles/editor.css';
+
+docx-editor {
+  display: block;
+  position: relative;
+  min-height: 0;
+}
+
+docx-editor > .docx-editor__scroll-container {
+  height: 100%;
+}

@@ -101,6 +101,14 @@ const FILES: Record<string, string> = {
     "export { jsx } from 'react/jsx-runtime';",
     '',
   ].join('\n'),
+  // The Angular adapter imports neither React nor Vue.
+  'packages/angular/src/sample.ts': [
+    "import { ref } from 'vue';",
+    "import { useState } from 'react';",
+    "export const load = () => import('@docx-editor.dev/vue');",
+    'export { ref, useState };',
+    '',
+  ].join('\n'),
   // Vue adapter tests are checked for sinks too.
   'packages/vue/src/__tests__/sample.test.ts': `${PRELUDE}\n${SINKS}\n`,
   // A single-file component: the JavaScript plugin runs on its script block.
@@ -145,6 +153,7 @@ const FILES: Record<string, string> = {
   // Editor DOM code reads the window it is mounted in, never the script's globals; tests may.
   'packages/core/src/editor/realm-sample.ts': `${HOST_REALM}\n`,
   'packages/vue/src/realm-sample.ts': `${HOST_REALM}\n`,
+  'packages/angular/src/realm-sample.ts': `${HOST_REALM}\n`,
   'packages/other/src/__tests__/realm-sample.test.ts': `${HOST_REALM}\n`,
   // The engine lanes are DOM-free and out of the rule's scope.
   'packages/core/src/layout/realm-sample.ts': `${HOST_REALM}\n`,
@@ -242,6 +251,10 @@ test('every banned shape is reported where the configuration applies it, and now
       'packages/core/src/layout/long.ts:1001 eslint(max-lines)',
       ...realmLines('packages/core/src/editor/realm-sample.ts'),
       ...realmLines('packages/vue/src/realm-sample.ts'),
+      ...realmLines('packages/angular/src/realm-sample.ts'),
+      'packages/angular/src/sample.ts:1 ' + restrictedImport,
+      'packages/angular/src/sample.ts:2 ' + restrictedImport,
+      'packages/angular/src/sample.ts:3 ' + restrictedImport,
       `packages/vue/src/slots-sample.tsx:4 ${vueSlots}`,
       `packages/vue/src/slots-sample.tsx:5 ${vueSlots}`,
       ...rawModeLines('packages/core/src/layout/compat-sample.ts'),

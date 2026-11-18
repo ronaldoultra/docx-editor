@@ -136,3 +136,6 @@ packages/*/.test-dist-*/
 
 # Local PDF exporter rendering checks.
 .cache/pdf/
+
+# Angular CLI cache
+.angular/

@@ -78,3 +78,30 @@ jobs:
         run: bash scripts/ci/install-dependencies.sh
       - name: Unit tests
         run: bun run test
+
+  angular:
+    name: Angular example in a browser
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+          no-cache: true
+      - name: Install dependencies
+        run: bash scripts/ci/install-dependencies.sh
+      - name: Build packages
+        run: bun run build:packages
+      - name: Build the example
+        run: bun run --filter './examples/angular' build
+      - name: Install Chromium
+        run: bunx playwright install --with-deps chromium
+      - name: Browser tests
+        run: bun run test:e2e:angular

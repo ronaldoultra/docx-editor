@@ -30,6 +30,7 @@ One engine. Thin chrome on top.
 
 | Package | What | Status |
 | --- | --- | --- |
+| `angular` | The Angular adapter: one standalone `<docx-editor>` component (load, pages, text editing, save). Built with `ng-packagr`. | publishable |
 | `core` | **The engine.** `store/` (canonical tree, ops, OPC read/write), `layout/` (DOM-free), `output/` (paint), `editor/` (facade, surface, chrome registry), `contracts/`, `binding/`, `automation/` | published |
 | `i18n` | Shared strings | published |
 | `fonts` | Metric-compatible substitutes for Word's defaults | published |
@@ -64,6 +65,12 @@ bytes → readOoxmlPackage (bounded OPC/XML) → canonical OoxmlNode tree per pa
 - **`createDocxEditor`** (`editor/docx-editor.ts`) — the full `Editor` contract over the surface; unimplemented reads return typed empty values. `snapshot()` is version-cached: same reference until state moves, sub-objects reference-stable (`useSyncExternalStore` contract), `perf` outside it. `attach(el)`/`detach()` split creation from mounting; `detach()` parks the live surface and `attach(el)` moves it, keeping undo, selection and collaboration, even into another window.
 - **Host window** (`editor/host-realm.ts`) — the editor can mount in a pop-out window or an iframe and move between windows. DOM code resolves its document and window from a node it owns (`hostDocumentOf`/`hostWindowOf`, `editorHostWindow(editor)`), at use time, never from script globals; `instanceof` a DOM constructor is false across windows. Long-lived document/window listeners go through `surface-host-listeners.ts` so a move rebinds them. `no-restricted-globals` and `docx/no-cross-realm-instanceof` enforce it; write `globalThis.x` only where any window will do.
 - **Chrome registry** (`editor/chrome-controls.ts`) — `CHROME_GROUPS` is the toolbar taxonomy; `ChromeSlotId` (`text.bold`, `font.family`, …) is public API, so renames are breaking. `commandForSlot`/`commandForSlotValue` is the command table; `toolbarCommandState`/`runToolbarCommand` give shared can-before-exec. `ChromeControlState` says HOW a control dispatches (`command`/`value`/`save`), never whether it is enabled — enabled state has exactly one source, `toolbarCommandState`. Unwired slots render disabled with the engine's reason.
+
+## Angular adapter
+
+`packages/angular` holds one standalone, `OnPush`, signal-based component. It creates the engine with `createDocxEditor`, attaches it to its own surface element, and runs it outside the Angular zone. Only the `change` output enters the zone again. It must work with and without zone.js. The component owns no editing state and never imports ProseMirror or private engine lanes (`adapter-authority.test.ts` checks this).
+
+The package compiles with its own TypeScript 5.9, because Angular 20 does not support TypeScript 6 or 7. The example in `examples/angular` reads the package from `packages/angular/dist`, so run `bun run build:packages` first. Browser tests: `bun run test:e2e:angular` after an example build.
 
 ## Verify
 
