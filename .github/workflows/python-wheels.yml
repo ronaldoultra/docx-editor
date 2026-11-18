@@ -92,7 +92,7 @@ jobs:
       - name: Build wheel
         working-directory: python/docx-to-markdown
         run: uv build --wheel
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: wheel-${{ matrix.tag }}
           path: python/docx-to-markdown/dist/*.whl
