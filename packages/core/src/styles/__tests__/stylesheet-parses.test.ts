@@ -13,11 +13,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import postcss from 'postcss';
 
-const STYLESHEETS = [
-  'packages/core/src/styles/editor.css',
-  'packages/react/src/styles/editor.css',
-  'packages/vue/src/styles/editor.css',
-];
+const STYLESHEETS = ['packages/core/src/styles/editor.css', 'packages/vue/src/styles/editor.css'];
 
 const repositoryRoot = resolve(import.meta.dir, '../../../../..');
 

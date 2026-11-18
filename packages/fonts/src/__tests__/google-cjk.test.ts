@@ -6,17 +6,11 @@
 // - every face is pinned to one revision and carries its hash
 
 import { describe, expect, test } from 'bun:test';
-import type { CjkFontLoading as PackagedCjkFontLoading } from '../../../fonts-cjk/src/browser.ts';
-import {
-  CJK_SUBSTITUTED_FAMILIES,
-  LOCALIZED_CJK_FAMILIES,
-} from '../../../fonts-cjk/src/families.ts';
-import { GOOGLE_CJK_FACES, googleCjkFaceFor } from '../google-cjk.ts';
+import { GOOGLE_CJK_FACES } from '../google-cjk.ts';
 import {
   GOOGLE_FONT_CATALOG,
   GOOGLE_FONT_FAMILIES,
   googleFonts,
-  type CjkFontLoading,
   type GoogleFontsFragment,
   type GoogleFontsOptions,
 } from '../google-fonts.ts';
@@ -46,19 +40,7 @@ const resolve = (
 const families = (fragment: GoogleFontsFragment | undefined) =>
   (fragment?.sources ?? []).map((source) => source.request.family).sort();
 
-// The two packages declare the same loading type without depending on each other; this fails
-// to compile if one drifts.
-const sameLoadingType: [CjkFontLoading] extends [PackagedCjkFontLoading]
-  ? [PackagedCjkFontLoading] extends [CjkFontLoading]
-    ? true
-    : false
-  : false = true;
-
 describe('googleFonts cjk', () => {
-  test('declares the same loading type as fonts-cjk', () => {
-    expect(sameLoadingType).toBe(true);
-  });
-
   test('pins every regional face to one revision, with its hash', () => {
     expect(GOOGLE_CJK_FACES.map((face) => face.family)).toEqual([
       'Noto Sans JP',
@@ -173,11 +155,6 @@ describe('googleFonts cjk', () => {
   });
 });
 
-test('serves every East Asian family the packaged CJK resolver knows', () => {
-  const names = [...CJK_SUBSTITUTED_FAMILIES, ...LOCALIZED_CJK_FAMILIES.keys()];
-  expect(names.filter((name) => googleCjkFaceFor(name) === undefined)).toEqual([]);
-});
-
 test('a regional face an earlier origin paints is not downloaded again', async () => {
   const { fetcher, requested } = fakeFetcher();
   const fragment = await googleFonts({ fetcher, cjk: { loading: 'wait' } })({
@@ -219,8 +196,6 @@ test('a font pick tells the families this package serves apart by script', async
   expect(latin.filter((family) => isEastAsianFontFamily(family))).toEqual([]);
   const eastAsian = [
     ...GOOGLE_CJK_FACES.map((face) => face.family),
-    ...CJK_SUBSTITUTED_FAMILIES,
-    ...LOCALIZED_CJK_FAMILIES.keys(),
     'M PLUS 1p',
     'Noto Sans CJK JP',
     'Noto Sans Mono CJK SC',

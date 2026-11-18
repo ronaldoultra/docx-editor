@@ -10,7 +10,7 @@ import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
 import { createDocxEditor } from '../docx-editor.ts';
 import { toolbarCommandState } from '../toolbar-commands.ts';
 import { trackedDocx, selectCellRectangle } from './paginated-surface-fixtures.ts';
-import { reviewModule } from '../../../../pro/src/review/review-module.ts';
+import { stubReviewModule } from './review-test-module.ts';
 import { addComment, TreeDocumentStore, readOoxmlPackage } from '../../store/index.ts';
 
 const cleanups: (() => void)[] = [];
@@ -42,7 +42,7 @@ function mount(bytes: Uint8Array) {
     container,
     document: bytes,
     author: 'Reviewer',
-    modules: [reviewModule()],
+    modules: [stubReviewModule()],
   });
   cleanups.push(() => {
     editor.destroy();
@@ -181,39 +181,6 @@ test('forms keep Tab navigation and valid field filling', () => {
   expect(surface.state().selection.head.offset).toBeLessThanOrEqual(12);
   expect(editor.exec({ type: 'insertText', text: 'X' })).toEqual({ ok: true, changed: true });
   expect(surface.session.bodyText()).toContain('X');
-});
-
-test('comments-only supports the complete comment lifecycle, undo, redo and reopen', async () => {
-  const { editor, select } = mount(fixture('comments'));
-  select(0, 3);
-  expect(editor.snapshot().editingMode).toBe('editing');
-  expect(editor.setEditingMode('suggesting')).toMatchObject({ ok: false, code: 'locked' });
-  expect(editor.addComment('Root')).toEqual({ ok: true, changed: true });
-  let key = editor.getReviewItems()[0]!.key;
-  expect(editor.replyToReviewItem(key, 'Reply')).toEqual({ ok: true, changed: true });
-  expect(editor.setCommentText(key, 'Root, edited')).toEqual({ ok: true, changed: true });
-  expect(editor.exec({ type: 'undo' })).toEqual({ ok: true, changed: true });
-  expect(editor.getReviewItems()[0]!.text).toBe('Root');
-  expect(editor.exec({ type: 'redo' })).toEqual({ ok: true, changed: true });
-  expect(editor.getReviewItems()[0]!.text).toBe('Root, edited');
-  expect(editor.setCommentResolved(key, true)).toEqual({ ok: true, changed: true });
-  expect(
-    editor
-      .getReviewItems()
-      .filter((item) => item.kind === 'comment')
-      .every((item) => item.resolved)
-  ).toBe(true);
-  expect(editor.setCommentResolved(key, false)).toEqual({ ok: true, changed: true });
-  const saved = await editor.save();
-  editor.load(saved);
-  key = editor.getReviewItems().find((item) => item.kind === 'comment' && !item.parentId)!.key;
-  expect(editor.deleteReviewItem(key)).toEqual({ ok: true, changed: true });
-  expect(editor.getReviewItems()).toHaveLength(0);
-  expect(editor.exec({ type: 'undo' })).toEqual({ ok: true, changed: true });
-  expect(editor.getReviewItems()).toHaveLength(2);
-  expect(editor.exec({ type: 'redo' })).toEqual({ ok: true, changed: true });
-  expect(editor.getReviewItems()).toHaveLength(0);
-  expect(editor.surface!.session.bodyText()).toBe('tracked');
 });
 
 test('comments-only never grants a generic package callback permission', () => {

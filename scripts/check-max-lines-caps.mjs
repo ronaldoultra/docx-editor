@@ -168,16 +168,11 @@ if (globalCap === undefined) failures.push('no global max-lines cap for **/*.{ts
 /** The directories `bun run lint` passes to oxlint that can hold `.vue` files. */
 function lintedDirectories() {
   const children = (parent, child) =>
-    readdirSync(join(root, parent), { withFileTypes: true })
+    (existsSync(join(root, parent)) ? readdirSync(join(root, parent), { withFileTypes: true }) : [])
       .filter((entry) => entry.isDirectory())
       .map((entry) => join(root, parent, entry.name, child))
       .filter((directory) => existsSync(directory));
-  return [
-    ...children('packages', 'src'),
-    ...children('examples', 'src'),
-    ...children('examples', 'app'),
-    join(root, 'examples', 'shared'),
-  ];
+  return [...children('packages', 'src'), ...children('examples', 'src')];
 }
 
 let vueChecked = 0;

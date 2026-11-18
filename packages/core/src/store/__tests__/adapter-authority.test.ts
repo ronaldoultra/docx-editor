@@ -10,10 +10,7 @@ import { PACKAGES_ROOT } from './lane-paths.ts';
 
 const PACKAGES_DIR = PACKAGES_ROOT;
 
-const ADAPTERS = [
-  { name: '@docx-editor.dev/react', dir: 'react' },
-  { name: '@docx-editor.dev/vue', dir: 'vue' },
-] as const;
+const ADAPTERS = [{ name: '@docx-editor.dev/vue', dir: 'vue' }] as const;
 
 /** Runtime/package.json deps adapters must never declare. */
 const FORBIDDEN_PACKAGE_ROOTS = [

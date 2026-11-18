@@ -348,7 +348,7 @@ describe('history, custom nodes, shape, and font messages', () => {
 describe('codes and hints', () => {
   test('every public code has an anchor in the diagnostics guide', async () => {
     const guide = await Bun.file(
-      new URL('../../../../../docs/site/content/guides/diagnostics.mdx', import.meta.url)
+      new URL('../../../../../docs/guides/diagnostics.mdx', import.meta.url)
     ).text();
     const missing = diagnosticCodes().filter(
       (code) => !guide.includes(`<a id="${diagnosticAnchor(code)}" />`)

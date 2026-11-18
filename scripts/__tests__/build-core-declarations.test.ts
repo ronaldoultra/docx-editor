@@ -59,42 +59,23 @@ test('an import keeps its module kind when it resolves to a declaration file', (
 });
 
 test('declaration builds drop sibling source paths and keep local aliases', () => {
-  const react = declarationCompilerOptions(
-    new URL('../../packages/react/tsup.config.ts', import.meta.url)
+  // Vue reads core and i18n as siblings, so it reads both from dist.
+  const vue = declarationCompilerOptions(
+    new URL('../../packages/vue/tsup.config.ts', import.meta.url)
   );
-  expect(Object.keys(react.paths)).toEqual(['@/*']);
-  const pro = declarationCompilerOptions(
-    new URL('../../packages/pro/tsup.config.ts', import.meta.url),
-    { jsx: 'preserve' }
+  expect(vue.paths).toEqual({});
+  // Fonts has core only as a development dependency, so it keeps core's source paths.
+  const fonts = declarationCompilerOptions(
+    new URL('../../packages/fonts/tsup.config.ts', import.meta.url)
   );
-  // Pro keeps its test-only editor-api paths; it reads core, react, and vue from dist.
-  expect(pro).toEqual({
-    jsx: 'preserve',
-    paths: {
-      '@docx-editor.dev/editor-api': ['../editor-api/src/index.ts'],
-      '@docx-editor.dev/editor-api/agent': ['../editor-api/src/agent.ts'],
-      '@docx-editor.dev/editor-api/browser': ['../editor-api/src/browser.ts'],
-    },
-    pathsBase: fileURLToPath(new URL('../../packages/pro', import.meta.url)),
-  });
-  const editorApi = declarationCompilerOptions(
-    new URL('../../packages/editor-api/tsup.config.ts', import.meta.url)
-  );
-  expect(
-    Object.keys(editorApi.paths).every((key) => !key.startsWith('@docx-editor.dev/core'))
-  ).toBe(true);
-  expect(Object.keys(editorApi.paths)).toContain('@docx-editor.dev/editor-api');
+  expect(Object.keys(fonts.paths)).toContain('@docx-editor.dev/core');
 });
 
 test('a package checks every sibling it reads, including those behind core', () => {
   const siblings = (name: string) =>
-    [...siblingsOf(new URL(`../../packages/${name}`, import.meta.url).pathname).keys()].sort();
-  expect(siblings('editor-api')).toEqual(['@docx-editor.dev/core', '@docx-editor.dev/i18n']);
-  expect(siblings('pro')).toEqual([
-    '@docx-editor.dev/core',
-    '@docx-editor.dev/i18n',
-    '@docx-editor.dev/react',
-    '@docx-editor.dev/vue',
-  ]);
+    [
+      ...siblingsOf(fileURLToPath(new URL(`../../packages/${name}`, import.meta.url))).keys(),
+    ].sort();
+  expect(siblings('vue')).toEqual(['@docx-editor.dev/core', '@docx-editor.dev/i18n']);
   expect(siblings('fonts')).toEqual([]);
 });

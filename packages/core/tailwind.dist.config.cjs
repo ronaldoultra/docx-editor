@@ -24,9 +24,5 @@ module.exports = {
   important: '.docx-editor',
   corePlugins: { preflight: false },
   experimental: { optimizeUniversalDefaults: true },
-  content: [
-    path.join(__dirname, '../react/src/**/*.{ts,tsx}'),
-    path.join(__dirname, '../pro/src/**/*.{ts,tsx}'),
-    path.join(__dirname, '../vue/src/**/*.{ts,vue}'),
-  ],
+  content: [path.join(__dirname, '../vue/src/**/*.{ts,vue}')],
 };

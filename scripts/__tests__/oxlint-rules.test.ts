@@ -83,9 +83,10 @@ const FILES: Record<string, string> = {
   'packages/core/src/store/__tests__/sample.test.ts': `${PRELUDE}\n${SINKS}\n${SPREADS}\n`,
   // Outside the engine lanes, spreads are allowed.
   'packages/core/src/editor/sample.ts': `${PRELUDE}\n${SPREADS}\n`,
-  // Adapters check their tests for sinks too (parity with the ESLint configuration).
-  'packages/react/src/__tests__/sample.test.ts': `${PRELUDE}\n${SINKS}\n`,
-  'packages/react/src/sample.ts': [
+  // A package without its own block: its tests are exempt from the sink rules, and it may
+  // import any framework.
+  'packages/other/src/__tests__/sample.test.ts': `${PRELUDE}\n${SINKS}\n`,
+  'packages/other/src/sample.ts': [
     "import { ref } from 'vue';",
     "export const load = () => import('@docx-editor.dev/vue');",
     'export { ref };',
@@ -97,21 +98,6 @@ const FILES: Record<string, string> = {
     "import { createRoot } from 'react-dom/client';",
     "export const load = () => import('react-dom/client');",
     'export { useState, createRoot };',
-    "export { jsx } from 'react/jsx-runtime';",
-    '',
-  ].join('\n'),
-  'packages/pro/src/vue/sample.ts': [
-    "import { useState } from '@docx-editor.dev/react';",
-    'export { useState };',
-    "export { jsx } from 'react/jsx-runtime';",
-    '',
-  ].join('\n'),
-  'packages/editor-api/src/sample.ts': [
-    "import { ref } from 'vue';",
-    "import { useState } from 'react';",
-    "export const load = () => import('vue');",
-    'export { ref, useState };',
-    "export { renderToString } from 'vue/server-renderer';",
     "export { jsx } from 'react/jsx-runtime';",
     '',
   ].join('\n'),
@@ -134,7 +120,7 @@ const FILES: Record<string, string> = {
   'packages/core/src/layout/compat-sample.ts': `${COMPAT_MODE}\n`,
   'packages/core/src/layout/compatibility/sample.ts': `${COMPAT_MODE}\n`,
   'packages/core/src/layout/__tests__/compat-sample.test.ts': `${COMPAT_MODE}\n`,
-  'packages/react/src/compat-sample.ts': `${COMPAT_MODE}\n`,
+  'packages/other/src/compat-sample.ts': `${COMPAT_MODE}\n`,
   // Vue chrome passes component children as function slots. Lines 4 and 5 are banned; the
   // rest are allowed: a function slot, an intrinsic element, a raw-children built-in, and a
   // self-closing component.
@@ -150,8 +136,8 @@ const FILES: Record<string, string> = {
     'export const ok4 = <Row />;',
     '',
   ].join('\n'),
-  // The rule is scoped to Vue sources; React passes children as props.
-  'packages/react/src/slots-sample.tsx': [
+  // The rule is scoped to Vue sources.
+  'packages/other/src/slots-sample.tsx': [
     'declare const Row: unknown;',
     'export const a = <Row>text</Row>;',
     '',
@@ -159,7 +145,7 @@ const FILES: Record<string, string> = {
   // Editor DOM code reads the window it is mounted in, never the script's globals; tests may.
   'packages/core/src/editor/realm-sample.ts': `${HOST_REALM}\n`,
   'packages/vue/src/realm-sample.ts': `${HOST_REALM}\n`,
-  'packages/react/src/__tests__/realm-sample.test.ts': `${HOST_REALM}\n`,
+  'packages/other/src/__tests__/realm-sample.test.ts': `${HOST_REALM}\n`,
   // The engine lanes are DOM-free and out of the rule's scope.
   'packages/core/src/layout/realm-sample.ts': `${HOST_REALM}\n`,
   // The global cap.
@@ -259,7 +245,7 @@ test('every banned shape is reported where the configuration applies it, and now
       `packages/vue/src/slots-sample.tsx:4 ${vueSlots}`,
       `packages/vue/src/slots-sample.tsx:5 ${vueSlots}`,
       ...rawModeLines('packages/core/src/layout/compat-sample.ts'),
-      ...rawModeLines('packages/react/src/compat-sample.ts'),
+      ...rawModeLines('packages/other/src/compat-sample.ts'),
       `packages/core/src/editor/tailwind.config.ts:6 ${sink}`,
       ...sinkLines('packages/core/src/store/beside.test.ts', 6),
       ...sinkLines('packages/vue/src/__tests__/sample.test.ts', 6),
@@ -267,18 +253,7 @@ test('every banned shape is reported where the configuration applies it, and now
       ...sinkLines(store, 6),
       `${store}:16 ${spread}`,
       `${store}:17 ${spread}`,
-      'packages/editor-api/src/sample.ts:1 ' + restrictedImport,
-      'packages/editor-api/src/sample.ts:2 ' + restrictedImport,
-      'packages/editor-api/src/sample.ts:3 ' + restrictedImport,
-      'packages/pro/src/vue/sample.ts:1 ' + restrictedImport,
-      'packages/pro/src/vue/sample.ts:3 ' + restrictedImport,
-      'packages/editor-api/src/sample.ts:5 ' + restrictedImport,
-      'packages/editor-api/src/sample.ts:6 ' + restrictedImport,
-      'packages/react/src/sample.ts:4 ' + restrictedImport,
       'packages/vue/src/sample.ts:5 ' + restrictedImport,
-      ...sinkLines('packages/react/src/__tests__/sample.test.ts', 6),
-      'packages/react/src/sample.ts:1 ' + restrictedImport,
-      'packages/react/src/sample.ts:2 ' + restrictedImport,
       'packages/vue/src/sample.ts:1 ' + restrictedImport,
       'packages/vue/src/sample.ts:2 ' + restrictedImport,
       'packages/vue/src/sample.ts:3 ' + restrictedImport,

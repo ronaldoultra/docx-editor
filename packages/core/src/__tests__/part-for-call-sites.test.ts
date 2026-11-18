@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 const PACKAGES = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 
 /** Every published package's src root that could hold a call site. */
-const SCANNED_ROOTS = ['core/src', 'pro/src', 'editor-api/src', 'react/src', 'vue/src'];
+const SCANNED_ROOTS = ['core/src', 'vue/src'];
 
 /** file (relative to packages/) → number of `partFor(` occurrences, definitions included. */
 const PINNED_CALL_SITES: Readonly<Record<string, number>> = {
@@ -54,9 +54,6 @@ const PINNED_CALL_SITES: Readonly<Record<string, number>> = {
   // that story to see the comment it is deleting, so the slot is spent either way.
   'core/src/store/store/comment-package-write.ts': 1,
   'core/src/store/store/tree-package-store.ts': 1, // the definition itself
-  // Custom-node payload writes genuinely need the open store (they mutate the part).
-  'pro/src/custom-nodes/insert-custom-node.ts': 1,
-  'pro/src/custom-nodes/update-custom-node.ts': 3,
 };
 
 function* sourceFiles(directory: string): Generator<string> {

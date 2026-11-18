@@ -253,45 +253,6 @@ test('duplicate oversized faces cannot invalidate an earlier winning face', asyn
   expect(failures).toEqual([]);
 });
 
-test('later optional fallback supplies missing glyphs after an execution-limit rejection', async () => {
-  const fallbackBytes = new Uint8Array(
-    readFileSync(
-      new URL('../../../../docx-to-pdf/test/fixtures/Devanagari.subset.ttf', import.meta.url)
-    )
-  );
-  const opened = await openFontBackedDocumentForExport(documentBytes('नमस्ते'), {
-    fonts: [
-      requiredFonts,
-      { sources: [optionalOversized] },
-      { sources: [source(OPTIONAL, 'usable-devanagari', fallbackBytes)] },
-    ],
-    glyphFallbacks: [optionalRequest],
-    fontPolicy: 'strict',
-    onFontResolution: () => {},
-  });
-  expect(opened.ok).toBe(true);
-  if (!opened.ok) throw new Error(opened.reason);
-  try {
-    expect(opened.session.admittedFontFace(optionalRequest)?.id).toBe('usable-devanagari');
-    expect(opened.session.fontResolution.originFailures).toHaveLength(1);
-    const layout = await opened.session.layout();
-    const spans = layout.pages
-      .flatMap((page) => page.fragments)
-      .flatMap((fragment) =>
-        fragment.kind === 'paragraph' ? fragment.lines.flatMap((line) => line.spans) : []
-      )
-      .filter((span) => span.text === 'नमस्ते');
-    expect(spans).toHaveLength(2);
-    for (const span of spans) {
-      const shaped = opened.session.shapeLaidOutText(span);
-      expect(shaped).not.toBeNull();
-      expect(shaped!.run.glyphs.every((glyph) => glyph.id !== 0)).toBe(true);
-    }
-  } finally {
-    opened.session.dispose();
-  }
-});
-
 test('strict policy checks required failures after an optional failure in an all-dropped origin', async () => {
   let cause: unknown;
   await expect(

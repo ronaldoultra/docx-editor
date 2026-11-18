@@ -17,7 +17,6 @@ const PACKAGES_DIR = PACKAGES_ROOT;
 // every production engine package.
 const PUBLIC_SRC_DIRS = [
   'core/src',
-  'react/src',
   'vue/src',
   'core/src/store',
   'core/src/binding',

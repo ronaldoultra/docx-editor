@@ -3,12 +3,9 @@ LICENSE SCOPE NOTICE
 Except where a file or directory expressly states different license terms, this
 repository is licensed under the Apache License, Version 2.0, reproduced below.
 
-The contents of packages/editor-api/, packages/pro/, packages/docx-to-pdf/,
-and packages/telemetry/ are not licensed under the Apache License. They are
-governed by the EigenPal Pro Evaluation License 1.0 in
-packages/editor-api/LICENSE.md, packages/pro/LICENSE.md,
-packages/docx-to-pdf/LICENSE.md, and packages/telemetry/LICENSE.md,
-respectively.
+This fork does not contain the upstream packages that were governed by the
+EigenPal Pro Evaluation License 1.0 (packages/editor-api/, packages/pro/,
+packages/docx-to-pdf/, and packages/telemetry/). They were removed in full.
 
                                  Apache License
                            Version 2.0, January 2004
