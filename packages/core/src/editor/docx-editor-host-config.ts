@@ -37,8 +37,8 @@ function localeState(value: string | undefined): { locale: string; labels: TocLa
     const separator = candidate.lastIndexOf('-');
     candidate = separator < 0 ? '' : candidate.slice(0, separator);
   }
-  // Some catalogues are named by region only (pt-BR, zh-CN). Fall back to a
-  // compatible language/script without mapping Traditional Chinese to Simplified.
+  // Some catalogues are named by region only (pt-BR). Fall back to a
+  // catalogue with a compatible language and script.
   const requested = new Intl.Locale(locale).maximize();
   const languageMatch = candidate
     ? undefined

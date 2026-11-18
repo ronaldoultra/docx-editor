@@ -44,8 +44,8 @@ export function localeDirection(tag: string | null | undefined): 'ltr' | 'rtl' {
  * otherwise the direction of its `_lang` tag. A catalog that declares neither returns
  * `undefined`, so a provider can keep the direction it inherits.
  *
- * The shipped Arabic and Hebrew catalogs declare `_dir: 'rtl'`. Declare it in your own
- * catalog to mirror the editor chrome for another right-to-left language.
+ * The shipped catalogs are left to right. Declare `_dir: 'rtl'` in your own
+ * catalog to mirror the editor chrome for a right-to-left language.
  *
  * @public
  */

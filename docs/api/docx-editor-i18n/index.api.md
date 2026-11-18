@@ -5,9 +5,6 @@
 ```ts
 
 // @public
-export const ar: PartialLocaleStrings;
-
-// @public
 export function catalogDirection(catalog: {
     readonly _dir?: unknown;
     readonly _lang?: unknown;
@@ -23,9 +20,6 @@ export function chromeDirection(dir: 'ltr' | 'rtl' | undefined, catalog: {
 export function createT(strings: LocaleStrings, lang?: string): TFunction;
 
 // @public
-export const de: PartialLocaleStrings;
-
-// @public
 export function deepMerge(base: AnyRecord, override: AnyRecord | undefined): AnyRecord;
 
 // @public
@@ -37,31 +31,10 @@ export type DeepPartial<T> = {
 export const en: LocaleStrings;
 
 // @public
-export const es: PartialLocaleStrings;
-
-// @public
-export const fr: PartialLocaleStrings;
-
-// @public
-export const he: PartialLocaleStrings;
-
-// @public
-export const hi: PartialLocaleStrings;
-
-// @public
-export const id: PartialLocaleStrings;
-
-// @public
 export function isApplePlatform(): boolean;
 
 // @public
-export const it: PartialLocaleStrings;
-
-// @public
-export const ja: PartialLocaleStrings;
-
-// @public
-export type LocaleCode = 'en' | 'ar' | 'de' | 'es' | 'fr' | 'he' | 'hi' | 'id' | 'it' | 'ja' | 'pl' | 'pt-BR' | 'ru' | 'tr' | 'zh-CN';
+export type LocaleCode = 'en' | 'pt-BR';
 
 // @public
 export function localeDirection(tag: string | null | undefined): 'ltr' | 'rtl';
@@ -82,30 +55,18 @@ export type PartialLocaleStrings = DeepPartial<LocaleStrings> & {
 };
 
 // @public
-export const pl: PartialLocaleStrings;
-
-// @public
 export function platformShortcut(text: string): string;
 
 // @public
 export const ptBR: PartialLocaleStrings;
 
 // @public
-export const ru: PartialLocaleStrings;
-
-// @public
 export type TFunction = (key: TranslationKey, vars?: Record<string, string | number>) => string;
-
-// @public
-export const tr: PartialLocaleStrings;
 
 // @public
 export type TranslationKey = DotPath<LocaleStrings>;
 
 // @public
 export type Translations = PartialLocaleStrings;
-
-// @public
-export const zhCN: PartialLocaleStrings;
 
 ```

@@ -20,10 +20,9 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const i18nDir = join(__dirname, '..', 'packages', 'i18n');
 const i18nDist = join(i18nDir, 'dist');
 
-// The largest per-locale bundle is hi.js at ~101 KB: Devanagari takes three
-// bytes per character in UTF-8. 112 KB leaves room for locale growth while
-// still catching tree-shake regressions, which pull the whole locale map and
-// helpers (~220 KB) into every per-locale bundle, far past this limit.
+// 112 KB leaves room for locale growth while still catching tree-shake
+// regressions, which pull the whole locale map and helpers (~220 KB) into
+// every per-locale bundle, far past this limit.
 const MAX_BYTES = 112 * 1024;
 
 const codes = readLocaleCodes(i18nDir);
@@ -48,9 +47,7 @@ for (const code of codes) {
     const size = statSync(path).size;
     rows.push({ file, size, ok: size <= MAX_BYTES });
     if (size > MAX_BYTES) {
-      errors.push(
-        `✗ ${file} = ${(size / 1024).toFixed(1)} KB (limit ${MAX_BYTES / 1024} KB)`
-      );
+      errors.push(`✗ ${file} = ${(size / 1024).toFixed(1)} KB (limit ${MAX_BYTES / 1024} KB)`);
     }
   }
 }
@@ -71,6 +68,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(
-  `\nAll ${rows.length} per-locale bundles under ${MAX_BYTES / 1024} KB.`
-);
+console.log(`\nAll ${rows.length} per-locale bundles under ${MAX_BYTES / 1024} KB.`);

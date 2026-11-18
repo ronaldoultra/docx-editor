@@ -19,12 +19,12 @@ for (const [locale, resolved] of [
 }
 
 test('regional and extended tags fall back to the language catalogue without losing the region', () => {
-  const german = createDocxEditorHostConfigState({ locale: 'de' });
-  for (const locale of ['de-DE', 'de-AT', 'de-DE-u-nu-latn']) {
+  const portuguese = createDocxEditorHostConfigState({ locale: 'pt-BR' });
+  for (const locale of ['pt-BR', 'pt-BR-u-nu-latn', 'pt-PT', 'pt']) {
     const state = createDocxEditorHostConfigState({ locale });
     expect(state.locale()).toBe(locale);
-    expect(state.tocLabels()).toEqual(german.tocLabels());
-    expect(state.tocLabels().title).toBe('Inhaltsverzeichnis');
+    expect(state.tocLabels()).toEqual(portuguese.tocLabels());
+    expect(state.tocLabels().title).toBe('Sumário');
   }
 });
 
@@ -63,8 +63,6 @@ test('regional-only catalogues provide compatible language fallback', () => {
   for (const [locale, catalogue] of [
     ['pt', 'pt-BR'],
     ['pt-PT', 'pt-BR'],
-    ['zh', 'zh-CN'],
-    ['zh-Hans-CN', 'zh-CN'],
   ]) {
     const state = createDocxEditorHostConfigState({ locale });
     expect(state.locale()).toBe(locale!);
@@ -72,7 +70,7 @@ test('regional-only catalogues provide compatible language fallback', () => {
       createDocxEditorHostConfigState({ locale: catalogue }).tocLabels()
     );
   }
-  expect(createDocxEditorHostConfigState({ locale: 'zh-Hant' }).tocLabels()).toEqual(
+  expect(createDocxEditorHostConfigState({ locale: 'zh-CN' }).tocLabels()).toEqual(
     createDocxEditorHostConfigState({ locale: 'en' }).tocLabels()
   );
 });

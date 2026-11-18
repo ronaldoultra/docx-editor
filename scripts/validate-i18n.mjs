@@ -77,13 +77,7 @@ const LANG_DISPLAY = new Intl.DisplayNames(['en'], { type: 'language' });
 // actually sees in the JSDoc here. Keys are BCP-47 codes.
 const LOCALE_NAME_OVERRIDES = {
   en: 'English',
-  de: 'German',
-  es: 'Spanish',
-  he: 'Hebrew',
-  pl: 'Polish',
   'pt-BR': 'Portuguese (Brazil)',
-  tr: 'Turkish',
-  'zh-CN': 'Simplified Chinese',
 };
 
 function localeDisplayName(code) {
@@ -173,7 +167,7 @@ function renderGeneratedBlock(codes) {
   lines.push(' *');
   lines.push(' * Importing `locales` defeats the per-locale tree-shake — the bundler');
   lines.push(' * sees a static reference to every locale. If you only need one or two,');
-  lines.push(" * import them by name (`import { en, de } from '...'`) instead.");
+  lines.push(" * import them by name (`import { en, ptBR } from '...'`) instead.");
   lines.push(' *');
   lines.push(' * @public');
   lines.push(' */');
@@ -225,7 +219,7 @@ function regenerateLocaleExports() {
 }
 
 // ---------------------------------------------------------------------------
-// Per-locale subpath sources — `import pl from '@docx-editor.dev/i18n/pl'`
+// Per-locale subpath sources — `import ptBR from '@docx-editor.dev/i18n/pt-BR'`
 // only ships that one locale's JSON, instead of pulling every locale through
 // the named exports in index.ts. Each `src/<code>.ts` re-exports its JSON as
 // a typed `PartialLocaleStrings` (or `LocaleStrings` for English). tsup
@@ -388,7 +382,7 @@ function reportIntegrityViolations(en, localeFiles, fix) {
     hasViolations = true;
     const suffix = fix ? ' — manual fix required' : '';
     console.error(
-      `✗ ${file} — ${violations.length} placeholder/ICU violation${violations.length === 1 ? '' : 's'}${suffix}:`,
+      `✗ ${file} — ${violations.length} placeholder/ICU violation${violations.length === 1 ? '' : 's'}${suffix}:`
     );
     for (const v of violations) {
       console.error(`    ${v.key} [${v.code}] ${v.message}`);
@@ -439,7 +433,7 @@ function cmdValidate(fix) {
       for (const path of extra) deleteNestedValue(locale, path);
       writeFileSync(filePath, JSON.stringify(locale, null, 2) + '\n', 'utf-8');
       console.log(
-        `✓ ${file} — fixed: added ${missing.length} missing keys as null, removed ${extra.length} extra keys`,
+        `✓ ${file} — fixed: added ${missing.length} missing keys as null, removed ${extra.length} extra keys`
       );
     } else {
       hasErrors = true;
@@ -516,7 +510,7 @@ function cmdValidate(fix) {
     }
     if (hasIntegrityViolations) {
       console.error(
-        '\nPlaceholder/ICU integrity violations above require manual fixes — `i18n:fix` cannot repair them.',
+        '\nPlaceholder/ICU integrity violations above require manual fixes — `i18n:fix` cannot repair them.'
       );
     }
     process.exit(1);
@@ -534,7 +528,7 @@ function cmdNew(lang) {
   // Validate lang tag (BCP 47: language, language-Script, language-Region, language-Script-Region)
   if (!/^[a-z]{2,3}(-[a-zA-Z0-9]{2,8})*$/.test(lang)) {
     console.error(
-      `Invalid language tag: "${lang}". Use BCP 47 format (e.g., de, fr, pt-BR, zh-Hans, zh-Hant-TW).`,
+      `Invalid language tag: "${lang}". Use BCP 47 format (e.g., de, fr, pt-BR, zh-Hans, zh-Hant-TW).`
     );
     process.exit(1);
   }
@@ -562,7 +556,9 @@ function cmdNew(lang) {
   regenerateLocalePackageJsonExports();
 
   console.log(`Created ${lang}.json with ${leafCount} keys (all set to null).`);
-  console.log(`Wired \`${lang}\` into packages/i18n/src/index.ts, src/${lang}.ts, and package.json exports.`);
+  console.log(
+    `Wired \`${lang}\` into packages/i18n/src/index.ts, src/${lang}.ts, and package.json exports.`
+  );
   console.log('');
   console.log('Next steps:');
   console.log(`  1. Open packages/i18n/${lang}.json`);
@@ -593,7 +589,7 @@ function cmdStatus() {
     'Locale'.padEnd(langCol) +
       'Translated'.padEnd(numCol) +
       'Untranslated'.padEnd(numCol) +
-      'Coverage',
+      'Coverage'
   );
   console.log('-'.repeat(langCol + numCol * 2 + 8));
 

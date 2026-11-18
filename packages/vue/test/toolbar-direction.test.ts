@@ -8,7 +8,11 @@ import './dom-setup.ts';
 
 import { afterEach, describe, expect, test } from 'bun:test';
 import { createApp, h } from 'vue';
-import { ar, en, es, he } from '@docx-editor.dev/i18n';
+import { en, ptBR, type Translations } from '@docx-editor.dev/i18n';
+
+/** Right-to-left catalogs as a host declares them. The package ships none. */
+const ar: Translations = { _lang: 'ar', _dir: 'rtl' };
+const he: Translations = { _lang: 'he' };
 import { serializeOoxmlPart } from '@docx-editor.dev/core/store';
 import type { DocxEditorInstance } from '@docx-editor.dev/core/editor';
 import { DocxEditorToolbar } from '../src/editor/toolbar';
@@ -115,8 +119,8 @@ describe('a right-to-left interface language', () => {
       docx(p('alpha'))
     );
     await flush();
-    const rtl = button(mounted.container, ar.toolbar!.rightToLeft!);
-    const ltr = button(mounted.container, ar.toolbar!.leftToRight!);
+    const rtl = button(mounted.container, en.toolbar.rightToLeft);
+    const ltr = button(mounted.container, en.toolbar.leftToRight);
     const alignment = mounted.container.querySelector('[data-slot="alignment"]')!;
     expect(alignment.compareDocumentPosition(ltr) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(ltr.compareDocumentPosition(rtl) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -133,16 +137,16 @@ describe('a right-to-left interface language', () => {
 
   test('the provider dir prop decides over the catalog', async () => {
     mounted = mountEditorTree(
-      () => h(LocaleProvider, { i18n: es, dir: 'rtl' }, { default: () => h(DocxEditorToolbar) }),
+      () => h(LocaleProvider, { i18n: ptBR, dir: 'rtl' }, { default: () => h(DocxEditorToolbar) }),
       docx(p('alpha'))
     );
     await flush();
     expect(mounted.container.querySelector('.docx-toolbar')!.getAttribute('dir')).toBe('rtl');
-    expect(button(mounted.container, es.toolbar!.rightToLeft!)).toBeDefined();
+    expect(button(mounted.container, ptBR.toolbar!.rightToLeft!)).toBeDefined();
   });
 
   /** The packaged editor's chrome wrapper direction for one catalog. */
-  async function sugarDirection(i18n: typeof ar): Promise<string | null> {
+  async function sugarDirection(i18n: Translations): Promise<string | null> {
     const host = document.createElement('div');
     document.body.append(host);
     const app = createApp({ render: () => h(DocxEditor, { document: docx(p('alpha')), i18n }) });
@@ -160,6 +164,6 @@ describe('a right-to-left interface language', () => {
   });
 
   test('a left-to-right catalog leaves the host direction in charge', async () => {
-    expect(await sugarDirection(es)).toBeNull();
+    expect(await sugarDirection(ptBR)).toBeNull();
   });
 });

@@ -1,12 +1,16 @@
 import { describe, expect, test } from 'bun:test';
 import { catalogDirection, chromeDirection, localeDirection } from './direction';
-import { ar, es, he } from './index';
+import { ptBR } from './index';
+
+/** Right-to-left catalogs as a host declares them. The package ships none. */
+const ar = { _lang: 'ar', _dir: 'rtl' } as const;
+const he = { _lang: 'he', _dir: 'rtl' } as const;
 
 describe('catalogDirection', () => {
-  test('the shipped right-to-left catalogs declare their direction', () => {
+  test('right-to-left catalogs declare their direction', () => {
     expect(catalogDirection(ar)).toBe('rtl');
     expect(catalogDirection(he)).toBe('rtl');
-    expect(catalogDirection(es)).toBe('ltr');
+    expect(catalogDirection(ptBR)).toBe('ltr');
   });
 
   test('_dir decides over _lang', () => {
@@ -55,8 +59,8 @@ describe('chromeDirection', () => {
   });
 
   test('a left-to-right _lang alone keeps the inherited or host direction', () => {
-    expect(chromeDirection(undefined, es, undefined)).toBeUndefined();
-    expect(chromeDirection(undefined, es, 'rtl')).toBe('rtl');
+    expect(chromeDirection(undefined, ptBR, undefined)).toBeUndefined();
+    expect(chromeDirection(undefined, ptBR, 'rtl')).toBe('rtl');
     expect(chromeDirection(undefined, undefined, undefined)).toBeUndefined();
   });
 });

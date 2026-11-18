@@ -198,9 +198,7 @@ describe('shipped locales integrity (regression)', () => {
   const codes = readLocaleCodes(I18N_DIR).filter((code) => code !== 'en');
 
   test('discovers the shipped community locales', () => {
-    expect(codes).toContain('id');
-    expect(codes).toContain('pl');
-    expect(codes.length).toBeGreaterThanOrEqual(9);
+    expect(codes).toEqual(['pt-BR']);
   });
 
   for (const code of codes) {

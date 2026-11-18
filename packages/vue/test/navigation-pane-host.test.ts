@@ -6,7 +6,7 @@ import './dom-setup.ts';
 
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import deCatalog from '../../i18n/de.json';
+import ptBRCatalog from '../../i18n/pt-BR.json';
 import { resolve } from 'node:path';
 import { h, nextTick, ref } from 'vue';
 import { zipSync, strToU8 } from 'fflate';
@@ -140,9 +140,9 @@ async function ctrlF(target: Element, init: KeyboardEventInit = { ctrlKey: true 
 
 const q = (root: ParentNode, selector: string) => root.querySelector(selector) as HTMLElement;
 
-/** A resolver over the German catalogue source, as a host passes it to Root. */
-function germanTranslate(key: string, params: Record<string, string | number> = {}): string {
-  let node: unknown = deCatalog;
+/** A resolver over the Brazilian Portuguese catalogue source, as a host passes it to Root. */
+function portugueseTranslate(key: string, params: Record<string, string | number> = {}): string {
+  let node: unknown = ptBRCatalog;
   for (const part of key.split('.')) {
     node = node && typeof node === 'object' ? (node as Record<string, unknown>)[part] : null;
   }
@@ -350,12 +350,14 @@ describe('the disc', () => {
   test('on macOS in another language, names Cmd+F, never the translated Ctrl spelling', async () => {
     Object.defineProperty(navigator, 'platform', { configurable: true, value: 'MacIntel' });
     try {
-      const view = mountPane({}, { rootProps: { translate: germanTranslate } });
+      const view = mountPane({}, { rootProps: { translate: portugueseTranslate } });
       await flush();
       const disc = q(view.container, '.docx-nav__toggle');
-      expect(disc.getAttribute('aria-label')).toBe(germanTranslate('navigation.openAriaLabel'));
-      expect(disc.getAttribute('title')).toBe(`${germanTranslate('navigation.openTitle')} (⌘+F)`);
-      expect(disc.getAttribute('title')).not.toContain('Strg');
+      expect(disc.getAttribute('aria-label')).toBe(portugueseTranslate('navigation.openAriaLabel'));
+      expect(disc.getAttribute('title')).toBe(
+        `${portugueseTranslate('navigation.openTitle')} (⌘+F)`
+      );
+      expect(disc.getAttribute('title')).not.toContain('Ctrl');
       expect(disc.getAttribute('aria-keyshortcuts')).toBe('Meta+F');
     } finally {
       delete (navigator as unknown as { platform?: string }).platform;

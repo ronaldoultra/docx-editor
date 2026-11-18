@@ -399,54 +399,15 @@
     ]
   },
   "@docx-editor.dev/i18n": {
-    "ar": [
-      "PartialLocaleStrings"
-    ],
-    "de": [
-      "PartialLocaleStrings"
-    ],
     "en": [
       "LocaleStrings"
-    ],
-    "es": [
-      "PartialLocaleStrings"
-    ],
-    "fr": [
-      "PartialLocaleStrings"
-    ],
-    "he": [
-      "PartialLocaleStrings"
-    ],
-    "hi": [
-      "PartialLocaleStrings"
-    ],
-    "id": [
-      "PartialLocaleStrings"
     ],
     "index": [
       "AnyRecord",
       "DotPath",
       "enJson"
     ],
-    "it": [
-      "PartialLocaleStrings"
-    ],
-    "ja": [
-      "PartialLocaleStrings"
-    ],
-    "pl": [
-      "PartialLocaleStrings"
-    ],
     "pt-BR": [
-      "PartialLocaleStrings"
-    ],
-    "ru": [
-      "PartialLocaleStrings"
-    ],
-    "tr": [
-      "PartialLocaleStrings"
-    ],
-    "zh-CN": [
       "PartialLocaleStrings"
     ]
   },

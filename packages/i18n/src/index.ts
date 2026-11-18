@@ -7,13 +7,13 @@
  *
  * ```ts
  * import {
- *   en, de, pl, tr, he, ptBR, zhCN,    // typed locale data
+ *   en, ptBR,                           // typed locale data
  *   locales,                            // record keyed by BCP-47 tag
  *   deepMerge, createT,                 // build a t() for custom hosts
  *   type LocaleStrings,                 // shape of `en` (source of truth)
  *   type Translations,                  // shape of a community partial
  *   type TranslationKey,                // every valid `t()` key
- *   type LocaleCode,                    // 'en' | 'de' | 'pt-BR' | ...
+ *   type LocaleCode,                    // 'en' | 'pt-BR'
  * } from '@docx-editor.dev/i18n';
  * ```
  *
@@ -33,20 +33,7 @@
 // JSON files. Edit the JSON, not this block.
 
 import enJson from '../en.json';
-import arJson from '../ar.json';
-import deJson from '../de.json';
-import esJson from '../es.json';
-import frJson from '../fr.json';
-import heJson from '../he.json';
-import hiJson from '../hi.json';
-import idJson from '../id.json';
-import itJson from '../it.json';
-import jaJson from '../ja.json';
-import plJson from '../pl.json';
 import ptBRJson from '../pt-BR.json';
-import ruJson from '../ru.json';
-import trJson from '../tr.json';
-import zhCNJson from '../zh-CN.json';
 
 /**
  * Full locale string set, auto-derived from `en.json` (the source of truth).
@@ -66,52 +53,13 @@ export type LocaleStrings = typeof enJson;
  * @public
  */
 // prettier-ignore
-export type LocaleCode = 'en' | 'ar' | 'de' | 'es' | 'fr' | 'he' | 'hi' | 'id' | 'it' | 'ja' | 'pl' | 'pt-BR' | 'ru' | 'tr' | 'zh-CN';
+export type LocaleCode = 'en' | 'pt-BR';
 
 /** English (`en`) — the source of truth, 100% covered. @public */
 export const en: LocaleStrings = enJson;
 
-/** Arabic (`ar`). Community-maintained; null leaves fall back to English. @public */
-export const ar: PartialLocaleStrings = arJson;
-
-/** German (`de`). Community-maintained; null leaves fall back to English. @public */
-export const de: PartialLocaleStrings = deJson;
-
-/** Spanish (`es`). Community-maintained; null leaves fall back to English. @public */
-export const es: PartialLocaleStrings = esJson;
-
-/** French (`fr`). Community-maintained; null leaves fall back to English. @public */
-export const fr: PartialLocaleStrings = frJson;
-
-/** Hebrew (`he`). Community-maintained; null leaves fall back to English. @public */
-export const he: PartialLocaleStrings = heJson;
-
-/** Hindi (`hi`). Community-maintained; null leaves fall back to English. @public */
-export const hi: PartialLocaleStrings = hiJson;
-
-/** Indonesian (`id`). Community-maintained; null leaves fall back to English. @public */
-export const id: PartialLocaleStrings = idJson;
-
-/** Italian (`it`). Community-maintained; null leaves fall back to English. @public */
-export const it: PartialLocaleStrings = itJson;
-
-/** Japanese (`ja`). Community-maintained; null leaves fall back to English. @public */
-export const ja: PartialLocaleStrings = jaJson;
-
-/** Polish (`pl`). Community-maintained; null leaves fall back to English. @public */
-export const pl: PartialLocaleStrings = plJson;
-
 /** Portuguese (Brazil) (`pt-BR`). Community-maintained; null leaves fall back to English. @public */
 export const ptBR: PartialLocaleStrings = ptBRJson;
-
-/** Russian (`ru`). Community-maintained; null leaves fall back to English. @public */
-export const ru: PartialLocaleStrings = ruJson;
-
-/** Turkish (`tr`). Community-maintained; null leaves fall back to English. @public */
-export const tr: PartialLocaleStrings = trJson;
-
-/** Simplified Chinese (`zh-CN`). Community-maintained; null leaves fall back to English. @public */
-export const zhCN: PartialLocaleStrings = zhCNJson;
 
 /**
  * Every shipped locale, keyed by BCP-47 tag. Use for runtime locale
@@ -123,26 +71,13 @@ export const zhCN: PartialLocaleStrings = zhCNJson;
  *
  * Importing `locales` defeats the per-locale tree-shake — the bundler
  * sees a static reference to every locale. If you only need one or two,
- * import them by name (`import { en, de } from '...'`) instead.
+ * import them by name (`import { en, ptBR } from '...'`) instead.
  *
  * @public
  */
 export const locales: Record<LocaleCode, PartialLocaleStrings> = {
   en,
-  ar,
-  de,
-  es,
-  fr,
-  he,
-  hi,
-  id,
-  it,
-  ja,
-  pl,
   'pt-BR': ptBR,
-  ru,
-  tr,
-  'zh-CN': zhCN,
 };
 // ─── GENERATED END ───
 
@@ -171,8 +106,8 @@ export type PartialLocaleStrings = DeepPartial<LocaleStrings> & {
   // while still accepting arbitrary strings at runtime.
   _lang?: LocaleCode | (string & {});
   /**
-   * The writing direction of the interface strings. `'rtl'` mirrors the editor chrome, as
-   * the shipped Arabic (`ar`) and Hebrew (`he`) catalogs do. Without it, the direction
+   * The writing direction of the interface strings. `'rtl'` mirrors the editor chrome for a
+   * right-to-left catalog that a host supplies. Without it, the direction
    * follows `_lang` (see {@link localeDirection}).
    */
   _dir?: 'ltr' | 'rtl' | (string & {});
@@ -321,10 +256,10 @@ export { isApplePlatform, platformShortcut } from './platform-shortcuts';
  *
  * @example
  * ```ts
- * import { deepMerge, createT, en, de } from '@docx-editor.dev/i18n';
- * const merged = deepMerge(en, de) as LocaleStrings;
- * const t = createT(merged, 'de');
- * t('formattingBar.bold');                    // → 'Fett'
+ * import { deepMerge, createT, en, ptBR } from '@docx-editor.dev/i18n';
+ * const merged = deepMerge(en, ptBR) as LocaleStrings;
+ * const t = createT(merged, 'pt-BR');
+ * t('formattingBar.bold');                    // → 'Negrito'
  * t('navigation.find.counter', { current: 3, total: 15 });
  * ```
  *

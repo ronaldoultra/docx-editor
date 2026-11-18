@@ -32,9 +32,9 @@ Pass a locale to the editor. This example requires the React adapter and its eng
 
 ```tsx
 import { DocxEditor } from '@docx-editor.dev/react';
-import { es } from '@docx-editor.dev/i18n';
+import { ptBR } from '@docx-editor.dev/i18n';
 
-<DocxEditor document={bytes} i18n={es} locale="es-ES" />;
+<DocxEditor document={bytes} i18n={ptBR} locale="pt-BR" />;
 ```
 
 The `i18n` prop translates controls. Set `locale` separately for regional date input and generated document labels. It defaults to `en-US`.
@@ -43,9 +43,9 @@ To share a locale across editors and custom controls, use `LocaleProvider`:
 
 ```tsx
 import { DocxEditor, LocaleProvider } from '@docx-editor.dev/react';
-import { de } from '@docx-editor.dev/i18n';
+import { ptBR } from '@docx-editor.dev/i18n';
 
-<LocaleProvider i18n={de}>
+<LocaleProvider i18n={ptBR}>
   <DocxEditor document={bytes} />
 </LocaleProvider>;
 ```
@@ -55,11 +55,11 @@ Custom controls read the same catalog through `useTranslation()`.
 Mix a community locale with custom overrides:
 
 ```ts
-import { de } from '@docx-editor.dev/i18n';
+import { ptBR } from '@docx-editor.dev/i18n';
 
 const myLocale = {
-  ...de,
-  formattingBar: { ...de.formattingBar, bold: 'Fettdruck' },
+  ...ptBR,
+  formattingBar: { ...ptBR.formattingBar, bold: 'Em negrito' },
 };
 ```
 
@@ -67,7 +67,7 @@ Missing or `null` keys keep the inherited catalog value. Without an outer `Local
 
 ## Right-to-left interfaces
 
-The Arabic (`ar`) and Hebrew (`he`) catalogs declare `_dir: 'rtl'`. Passing either catalog through `i18n` mirrors editor controls in React and Vue. Interface direction does not change the document's paragraph direction.
+The shipped catalogs are left to right. A catalog that declares `_dir: 'rtl'` mirrors editor controls. Interface direction does not change the document's paragraph direction.
 
 For custom translations, set `_dir: 'rtl'` in your catalog or pass `dir="rtl"` to `LocaleProvider`. For setup and limits, see [Right-to-left support](https://www.docx-editor.dev/docs/2.x/guides/right-to-left).
 
@@ -76,22 +76,9 @@ For custom translations, set `_dir: 'rtl'` in your catalog or pass `dir="rtl"` t
 | Code    | Export | Language            |
 | ------- | ------ | ------------------- |
 | `en`    | `en`   | English (source)    |
-| `ar`    | `ar`   | Arabic              |
-| `de`    | `de`   | German              |
-| `es`    | `es`   | Spanish             |
-| `fr`    | `fr`   | French              |
-| `he`    | `he`   | Hebrew              |
-| `hi`    | `hi`   | Hindi               |
-| `id`    | `id`   | Indonesian          |
-| `it`    | `it`   | Italian             |
-| `ja`    | `ja`   | Japanese            |
-| `pl`    | `pl`   | Polish              |
 | `pt-BR` | `ptBR` | Portuguese (Brazil) |
-| `ru`    | `ru`   | Russian             |
-| `tr`    | `tr`   | Turkish             |
-| `zh-CN` | `zhCN` | Simplified Chinese  |
 
-BCP-47 codes (`pt-BR`, `zh-CN`) use camelCase JS identifiers (`ptBR`, `zhCN`). For runtime lookup by tag:
+The BCP-47 code `pt-BR` uses the camelCase JS identifier `ptBR`. For runtime lookup by tag:
 
 ```tsx
 import { locales } from '@docx-editor.dev/i18n';
@@ -109,16 +96,16 @@ If you choose a locale at runtime, import its subpath to load only that locale. 
 
 ```ts
 // Static import: include only this locale's strings.
-import pl from '@docx-editor.dev/i18n/pl';
+import ptBR from '@docx-editor.dev/i18n/pt-BR';
 ```
 
 For on-demand loading, use a dynamic import instead:
 
 ```ts
-const pl = (await import('@docx-editor.dev/i18n/pl')).default;
+const ptBR = (await import('@docx-editor.dev/i18n/pt-BR')).default;
 ```
 
-Subpaths ship for every locale: `/en`, `/ar`, `/de`, `/es`, `/fr`, `/he`, `/hi`, `/id`, `/it`, `/ja`, `/pl`, `/pt-BR`, `/ru`, `/tr`, `/zh-CN`. Each also exports its locale as a named binding (`import { pl } from '@docx-editor.dev/i18n/pl'`) for callers that prefer non-default imports.
+Subpaths ship for every locale: `/en` and `/pt-BR`. Each also exports its locale as a named binding (`import { ptBR } from '@docx-editor.dev/i18n/pt-BR'`) for callers that prefer non-default imports.
 
 ## Types
 
@@ -130,7 +117,7 @@ import type {
   PartialLocaleStrings, // shape of a community partial (null falls back)
   Translations, // alias for PartialLocaleStrings
   TranslationKey, // 'formattingBar.bold' | 'navigation.find.counter' | ...
-  LocaleCode, // 'en' | 'de' | 'pt-BR' | ...
+  LocaleCode, // 'en' | 'pt-BR'
   TFunction, // signature of the `t()` callback
 } from '@docx-editor.dev/i18n';
 ```
@@ -140,11 +127,11 @@ import type {
 Build a typed `t()` outside the adapter packages:
 
 ```ts
-import { createT, deepMerge, en, de, type LocaleStrings } from '@docx-editor.dev/i18n';
+import { createT, deepMerge, en, ptBR, type LocaleStrings } from '@docx-editor.dev/i18n';
 
-const merged = deepMerge(en, de) as LocaleStrings;
-const t = createT(merged, 'de');
-t('formattingBar.bold'); // 'Fett'
+const merged = deepMerge(en, ptBR) as LocaleStrings;
+const t = createT(merged, 'pt-BR');
+t('formattingBar.bold'); // 'Negrito'
 t('navigation.find.total', { total: 15 }); // ICU plurals
 ```
 
@@ -155,7 +142,6 @@ t('navigation.find.total', { total: 15 }); // ICU plurals
 The catalogs contain editor controls. Examples keep English text in `examples/shared/example-text.ts`.
 
 If you use `collaborationDemo`, `documentRefresh`, `anchorNavigation`, or `writerAgent` keys, move those messages into your application's text catalog. Also move `toolbar.exportPdfServerUnavailable`. These keys are removed from `LocaleStrings` and `TranslationKey`.
-
 
 ## Commercial support
 
