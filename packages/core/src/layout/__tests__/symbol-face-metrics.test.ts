@@ -18,7 +18,6 @@ import { composeFontConfiguration } from '../font-composition.ts';
 import { markerSymbolFontAvailability } from '../marker-symbol-font.ts';
 import { symbolFaceMetrics, withSymbolFaceMetrics } from '../symbol-face-metrics.ts';
 import { symbolFaceByteOf } from '../symbol-encoding.ts';
-import { openFontBackedDocumentForExport } from '../../export/document-export-shaping.ts';
 import type { FontSource } from '../../contracts/editor.ts';
 import { paragraphFragmentsOf } from '../semantic-records.ts';
 import {
@@ -130,31 +129,6 @@ test('a whole font-table alternate still resolves next to symbol families', () =
       to: { family: 'Courier New', weight: 400, style: 'normal' },
     },
   ]);
-});
-
-test('export keeps an unavailable symbol face unresolved, so bullets map to Unicode', async () => {
-  const physical: FontSource = {
-    request: { family: 'Calibri', weight: 400, style: 'normal' },
-    id: 'public-font-fixture',
-    bytes: FONT_BYTES,
-    hash: sha256FontBytes(FONT_BYTES),
-    faceIndex: 0,
-  };
-  const opened = await openFontBackedDocumentForExport(
-    documentBytes(['Symbol', 'Wingdings', 'Unknown Latin']),
-    { fonts: () => ({ sources: [physical] }) }
-  );
-  expect(opened.ok).toBe(true);
-  if (!opened.ok) return;
-  try {
-    const face = (family: string) =>
-      opened.session.admittedFontFace({ family, weight: 400, style: 'normal' });
-    expect(face('Symbol')).toBeFalsy();
-    expect(face('Wingdings')).toBeFalsy();
-    expect(face('Unknown Latin')?.id).toBe(physical.id);
-  } finally {
-    opened.session.dispose();
-  }
 });
 
 // ---- Measurement -------------------------------------------------------------------------
@@ -275,68 +249,4 @@ test('the table covers exactly the five symbol-encoded families', () => {
   // The wrapper passes other families to the wrapped measurer untouched.
   const wrapped = withSymbolFaceMetrics(fixed);
   expect(wrapped.measure('PUBLIC', style('Calibri'))).toBe(36);
-});
-
-test('export sizes a translated marker by the symbol face and paints its Unicode twin', async () => {
-  const physical: FontSource = {
-    request: { family: 'Calibri', weight: 400, style: 'normal' },
-    id: 'public-font-fixture',
-    bytes: FONT_BYTES,
-    hash: sha256FontBytes(FONT_BYTES),
-    faceIndex: 0,
-  };
-  const numbering = strToU8(
-    `<w:numbering xmlns:w="${W}"><w:abstractNum w:abstractNumId="1"><w:lvl w:ilvl="0">` +
-      '<w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="\uf0b7"/>' +
-      '<w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr>' +
-      '<w:rPr><w:rFonts w:ascii="Symbol" w:hAnsi="Symbol" w:hint="default"/></w:rPr></w:lvl>' +
-      '</w:abstractNum><w:num w:numId="1"><w:abstractNumId w:val="1"/></w:num></w:numbering>'
-  );
-  const files = unzipSync(
-    documentBytes(
-      [],
-      { 'word/numbering.xml': numbering },
-      '<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr></w:pPr>' +
-        '<w:r><w:t>PUBLIC</w:t></w:r></w:p>' +
-        '<w:p><w:r><w:t>PUBLIC</w:t></w:r><w:r><w:sym w:font="Wingdings" w:char="F0FC"/></w:r></w:p>'
-    )
-  );
-  files['word/_rels/document.xml.rels'] = strToU8(
-    strFromU8(files['word/_rels/document.xml.rels']!).replace(
-      '</Relationships>',
-      '<Relationship Id="n" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/></Relationships>'
-    )
-  );
-  const opened = await openFontBackedDocumentForExport(zipSync(files), {
-    fonts: () => ({ sources: [physical] }),
-  });
-  expect(opened.ok).toBe(true);
-  if (!opened.ok) return;
-  try {
-    const layout = await opened.session.layout();
-    const [, listed, symbol] = paragraphFragmentsOf(layout.pages[0]!);
-    const marker = listed!.marker!;
-    expect(marker.text).toBe('\u{2022}');
-    expect(marker.style.fontFamily).toBe('Symbol');
-    // Symbol 0xB7 advance, and a first line at least as tall as the Symbol line box.
-    expect(marker.box.width).toBeCloseTo(em(942, marker.style.fontSizePt), 3);
-    expect(listed!.lines[0]!.box.height).toBeGreaterThanOrEqual(
-      em(2509, marker.style.fontSizePt) - 1e-6
-    );
-    const span = listed!.lines[0]!.spans[0]!;
-    const painted = opened.session.shapeLaidOutText({
-      ...span,
-      text: marker.text,
-      style: marker.style,
-      box: marker.box,
-    });
-    expect(painted?.run.glyphs.length).toBe(1);
-    expect(painted?.run.glyphs[0]?.id).not.toBe(0);
-    // A symbol glyph that is no Unicode twin keeps the symbol face only; its twin paints.
-    const check = symbol!.lines[0]!.spans.find((candidate) => candidate.text === '\u{2714}');
-    expect(check?.style.fontFamily).toBe('Wingdings');
-    expect(opened.session.shapeLaidOutText(check!)?.run.glyphs[0]?.id).not.toBe(0);
-  } finally {
-    opened.session.dispose();
-  }
 });

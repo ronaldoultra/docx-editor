@@ -193,29 +193,20 @@ describe('a browser bundle cannot reach the server (task 10.1)', () => {
     }
   });
 
-  test('heavy lane runtimes are OPTIONAL peers, not dependencies', () => {
-    // pdf-lib (output) and yjs (sync) are real runtimes of real lanes, but a consumer that
-    // only parses and paints a document needs neither. As plain dependencies they were
-    // installed by everyone; as optional peers they are installed only by consumers that use
-    // those lanes. This is about INSTALL weight — it says nothing about what a bundle pulls
-    // in, which is the import-graph walk's job, because a manifest cannot stop an import.
+  test('core declares no PDF or CRDT runtime', () => {
+    // pdf-lib (PDF output) and yjs (collaboration sync) belonged to the upstream PDF converter
+    // and Pro collaboration provider, which this fork removed. No core source imports either,
+    // so neither may come back as a dependency or a peer by accident.
     const core = manifestOf('contracts') ?? {};
     const dependencies = Object.keys((core.dependencies as Record<string, string>) ?? {});
-    const peers = (core.peerDependencies as Record<string, string>) ?? {};
-    const meta = (core.peerDependenciesMeta as Record<string, { optional?: boolean }>) ?? {};
+    const peers = Object.keys((core.peerDependencies as Record<string, string>) ?? {});
 
     for (const heavy of ['pdf-lib', 'yjs']) {
-      expect({ heavy, inDependencies: dependencies.includes(heavy) }).toEqual({
+      expect({
         heavy,
-        inDependencies: false,
-      });
-      expect({ heavy, declared: heavy in peers, optional: meta[heavy]?.optional === true }).toEqual(
-        {
-          heavy,
-          declared: true,
-          optional: true,
-        }
-      );
+        dependency: dependencies.includes(heavy),
+        peer: peers.includes(heavy),
+      }).toEqual({ heavy, dependency: false, peer: false });
     }
 
     // What everyone genuinely needs stays a hard dependency.
@@ -231,7 +222,23 @@ describe('a browser bundle cannot reach the server (task 10.1)', () => {
   });
 });
 
+/**
+ * Lanes with no public subpath. `export` serves the automation lane's pagination only, since
+ * the fork removed the PDF and Markdown converters that imported `./export`.
+ */
+const INTERNAL_LANES: ReadonlySet<LaneName> = new Set<LaneName>(['export']);
+
 describe('every lane has somewhere to be imported from (task 10.1)', () => {
+  test('internal lanes declare no subpath, and are the only ones', () => {
+    for (const lane of laneNames) {
+      const { subpath, subpathPrefix } = CORE_LANES[lane];
+      expect({ lane, internal: subpath === null && subpathPrefix === undefined }).toEqual({
+        lane,
+        internal: INTERNAL_LANES.has(lane),
+      });
+    }
+  });
+
   test('every lane is importable at its own subpath', () => {
     // The store lane was the package root while it lived in `engine-core`. Now that it sits
     // inside the core package alongside `contracts`, the root belongs to the package itself
@@ -242,6 +249,7 @@ describe('every lane has somewhere to be imported from (task 10.1)', () => {
     // `exports` entry ever answered — a lane graph that named an import path a consumer
     // could not use.
     for (const lane of laneNames) {
+      if (INTERNAL_LANES.has(lane)) continue;
       const { subpath, subpathPrefix } = CORE_LANES[lane];
       expect({ lane, importableAs: subpath ?? subpathPrefix }).toEqual({
         lane,
@@ -255,6 +263,7 @@ describe('every lane has somewhere to be imported from (task 10.1)', () => {
     // say a lane is importable at `./x` while `exports` has no `./x` at all.
     const exports = Object.keys(coreManifest.exports);
     for (const lane of laneNames) {
+      if (INTERNAL_LANES.has(lane)) continue;
       const { subpath, subpathPrefix } = CORE_LANES[lane];
       if (subpath) {
         expect({ lane, exported: exports.includes(subpath) }).toEqual({ lane, exported: true });

@@ -32,9 +32,6 @@ const LANES = Object.keys(CORE_LANES) as LaneName[];
  * — coupling that predates the lane move and is compile-time only.
  */
 const GRANDFATHERED_TYPE_EDGES: readonly { readonly file: string; readonly to: LaneName }[] = [
-  // The neutral export composition root shares the existing public FontOrigin type. This is
-  // erased and does not make the browser editor depend on the Node-oriented export lane.
-  { file: 'export/index.ts', to: 'editor' },
   { file: 'store/store/tree-op-types.ts', to: 'contracts' },
   // The public diagnostic codes live in the neutral automation lane, so a headless runtime can
   // name a refusal; the contract re-exports them beside the editor's event types. Erased.

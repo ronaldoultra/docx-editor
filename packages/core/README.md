@@ -59,7 +59,6 @@ The root exports editor creation, contracts, font helpers, control definitions, 
 | `./store` | The canonical tree and its transactional store. |
 | `./layout` | The DOM-free layout pass. |
 | `./output` | Paint layouts and selection overlays into the DOM. |
-| `./export` | Document layout sessions for exporters. No DOM required. |
 | `./automation` | The transport-neutral host port for document automation. |
 | `./collaboration` | Provider-neutral collaboration session contracts. |
 | `./collaboration/replication` | Replication helpers for collaboration providers. |
@@ -72,37 +71,6 @@ The engine reads DOCX bytes into a canonical OOXML tree. Layout reads the tree a
 The document tree holds all editing state. The engine displays editable pages and converts browser input into tree operations.
 
 Typed nodes supply layout properties. Generic nodes preserve other element structures, including unsupported extensions.
-
-Export sessions default to `all-markup`, which shows inserted and deleted text. Use `displayMode: 'proposed'` for the accepted view or `displayMode: 'original'` for the rejected view.
-
-### Build a paginated exporter
-
-For exports that need font-based page breaks, use `openFontBackedDocumentForExport`. It resolves the fonts used throughout the document before layout. Without a measurer, `openDocumentForExport(bytes)` uses a fixed-width approximation.
-
-Install `@docx-editor.dev/fonts` to use packaged substitutes in this example:
-
-```ts
-import { readFile } from 'node:fs/promises';
-import { openFontBackedDocumentForExport } from '@docx-editor.dev/core/export';
-import { packagedFonts } from '@docx-editor.dev/fonts';
-
-const bytes = new Uint8Array(await readFile('contract.docx'));
-const opened = await openFontBackedDocumentForExport(bytes, {
-  fonts: packagedFonts(),
-  fontPolicy: 'strict',
-  onFontResolution: (report) => console.info(report),
-});
-
-if (!opened.ok) throw new Error(`DOCX rejected: ${opened.reason}`);
-try {
-  const layout = await opened.session.layout();
-  console.log(layout); // Replace this with your exporter.
-} finally {
-  opened.session.dispose(); // releases document-owned shaping bytes
-}
-```
-
-Let the engine manage fonts, resources, and layout. Build your output from the returned pages. For a live `HeadlessDocumentView`, pass the editor's revision-stable measurer.
 
 ## Fidelity
 
