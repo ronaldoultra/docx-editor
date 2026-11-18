@@ -43,7 +43,7 @@ export class AppComponent {
   protected readonly lastSource = signal('');
 
   private readonly editor = viewChild(DocxEditorComponent);
-  private readonly zone = 'Zone' in globalThis ? 'com zone.js' : 'sem zone.js';
+  private readonly zone = 'Zone' in globalThis ? 'com zone.js' : 'TESTE';
 
   protected readonly status = computed(() => {
     const parts = [this.zone, `${this.changes()} alterações`];
