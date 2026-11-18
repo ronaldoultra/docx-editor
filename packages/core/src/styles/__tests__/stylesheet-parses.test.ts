@@ -15,8 +15,8 @@ import postcss from 'postcss';
 
 const STYLESHEETS = [
   'packages/core/src/styles/editor.css',
-  'packages/react/src/styles/editor.css',
   'packages/vue/src/styles/editor.css',
+  'packages/angular/styles.css',
 ];
 
 const repositoryRoot = resolve(import.meta.dir, '../../../../..');

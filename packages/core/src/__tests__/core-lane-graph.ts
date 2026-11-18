@@ -143,7 +143,8 @@ export const CORE_LANES: Readonly<Record<LaneName, Lane>> = Object.freeze({
     nativeToCore: true,
     mayImport: ['contracts', 'store', 'layout'],
     environment: 'neutral',
-    subpath: './export',
+    // Internal since the fork removed the PDF and Markdown converters that imported it.
+    subpath: null,
   },
   automation: {
     directory: 'src/automation',

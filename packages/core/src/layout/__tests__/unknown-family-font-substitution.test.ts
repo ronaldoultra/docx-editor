@@ -12,7 +12,6 @@ import {
 } from '../document-font-substitution.ts';
 import { composeFontConfiguration } from '../font-composition.ts';
 import type { FontSource } from '../../contracts/editor.ts';
-import { openFontBackedDocumentForExport } from '../../export/document-export-shaping.ts';
 import { sha256FontBytes } from '../font-resource.ts';
 
 const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
@@ -177,51 +176,6 @@ test('unavailable whole alternate can use an explicitly chosen script default', 
   );
   expect(result.substitutions?.[0]?.from.family).toBe('Meiryo;SimSun');
   expect(result.substitutions?.[0]?.to.family).toBe('SimSun');
-});
-
-test('font-backed export evidence and geometry use the admitted whole alternate', async () => {
-  const bytes = new Uint8Array(
-    readFileSync(new URL('./fixtures/fonts/DejaVuSans.ttf', import.meta.url))
-  );
-  const physical = {
-    request: { family: 'DejaVu Sans', weight: 400, style: 'normal' as const },
-    id: 'public-font-fixture',
-    bytes,
-    hash: sha256FontBytes(bytes),
-    faceIndex: 0,
-  };
-  const requested: (readonly string[])[] = [];
-  const document = documentBytes('Georgia;Verdana', 'DejaVu Sans');
-  const opened = await openFontBackedDocumentForExport(document, {
-    fonts: (request) => {
-      requested.push(request.families);
-      return { sources: [physical] };
-    },
-  });
-  expect(opened.ok).toBe(true);
-  if (!opened.ok) return;
-  try {
-    expect(requested[0]).toContain('Georgia;Verdana');
-    expect(requested[0]).toContain('DejaVu Sans');
-    expect(requested[0]).not.toContain('Georgia');
-    expect(requested[0]).not.toContain('Verdana');
-    const face = opened.session.admittedFontFace({
-      family: 'Georgia;Verdana',
-      weight: 400,
-      style: 'normal',
-    });
-    expect(face?.id).toBe(physical.id);
-    expect(face?.hash).toBe(physical.hash);
-    expect(face?.substitution?.resolved.family).toBe('DejaVu Sans');
-    expect(
-      opened.session.fontResolution.families.find((family) => family.family === 'Georgia;Verdana')
-        ?.faces[0]?.sourceFamily
-    ).toBe('DejaVu Sans');
-    const layout = await opened.session.layout();
-    expect(layout.pages.length).toBeGreaterThan(0);
-  } finally {
-    opened.session.dispose();
-  }
 });
 
 test('script defaults stay distinct when one unknown name occupies different slots', () => {

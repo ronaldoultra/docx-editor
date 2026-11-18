@@ -41,7 +41,7 @@
 
 import { execFile, execFileSync, spawn } from 'node:child_process';
 import { availableParallelism, freemem, tmpdir, totalmem } from 'node:os';
-import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -49,23 +49,12 @@ import { createOutputCapture } from './output-capture.mjs';
 import { selectShard } from './shard.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-// `scripts/` as well as `packages/`: the checks that guard the published manifests and the
-// docs surface live next to the scripts they cover, and a suite that only walks `packages`
-// leaves them sitting there passing locally and running nowhere.
-//
-// `docs/` and `examples/` for the same reason, learned the hard way: the typed feature matrix
-// has a test beside it, and it never ran here, so a plain type error in that file survived
-// review. A test the suite does not walk is worth nothing.
-//
-// `benchmarks/` holds the collaboration scenario checks. Its long load run is named
-// `*.bench.ts`, so it stays out of the suite and runs only when asked for.
-const SEARCH_ROOTS = [
-  join(ROOT, 'packages'),
-  join(ROOT, 'scripts'),
-  join(ROOT, 'docs'),
-  join(ROOT, 'examples'),
-  join(ROOT, 'benchmarks'),
-];
+// `scripts/` as well as `packages/`: the checks that guard the build and lint scripts live next
+// to the scripts they cover, and a suite that only walks `packages` leaves them running nowhere.
+// `examples/` for the same reason: an example test the suite does not walk is worth nothing.
+const SEARCH_ROOTS = [join(ROOT, 'packages'), join(ROOT, 'scripts'), join(ROOT, 'examples')].filter(
+  (directory) => existsSync(directory)
+);
 const CACHE_FILE = join(ROOT, 'node_modules', '.cache', 'docx-editor', 'test-durations.json');
 
 /** Directories that hold build output or dependencies, never sources to run. */

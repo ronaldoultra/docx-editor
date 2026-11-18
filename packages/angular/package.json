@@ -1,0 +1,51 @@
+{
+  "name": "@docx-editor.dev/angular",
+  "version": "0.1.0",
+  "description": "Angular DOCX editor component for the @docx-editor.dev engine.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "docx",
+    "editor",
+    "angular",
+    "word",
+    "document"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./styles.css": "./styles.css"
+  },
+  "scripts": {
+    "build": "node ../../scripts/check-built-siblings.mjs && ng-packagr -p ng-package.json -c tsconfig.lib.json",
+    "typecheck": "ngc -p tsconfig.lib.json --noEmit"
+  },
+  "dependencies": {
+    "@docx-editor.dev/i18n": "^2.39.0",
+    "tslib": "^2.8.1"
+  },
+  "peerDependencies": {
+    "@angular/common": "^19.0.0 || ^20.0.0",
+    "@angular/core": "^19.0.0 || ^20.0.0",
+    "@docx-editor.dev/core": "~2.39.0"
+  },
+  "devDependencies": {
+    "@angular/common": "~20.3.0",
+    "@angular/compiler": "~20.3.0",
+    "@angular/compiler-cli": "~20.3.0",
+    "@angular/core": "~20.3.0",
+    "@angular/platform-browser": "~20.3.0",
+    "@docx-editor.dev/core": "workspace:*",
+    "ng-packagr": "~20.3.0",
+    "rxjs": "~7.8.2",
+    "typescript": "~5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eigenpal/docx-editor.git",
+    "directory": "packages/angular"
+  }
+}

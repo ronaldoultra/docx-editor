@@ -9,7 +9,7 @@
 // This check fails loudly when that happens.
 //
 // Run after `bun run --filter '@docx-editor.dev/i18n' build`.
-// Wired into CI in `.github/workflows/ci.yml`.
+// Run with `bun run check:i18n-bundle-size`.
 
 import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';

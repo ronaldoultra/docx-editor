@@ -31,18 +31,18 @@ import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const SEARCH_ROOTS = ['packages', 'scripts', 'docs', 'examples', 'benchmarks', 'e2e', 'api'];
+const SEARCH_ROOTS = ['packages', 'scripts', 'examples', 'e2e'];
 const SKIP_DIRECTORIES = new Set(['node_modules', 'dist', 'dist-types', 'temp', '.turbo', '.next']);
 const CODE_FILE = /\.(ts|tsx|mts|cts|js|jsx|mjs|cjs|vue)$/;
 const TEST_FILE = /\.(test|spec)\.(ts|tsx|js|jsx|mjs|cjs)$/;
-/** Where `bun run test` looks for test files; the graph also reads e2e/ and api/ sources. */
-const SUITE_ROOTS = /^(packages|scripts|docs|examples|benchmarks)\//;
+/** Where `bun run test` looks for test files; the graph also reads e2e/ fixtures. */
+const SUITE_ROOTS = /^(packages|scripts|examples)\//;
 const RESOLVE_EXTENSIONS = ['', '.ts', '.tsx', '.mts', '.js', '.mjs', '.jsx', '.cjs', '.vue'];
 const WORKSPACE_SCOPE = '@docx-editor.dev/';
 
 /** Changes the import graph cannot see through. Any of these runs the whole suite. */
 const RUN_EVERYTHING = [
-  /^(packages\/[^/]+\/|examples\/[^/]+\/|benchmarks\/[^/]+\/)?package\.json$/,
+  /^(packages\/[^/]+\/|examples\/[^/]+\/)?package\.json$/,
   /^bun\.lock$/,
   /^bunfig\.toml$/,
   /(^|\/)tsconfig[^/]*\.json$/,
@@ -103,9 +103,6 @@ export function resolveSpecifier(from, specifier) {
     const sub = rest.join('/');
     const source = join('packages', name, 'src');
     return resolveFile(join(source, sub || 'index')) ?? `package:packages/${name}`;
-  }
-  if (specifier.startsWith('@/')) {
-    return resolveFile(join('packages/react/src', specifier.slice(2)));
   }
   return null;
 }

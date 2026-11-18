@@ -108,18 +108,7 @@ test('type roots are every node_modules/@types from the package up', () => {
 
 test('every package that builds declarations installs the TypeScript 7 compiler', () => {
   const repository = join(import.meta.dir, '..', '..');
-  for (const name of [
-    'core',
-    'docx-to-markdown',
-    'docx-to-pdf',
-    'editor-api',
-    'fonts',
-    'fonts-cjk',
-    'i18n',
-    'pro',
-    'react',
-    'vue',
-  ]) {
+  for (const name of ['core', 'fonts', 'i18n', 'vue']) {
     expect(typescript7Compiler(join(repository, 'packages', name))).toEndWith('/bin/tsc');
   }
 });
@@ -133,7 +122,7 @@ test('a types condition is found at any depth, in condition order', () => {
 });
 
 test('tsup --no-dts skips declarations, and other flags keep the previous onSuccess', () => {
-  const configUrl = new URL('../../packages/fonts-cjk/tsup.config.ts', import.meta.url);
+  const configUrl = new URL('../../packages/fonts/tsup.config.ts', import.meta.url);
   const previous = async () => {};
   const config = { entry: ['src/index.ts'], declarations: { banner: '// x' }, onSuccess: previous };
 

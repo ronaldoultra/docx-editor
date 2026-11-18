@@ -24,47 +24,21 @@ Keep technical items exact. File paths, function names, flags, and numbers do no
 
 In user-facing text, always use the name `EigenPal Pro License`. Do not rename the legal license files or `LicenseRef-EigenPal-Pro-Evaluation-1.0` metadata.
 
-## Public API compatibility
-
-All public document automation APIs must keep the Microsoft Word Office.js shape. Match member names, signatures, enum values, return types, and `load()` / `context.sync()` behavior. Use existing Office.js members when they express the operation. Do not add competing convenience methods. This includes server agents: set `document.changeTrackingMode`, then use standard edits such as `range.insertText(text, 'Replace')` and `range.delete()` to create redlines.
-
-Compatibility includes behavior. Explicitly refuse unsupported modes or operations; never silently approximate them. Record supported subsets and differences in `packages/editor-api/compat/manifest.json` and public documentation. Extend the pinned Office.js reference, conformance fixtures, and runtime tests when adding public members. Keep host creation, collaboration transport, and job orchestration separate from the Office-shaped document model. These infrastructure APIs have no Office.js equivalent. Do not claim full Office.js compatibility from subset conformance.
-
-Run `bun run --filter '@docx-editor.dev/editor-api' compat:report` to check document editing methods and property writes against pinned Office.js signatures. The command checks both the broad editing inventory and an 81-member profile. Reads and host setup are excluded. See [Compatibility reports](packages/editor-api/compat/README.md) for scope definitions and maintenance. CI reports editing percentages without blocking merges. Full results are in `packages/editor-api/compat/reports/`. Record per-endpoint runtime differences in `packages/editor-api/compat/runtime-notes.json`; signature matches do not prove runtime equivalence.
-
-### Office.js developer experience
-
-- Load only the properties needed. Use explicit property names in examples.
-- Batch independent loads and writes. Keep `context.sync()` outside per-item read loops.
-- Use an explicit final `await context.sync()` when commands remain queued.
-- Keep proxies within their `run()` lifetime. Pass plain data to models and job queues.
-- Explain intentional sync boundaries for progressive, separately reviewable suggestions.
-- Handle stable error codes. On stale reads, re-read and reconsider; never blindly replay model edits.
-- Make supported host and operation limits visible in types, JSDoc, examples, and compatibility documentation.
-- Never disable tracking automatically to make an unsupported tracked edit succeed.
-
-Use `packages/editor-api/OFFICE_JS_GUIDE.md` as the reference for agent-facing examples. Dedicated API guides and the complete public member directory live in `docs/site/content/editor-api/`. Keep the relevant guide and `reference.mdx` current when adding or changing public API behavior.
-
 ## Packages
 
 One engine. Thin chrome on top.
 
 | Package | What | Status |
 | --- | --- | --- |
-| `core` | **The engine.** `store/` (canonical tree, ops, OPC read/write), `layout/` (DOM-free), `output/` (paint), `editor/` (facade, surface, chrome registry), `contracts/`, `binding/`, `automation/` | published, external to `react` |
-| `react` | The adapter: provider + hooks, holds no editing state | published |
+| `angular` | The Angular adapter: one standalone `<docx-editor>` component (load, pages, text editing, save). Built with `ng-packagr`. | publishable |
+| `core` | **The engine.** `store/` (canonical tree, ops, OPC read/write), `layout/` (DOM-free), `output/` (paint), `editor/` (facade, surface, chrome registry), `contracts/`, `binding/`, `automation/` | published |
 | `i18n` | Shared strings | published |
-| `editor-api` | `DocxEditor` automation object model, headless/server | published, Pro license |
-| `pro` | Review module (comments, tracked changes) + custom nodes, as `EditorModule`s | published, Pro license |
-| `docx-to-markdown` | DOCX to Markdown conversion with pages and media | published |
-| `docx-to-pdf` | DOCX to PDF conversion on Node.js | release-enabled, EigenPal Pro License |
 | `fonts` | Metric-compatible substitutes for Word's defaults | published |
-| `vue` | The Vue 3 adapter twin, parity-gated against `react` | published |
-| `nuxt` | Nuxt module over the Vue adapter | WIP, private |
+| `vue` | The upstream Vue 3 adapter. Reference for the Angular port only; it leaves in a later step. | reference |
 
-React and Vue both ship; the parity gates below keep them from drifting.
+This fork removed the upstream `pro`, `editor-api`, `docx-to-pdf`, and `telemetry` packages (EigenPal Pro License), and `react`, `nuxt`, `docx-to-markdown`, and `fonts-cjk`. Never copy code from those upstream packages into this repository.
 
-**The engine must resolve to ONE copy.** It holds module-level state — the HarfBuzz shaper and its cache budget, the grapheme boundary strategy, layout caches keyed by object identity. Two copies in a tree do not crash; they load the shaper twice and miss every identity-keyed cache, quietly. So `core` is external to `react` (not inlined) and a **peer** of both `react` and `pro`, which makes the package manager resolve one and say so at install when it cannot. Both adapters assert their own dependency shape: `packages/{react,pro}/src/__tests__/package-dependencies.test.ts`. Never move `core` back to a regular `dependency`.
+**The engine must resolve to ONE copy.** It holds module-level state — the HarfBuzz shaper and its cache budget, the grapheme boundary strategy, layout caches keyed by object identity. Two copies in a tree do not crash; they load the shaper twice and miss every identity-keyed cache, quietly. So `core` is a **peer** of every adapter. Never move `core` to a regular `dependency` of an adapter.
 
 Inside `core`, each directory is a guarded lane with a declared dependency edge and environment (`store` and `layout` are DOM-free, `binding` is the only PM-aware one). The DAG is machine-readable in `packages/core/src/__tests__/core-lane-graph.ts` and documented in `docs/architecture/production-engine-packages.md`. A lane taking a new dependency edits that DAG.
 
@@ -92,29 +66,11 @@ bytes → readOoxmlPackage (bounded OPC/XML) → canonical OoxmlNode tree per pa
 - **Host window** (`editor/host-realm.ts`) — the editor can mount in a pop-out window or an iframe and move between windows. DOM code resolves its document and window from a node it owns (`hostDocumentOf`/`hostWindowOf`, `editorHostWindow(editor)`), at use time, never from script globals; `instanceof` a DOM constructor is false across windows. Long-lived document/window listeners go through `surface-host-listeners.ts` so a move rebinds them. `no-restricted-globals` and `docx/no-cross-realm-instanceof` enforce it; write `globalThis.x` only where any window will do.
 - **Chrome registry** (`editor/chrome-controls.ts`) — `CHROME_GROUPS` is the toolbar taxonomy; `ChromeSlotId` (`text.bold`, `font.family`, …) is public API, so renames are breaking. `commandForSlot`/`commandForSlotValue` is the command table; `toolbarCommandState`/`runToolbarCommand` give shared can-before-exec. `ChromeControlState` says HOW a control dispatches (`command`/`value`/`save`), never whether it is enabled — enabled state has exactly one source, `toolbarCommandState`. Unwired slots render disabled with the engine's reason.
 
-## React adapter
+## Angular adapter
 
-`DocxEditor.Root` (owns the instance, created in an effect, StrictMode-safe, container-less) → `.Viewport` (the engine's load-bearing scroll classes) → `.Content` (attach/detach in a layout effect). All chrome is a hook consumer.
+`packages/angular` holds one standalone, `OnPush`, signal-based component. It creates the engine with `createDocxEditor`, attaches it to its own surface element, and runs it outside the Angular zone. Only the `change` output enters the zone again. It must work with and without zone.js. The component owns no editing state and never imports ProseMirror or private engine lanes (`adapter-authority.test.ts` checks this).
 
-- `useDocxEditor()`, `useEditorState(selector, isEqual?)` (one multiplexed subscription + slice memoization — a page selector must NOT re-render on a bold toggle), `useEditorCommand(slotId)` → `{execute, isActive, isEnabled, disabledReason}`, `useEditorEvent`, `useFontFamily`.
-- `DocxEditor.Toolbar` arrangement derives FROM `CHROME_GROUPS`, never hand-listed. Customization ladder: `className`/`data-active` → `icon` prop → `asChild` → in-place slot override (`hidden` removes, `preset={false}` opts out) → raw hooks. Complex parts are compounds (`FontFamily.Trigger/Content/Item`) over a part-level context.
-- `<DocxEditor>` (props + the 7-member `DocxEditorRef`) is sugar over the same primitives. Parity-contract gated; do not widen the ref.
-- Chrome mousedown must `preventDefault()` (skip INPUT/SELECT/TEXTAREA) or it steals the caret.
-- Exported names describe capabilities, never engine internals (no "tree").
-
-Check current feature support in `docs/site/data/word-features.ts` and the public API snapshots in `docs/api/`. React and Vue expose provider composition, shared editing commands, and live zoom updates. Keep capability claims aligned with those sources.
-
-## Collaboration verification
-
-Always check collaboration when adding or changing an editor feature. Treat collaboration support as part of the feature.
-
-- Exercise the feature through two editor instances attached to real collaboration sessions.
-- Verify that supported edits synchronize, converge, and survive save and reopen.
-- Cover concurrent edits, undo and redo, and deletion while another participant edits the affected content.
-- Check remote cursors and selections when the feature introduces an editable region or changes its geometry.
-- Check reconnect behavior when the feature changes shared state or operation handling.
-- Add regression tests for collaboration defects. Use existing collaboration harnesses and record the compatibility decision.
-- Do not infer collaboration support from local editing tests or use of the shared document store alone.
+The package compiles with its own TypeScript 5.9, because Angular 20 does not support TypeScript 6 or 7. The example in `examples/angular` reads the package from `packages/angular/dist`, so run `bun run build:packages` first. Browser tests: `bun run test:e2e:angular` after an example build.
 
 ## Verify
 
@@ -122,32 +78,27 @@ Always check collaboration when adding or changing an editor feature. Treat coll
 bun run typecheck
 bun run lint
 bun run test
-bun run check:parity
 bun run api:check
 bun run i18n:validate
 openspec validate typed-ooxml-paragraph-editor --strict
 ```
 
-- `bun run lint` runs oxlint with `.oxlintrc.json`. Its errors are the `max-lines` caps (1000 lines for most files, per-file caps up to 3500 for the handful already past it) and the repository rules in `scripts/oxlint/docx-rules.mjs` (HTML-from-strings sinks in `packages/*/src` non-test code, global `@keyframes` names, varargs array spread in `core/src/{store,layout}`, raw Word compatibility-mode comparisons outside `core/src/layout/compatibility/`) plus the framework-isolation `no-restricted-imports`. Nothing else catches the caps, so adding to a large file passes typecheck and the whole suite and fails CI. Extract; do not raise the cap — `scripts/check-max-lines-caps.mjs` also fails a cap that drifts more than 150 lines above its file. `scripts/__tests__/oxlint-rules.test.ts` keeps the repository rules firing; extend it when you add one. Lint covers `examples/*/src` as well as `packages/*/src` — the demos hit the same line caps.
-- `bun run test` shards the suite one process per file across a worker pool (`scripts/test/run-parallel.mjs`, `--jobs N` to pin the width). That is also what CI runs. `bun test` still works and is the one to reach for when you want a single file, `-t`, or `--watch`; `bun run test:serial` is the whole suite the old way.
+- `bun run lint` runs oxlint with `.oxlintrc.json`. Its errors are the `max-lines` caps (1000 lines for most files, per-file caps up to 3500 for the handful already past it) and the repository rules in `scripts/oxlint/docx-rules.mjs` (HTML-from-strings sinks in `packages/*/src` non-test code, global `@keyframes` names, varargs array spread in `core/src/{store,layout}`, raw Word compatibility-mode comparisons outside `core/src/layout/compatibility/`) plus the framework-isolation `no-restricted-imports`. Nothing else catches the caps, so adding to a large file passes typecheck and the whole suite. Extract; do not raise the cap — `scripts/check-max-lines-caps.mjs` also fails a cap that drifts more than 150 lines above its file. `scripts/__tests__/oxlint-rules.test.ts` keeps the repository rules firing; extend it when you add one. Lint covers `examples/*/src` as well as `packages/*/src` — the examples hit the same line caps.
+- `bun run test` shards the suite one process per file across a worker pool (`scripts/test/run-parallel.mjs`, `--jobs N` to pin the width). `bun test` still works and is the one to reach for when you want a single file, `-t`, or `--watch`; `bun run test:serial` is the whole suite the old way.
 - `bun run test:changed` runs only the test files that import a changed file, directly or through other imports, compared with the merge base with `main`. `--list` prints the selection. It runs the whole suite when a change is outside what the import graph can follow, such as `bun.lock`, a `package.json`, a `tsconfig`, or the test runner. A change in `core` still selects most of the suite, because most tests import the `core` entry point.
-- `bun run test:no-collab` runs the suite without the collaboration tests: the collaboration server scenarios in `benchmarks/`, the `pro` and `core` collaboration folders, the collaboration scripts, and the collaboration example. Use it for engine changes that do not touch shared state, operations, or the editor. It finishes in a fraction of the full run. CI still runs the full suite.
 - The pool is machine-aware, and must stay that way: the heavy OOXML-oracle files peak at multiple GiB each and slowest-first starts them together, which once froze a 48 GiB machine (fourteen workers, ~94 GiB footprint, WindowServer watchdog death). The runner caps width by installed memory, splits width and budget between concurrent runs on the machine (tmpdir registry), and gates dispatch on each file's measured peak footprint plus live memory pressure. `--jobs` pins the width but never lifts the gate. A single test file that needs more than a few GiB is a bug to file, not a budget to raise.
 - A file that leaves state on `document` can only be caught by the serial run — per-file processes hide it. Scope DOM queries to the container you mounted.
-- The pre-commit hook runs `lint-staged`, then its other gates side by side (`scripts/precommit/gates.mjs`). The API snapshot gate skips packages whose `dist/` is older than their sources, because a stale build fails correct commits; CI checks every package on a fresh build.
-- `git commit --no-verify` is fine locally, but `bun run format` and `bun run lint` are not optional — the hook runs both, and they are the two gates nothing else covers. Run the other relevant scoped checks too, and report a bypassed failing gate instead of calling it passing.
+- No Git hook or CI runs for you. Run `bun run format` and `bun run lint` before each commit, plus the relevant scoped checks.
 - Compare the run against the non-clean baseline in the active change.
 - `bun run format` before pushing.
 
-## Parity and styling
+## Styling
 
-Platform-neutral logic goes in the engine; adapter-only glue may diverge. `scripts/parity/parity.contract.json` enumerates paired `DocxEditorProps`/`DocxEditorRef` members. Adding an adapter prop or ref method: edit the adapter, `bun run api:extract`, add it to the right bucket (`paired`, `deferredInVue`, `pairedViaInheritance`, `vueExclusive`), rerun `bun run check:parity-contract`.
-
-All editor chrome CSS and color tokens live in the core stylesheet; adapters only `@import` it (enforced by `bun run check:adapter-css-thin`). Never hardcode hex/rgba — use `--doc-*` tokens or shadcn utilities. The document canvas is not themed; it stays Word-faithful.
+All editor chrome CSS and color tokens live in the core stylesheet; adapters only `@import` it. Never hardcode hex/rgba — use `--doc-*` tokens. The document canvas is not themed; it stays Word-faithful.
 
 ## Public API
 
-API Extractor snapshots live in `docs/api/<pkg-slug>/<entry>.api.md`; CI runs `bun run api:check`. On drift: `bun run api:extract`, commit. Changing a `@public` symbol: tag it in TSDoc, rebuild, re-extract, commit. `bun run docs:json` generates consumer JSON (gitignored, CI smoke test).
+API Extractor snapshots live in `docs/api/<pkg-slug>/<entry>.api.md`; check them with `bun run api:check`. On drift: `bun run api:extract`, commit. Changing a `@public` symbol: tag it in TSDoc, rebuild, re-extract, commit.
 
 Vue composables must declare a named `Use<Name>Return` interface and annotate the return type, or core's internal types leak into the snapshot.
 
@@ -176,7 +127,7 @@ Fix sibling sinks when you fix one. The HTML sinks in that grep are also lint er
 
 ## i18n
 
-`packages/i18n/en.json` is source of truth; other locales mirror its shape with `null` = fall back to English. A missing key fails CI.
+`packages/i18n/en.json` is source of truth; other locales mirror its shape with `null` = fall back to English. A missing key fails `bun run i18n:validate`.
 
 The published catalogs cover only UI shipped by the library packages. Files under `examples/` must not add translation keys to `packages/i18n`. Keep example-only text in the example or `examples/shared/example-text.ts`. Examples may reuse existing keys for shipped editor controls. Examples use English unless the task explicitly requires local translations.
 
@@ -188,53 +139,16 @@ t('navigation.find.counter', { current: 3, total: 15 });
 
 New library UI string: add to `en.json`, use `t('key')`, `bun run i18n:fix`. New language: `bun run i18n:new <code>`, fill nulls, `bun run i18n:status`. Never hardcode user-facing English in shipped library components. This restriction does not apply to example-only text.
 
-## Docs site
+## Documentation style
 
-Keep DOCX fidelity descriptions short and clear for developers. Each feature note and table description has at most three sentences. Use 20 words or fewer per sentence. State the supported behavior and the main limitation. Put setup instructions, detailed rules, and edge cases in the relevant guide, and link to it. Never append implementation history or regression details to a feature note. Rewrite the existing summary when support changes. Apply this rule to `docs/site/data/word-features.ts` and `docs/site/content/docx-fidelity.mdx`.
-
-Authored here in `docs/site/content/` (MDX), synced by the site repo at build time. Feature-support claims live in `docs/site/data/word-features.ts` (typed matrix), never hand-written in prose. A PR that changes user-visible behavior updates both.
-
-READMEs, guides, developer docs, feature descriptions, and release notes follow the [Google developer documentation style guide](https://developers.google.com/style) ([highlights](https://developers.google.com/style/highlights) is the summary):
-
-- [Voice and tone](https://developers.google.com/style/tone) — conversational and friendly, not frivolous. No buzzwords, idioms, exclamation marks, or pop-culture references. In procedures, never "simply", "easy", "just", "quickly", or "please".
-- Grammar — [second person](https://developers.google.com/style/person) ("you", not "we"), [active voice](https://developers.google.com/style/voice), [present tense](https://developers.google.com/style/tense), American spelling. State the condition before the instruction ("If X, click Y").
-- [Timeless](https://developers.google.com/style/timeless-documentation) — no "currently", "new", "soon", "as of this writing". Document what the product does; never pre-announce features.
-- [Headings](https://developers.google.com/style/headings) — sentence case in all titles, headings, and navigation.
-- [Lists](https://developers.google.com/style/lists) — numbered for sequences, bulleted otherwise; parallel structure; serial (Oxford) commas.
-- [Text formatting](https://developers.google.com/style/text-formatting) — code font for filenames, identifiers, console output, and placeholders; bold for UI elements only; italics only for term definitions and work titles.
-- [Link text](https://developers.google.com/style/link-text) — a descriptive phrase that matches the target's title. Never "click here", "this article", or a bare URL. Introduce with "For more information, see …".
-- [Code samples](https://developers.google.com/style/code-samples) — introduce each sample with text; wrap lines at 80 characters; mark omissions with a comment, not an ellipsis.
-- [Accessibility](https://developers.google.com/style/accessibility) — proper heading hierarchy, alt text on every image, no images of text or terminal output, no directional language ("above", "below"), meaning never carried by color alone.
-- [Global audience](https://developers.google.com/style/translation) — short sentences (26 words or fewer), one idea per sentence, acronyms defined on first use, no culturally specific references.
-- The [word list](https://developers.google.com/style/word-list) settles spelling and usage; use unambiguous [dates and times](https://developers.google.com/style/dates-times).
-
-**Two `meta.json` must agree.** The `"root": true` `docs/site/content/meta.json` drives the sidebar with full paths; each subfolder has its own. Register a new page in BOTH, or it is URL-reachable but missing from the sidebar.
-
-**Diagrams are mermaid**, in a ` ```mermaid ` fence — not ASCII box drawing. ASCII renders at whatever the code block's font does, wraps on a phone, and is unreadable to a screen reader; mermaid scales and picks up the site theme. Keep it to the shape being explained (a flow, a sequence, a state machine); a diagram that just restates the prose earns nothing.
+READMEs, guides, and developer docs follow the [Google developer documentation style guide](https://developers.google.com/style): second person, active voice, present tense, sentence-case headings, American spelling, short sentences, and one idea per sentence. Introduce each code sample with text. Use code font for filenames and identifiers. Diagrams are mermaid, not ASCII box drawing.
 
 OOXML reference: `reference/quick-ref/wordprocessingml.md`, `themes-colors.md`; schemas in `reference/ecma-376/part1/schemas/`. PDFs are gitignored — run `bun run reference:fetch` once when needed.
-
-## Releasing
-
-Every code PR gets a changeset (`bun changeset`, or a correct hand-written `.changeset/*.md`). Skip only for test/docs/CI-only PRs.
-
-- The frontmatter package name must exactly match a published package and the bump must be `patch`/`minor`/`major`. A wrong name crashes the Release workflow — copy it from an existing changeset.
-- Published packages are one fixed group: declare one bump, the rest follow.
-- Default `patch`; `minor` for additive public API; `major` for breaks.
-- The summary lands verbatim in CHANGELOG: consumer-facing, what changed not how, `Fixes #N` at the end if relevant. No emojis, no marketing.
-- Keep the summary minimal: one sentence, two at most. No bullet lists, no implementation detail.
-
-Collaboration format compatibility has a separate policy after 2.18. Relevant PRs must include a decision from `bun run collaboration:change`. Format changes require at least a minor package release and migration instructions. Public API breaks still follow the major-version rule. See [Collaboration compatibility](docs/architecture/collaboration-compatibility.md).
-
-Never push the `chore: release` commit by hand, delete `.changeset/*.md` outside `changeset version`, or hand-edit `CHANGELOG.md` / `package.json#version`.
-
-**Third-party notices.** Every publishable package ships a `THIRD_PARTY_NOTICES.md` reproducing the license of each package esbuild inlines into its bundles, because MIT/Apache-2.0 both require the notice to travel with the copy. Only genuinely inlined code counts: core declares fast-xml-parser, fflate and prosemirror-\* as real `dependencies` with no `noExternal`, so esbuild leaves them external and npm installs them with their own licenses. The one exception is harfbuzzjs, which core's ESM build inlines (`noExternal`) so browser bundlers never see its Node-only `module` import — core's notice reproduces its MIT text, and every other package generates an empty notice. Both results are correct, not a broken generator — what would be wrong is a bundled dependency missing its text, which fails the run outright. The Release workflow generates it from `dist/metafile-*.json` just before publishing; the file is gitignored, so regenerate with `bun run build:packages && bun run notices:generate`. `notices:check` compares against the CURRENT `dist/`, so it only means anything right after a build and reports "missing" on a clean tree by design. The run is all-or-nothing: a tsup config that stops emitting `metafile: true`, a bundled dependency with no license text, or a `files` array that forgets the notice fails it — and a failure deletes the notices rather than shipping a stale one. A publishable package that is not a tsup bundle has no metafile and fails until it gets an attribution path; `packages/fonts` carries OFL text in `licenses/`, which no metafile can see.
 
 ## Conventions
 
 - **PRs** — short factual title (conventional-commit prefix); body is the minimum the diff doesn't show, often one sentence. A PR that resolves an issue MUST end its BODY with `Fixes #N` — GitHub links and auto-closes only from closing keywords in the body or in commits, never from the title, so a title-only `(fixes #N)` leaves the issue open after merge. No `@`-mentions, unrelated issue numbers, file lists, tooling footers or emojis. Write the body in the [Google developer documentation style](https://developers.google.com/style), the same guide the docs site follows: second person, active voice, present tense, sentence-case headings, American spelling, short sentences, one idea each. Code font for identifiers and filenames; bold for UI elements only.
 - **Bugs** — `gh issue view <N> --repo eigenpal/docx-editor`. Dev server `bun run dev` → `http://localhost:5173/`. Live demo `http://docx-editor.dev/editor`. Commit `fix: ... (fixes #N)`. Screenshots → `screenshots/`.
-- **Issue labels** — every issue gets exactly ONE `area:*` and ONE `priority:*` label; the taxonomy table lives in `README.md` under "Issue conventions". Optional `component:*` names the package. The labels are the source of truth for the public roadmap board (org project 2): `.github/workflows/sync-labels-to-project.yml` mirrors them into the board's Area/Priority single-select fields. An option name must keep matching its label slug (lowercase, spaces→dashes) or the sync warns and skips; an issue with no `area:*` label is removed from the board; two labels of one prefix clear the field. ALWAYS file an issue with both labels AND a native issue type: `gh issue create --type Bug|Feature|Task --label "area:...,priority:..."` (`gh issue edit <N> --type ...` to fix one). Never leave an issue without a type or an area.
 - **ESM only** — no `require()`.
 - **TypeScript** — `typecheck` scripts run `bun check` (Bun 1.4.3 or later), which reports the same errors as TypeScript 7 and writes no files. Declaration builds run TypeScript 7, installed as `typescript7` (`npm:typescript@^7`). The `typescript` dependency stays on 6, because tsup, rollup-plugin-dts, Next.js, and other tools load it as a library, and TypeScript 7 has no library API. A package's own `tsc` is TypeScript 7. Where both are installed (the root, `examples/write-agent`), `tsc` is TypeScript 6, so scripts that need `tsc` there call `node node_modules/typescript7/bin/tsc`; never use bare `bunx tsc` at the root. Examples whose framework loads TypeScript as a library (Next.js, Astro, Nuxt, and the Vue example) install only TypeScript 6. Declarations come from `scripts/build-declarations.mjs` through `withDeclarations` in each tsup config; do not turn tsup's `dts` back on.
 - **Tailwind** — scoped to `.docx-editor`; the scoping is baked into `dist/editor.css` at core build time (`scripts/build-core-styles.mjs` + `packages/core/tailwind.dist.config.cjs`), so the shipped file carries no raw `@tailwind` directive. Rendered output isn't always protected, so use inline styles on painted elements. Never put Tailwind utilities on the element that carries `docx-editor` itself — scoped utilities only match descendants.

@@ -172,11 +172,11 @@ describe('semantic layout is the only geometry authority (task 7.6)', () => {
   });
 
   test('the ADAPTER and editor seams may still measure, so the guard is not vacuous', () => {
-    // React/Vue and the editor composition root legitimately read viewport geometry or
+    // The Vue adapter and the editor composition root legitimately read viewport geometry or
     // create canvas contexts. If they were clean too, these tests would pass because
     // measurement had been removed everywhere rather than confined to where it belongs.
     const adapters = [
-      ...collectSources(existingLanePath('react/src')),
+      ...collectSources(existingLanePath('vue/src')),
       ...collectSources(existingLanePath('core/src/editor')),
     ];
     const measuring = adapters.filter(

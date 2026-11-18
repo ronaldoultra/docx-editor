@@ -1,0 +1,40 @@
+@import '@docx-editor.dev/angular/styles.css';
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #d0d0d0;
+  background: #f6f6f6;
+}
+
+.status {
+  color: #555;
+  font-size: 13px;
+}
+
+docx-editor {
+  flex: 1 1 auto;
+}
+
+.empty {
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
+  color: #555;
+}

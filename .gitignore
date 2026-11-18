@@ -114,8 +114,6 @@ e2e/fixtures/generated/
 e2e/fixtures/synthetic-massive-multisection.docx
 e2e/fixtures/synthetic-massive-singlesection.docx
 
-# SARIF from `bun run check:shipped-advisories --sarif=...`
-*.sarif
 
 # `api:check` writes this beside the repo root while diffing snapshots.
 .snap-tmp.txt
@@ -136,3 +134,6 @@ packages/*/.test-dist-*/
 
 # Local PDF exporter rendering checks.
 .cache/pdf/
+
+# Angular CLI cache
+.angular/
