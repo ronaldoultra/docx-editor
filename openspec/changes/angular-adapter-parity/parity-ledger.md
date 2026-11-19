@@ -85,36 +85,36 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `ContentControlWidgetEntry` | interface | | todo | |
 | `ContentControlWidgetItemProps` | interface | | todo | |
 | `ContentControlWidgetPictureProps` | interface | | todo | |
-| `ContextMenuAnchor` | interface | | todo | |
-| `ContextMenuCellVerticalAlignment` | const | | todo | |
-| `ContextMenuCommandProps` | interface | | todo | |
-| `ContextMenuContextValue` | interface | | todo | |
-| `ContextMenuCopy` | const | | todo | |
-| `ContextMenuCopyFormatting` | const | | todo | |
-| `ContextMenuCut` | const | | todo | |
-| `ContextMenuDelete` | const | | todo | |
-| `ContextMenuDeleteTable` | const | | todo | |
-| `ContextMenuDeleteTableColumn` | const | | todo | |
-| `ContextMenuDeleteTableRow` | const | | todo | |
-| `ContextMenuInsertColumnLeft` | const | | todo | |
-| `ContextMenuInsertColumnRight` | const | | todo | |
-| `ContextMenuInsertRowAbove` | const | | todo | |
-| `ContextMenuInsertRowBelow` | const | | todo | |
-| `ContextMenuItem` | const | | todo | |
-| `ContextMenuItemProps` | interface | | todo | |
-| `ContextMenuMergeCells` | const | | todo | |
-| `ContextMenuPaste` | const | | todo | |
-| `ContextMenuPasteFormatting` | const | | todo | |
-| `ContextMenuPasteWithoutFormatting` | const | | todo | |
-| `ContextMenuRefreshToc` | const | | todo | |
-| `ContextMenuRefreshTocPageNumbers` | const | | todo | |
-| `ContextMenuRemoveToc` | const | | todo | |
-| `ContextMenuSelectAll` | const | | todo | |
-| `ContextMenuSelectTable` | const | | todo | |
-| `ContextMenuSplitCell` | const | | todo | |
-| `ContextMenuStart` | const | | todo | |
-| `ContextMenuStartProps` | interface | | todo | |
-| `ContextMenuTableRowProps` | interface | | todo | |
+| `ContextMenuAnchor` | interface | `ContextMenuAnchor` | ported |  |
+| `ContextMenuCellVerticalAlignment` | const | `DocxContextMenuCellAlignmentComponent` | ported | `docx-context-menu-cell-alignment`. |
+| `ContextMenuCommandProps` | interface | `DocxContextMenuRowComponent` | ported | The inputs `labelKey`, `shortcutKey`, `icon` (Material Symbols paths), `className`, and `hidden`. |
+| `ContextMenuContextValue` | interface |  | dropped | Dropped: the Vue context value is internal state. Angular parts read it with `injectContextMenuAnchor` and `injectContextMenuTarget`. |
+| `ContextMenuCopy` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="edit.copy">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuCopyFormatting` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="format.copyFormatting">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuCut` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="edit.cut">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuDelete` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="edit.delete">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuDeleteTable` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.deleteTable">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuDeleteTableColumn` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.deleteColumn">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuDeleteTableRow` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.deleteRow">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuInsertColumnLeft` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.insertColumnLeft">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuInsertColumnRight` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.insertColumnRight">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuInsertRowAbove` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.insertRowAbove">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuInsertRowBelow` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.insertRowBelow">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuItem` | const | `DocxContextMenuItemComponent` | ported | `docx-context-menu-item`. The Vue `onSelect` is the `activate` output. |
+| `ContextMenuItemProps` | interface | `DocxContextMenuItemComponent` | ported | Inputs `label`, `icon`, `shortcut`, `disabled`, `reason` (Vue `disabledReason`), `active`, `className`, and the `activate` output. |
+| `ContextMenuMergeCells` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.mergeCells">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuPaste` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="edit.paste">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuPasteFormatting` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="format.pasteFormatting">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuPasteWithoutFormatting` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="edit.pasteWithoutFormatting">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuRefreshToc` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="toc.refresh">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuRefreshTocPageNumbers` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="toc.refreshPageNumbers">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuRemoveToc` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="toc.remove">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuSelectAll` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="edit.selectAll">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuSelectTable` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.selectTable">`. One component with a `row` input replaces the Vue component of each row. |
+| `ContextMenuSplitCell` | const | `DocxContextMenuRowComponent` | ported | `<docx-context-menu-row row="table.splitCell">`. The row shows in a table when the menu has a `splitCellHandler`. The split cell dialog lands in task 6.4. |
+| `ContextMenuStart` | const | `DocxContextMenuStartComponent` | ported | `docx-context-menu-start`. The menu adds one separator below all starts, and only when a start has rows. |
+| `ContextMenuStartProps` | interface | `DocxContextMenuStartComponent` | ported | The rows are projected content. |
+| `ContextMenuTableRowProps` | interface | `DocxContextMenuRowComponent` | ported | The input `destructive` on a table row. |
 | `createDocumentRefresh` | re-export from core | | todo | |
 | `createFontSource` | re-export from core | | todo | |
 | `DEFAULT_FONT` | re-export from core | | todo | |
@@ -165,9 +165,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorContentControlWidgetPartProps` | interface | | todo | |
 | `DocxEditorContentControlWidgetProps` | interface | | todo | |
 | `DocxEditorContentProps` | interface | `DocxEditorContentComponent` | ported | Angular hosts set `class` on the host element. |
-| `DocxEditorContextMenu` | const | | todo | |
-| `DocxEditorContextMenuNamespace` | interface | | todo | |
-| `DocxEditorContextMenuProps` | interface | | todo | |
+| `DocxEditorContextMenu` | const | `DocxEditorContextMenuComponent` | ported | `div[docxEditorContextMenu]`. Overrides are `ng-template[docxContextMenuRow]` (`DocxContextMenuRowDirective`) and `ng-template[docxSlot]`. The Add comment row ports with the review rail in task 10.1. |
+| `DocxEditorContextMenuNamespace` | interface |  | dropped | Dropped: Angular has no compound namespace object. Each part is a standalone component. The menu bar parts (`docx-menu-item`, `docx-menu-submenu`, `docxMenuRow`, `docxMenuSeparator`, `docxMenuGroup`) also work in the context menu. |
+| `DocxEditorContextMenuProps` | interface | `DocxEditorContextMenuComponent` | ported | Inputs `preset`, `disabled`, `t`, `className`, `splitCellHandler`, and the `openChange` output (Vue `onOpenChange`). |
 | `DocxEditorDocumentOutline` | const | | todo | |
 | `DocxEditorDocumentOutlineProps` | interface | | todo | |
 | `DocxEditorEquation` | const | | todo | |
@@ -547,9 +547,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `UseContentControlResult` | interface | | todo | |
 | `useContentControlWidget` | function | | todo | |
 | `UseContentControlWidgetResult` | interface | | todo | |
-| `useContextMenuAnchor` | function | | todo | |
-| `useContextMenuHighlights` | function | | todo | |
-| `useContextMenuTarget` | function | | todo | |
+| `useContextMenuAnchor` | function | `injectContextMenuAnchor` | ported |  |
+| `useContextMenuHighlights` | function | `injectContextMenuHighlights` | ported |  |
+| `useContextMenuTarget` | function | `injectContextMenuTarget` | ported |  |
 | `UseDialogReturn` | interface | | todo | |
 | `useDocumentOutline` | function | | todo | |
 | `UseDocumentOutlineResult` | interface | | todo | |
@@ -658,13 +658,13 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/content-control-widget-parts.test.ts` | | todo | Task 9.3 |
 | `packages/vue/test/content-lock-policy-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass the policy, so bold over a locked control succeeds only with it and the text stays; an equal new object does not warn; a changed value is ignored and warns once. |
 | `packages/vue/test/context-menu-add-comment.test.ts` | | todo | |
-| `packages/vue/test/context-menu-chart.test.ts` | | todo | Task 5.2 |
+| `packages/vue/test/context-menu-chart.test.ts` | `packages/angular/src/lib/context-menu/context-menu.spec.ts` | ported |  |
 | `packages/vue/test/context-menu-keyboard.test.ts` | | todo | Task 5.3 |
-| `packages/vue/test/context-menu-link.test.ts` | | todo | Task 5.2 |
-| `packages/vue/test/context-menu-placement.test.ts` | | todo | Task 5.2 |
-| `packages/vue/test/context-menu-start.test.ts` | | todo | Task 5.2 |
-| `packages/vue/test/context-menu-target.test.ts` | | todo | Task 5.2 |
-| `packages/vue/test/context-menu.test.ts` | | todo | Task 5.2 |
+| `packages/vue/test/context-menu-link.test.ts` | `packages/angular/src/lib/context-menu/context-menu-link.spec.ts` | todo | Ported (task 5.2): the row is enabled and opens the registered link UI; in viewing mode it is disabled with the engine reason; a `text.link` slot template replaces the row; on a link the row says Edit link. The claims about the link popup and the focus after it closes port with task 6.2. |
+| `packages/vue/test/context-menu-placement.test.ts` | `packages/angular/src/lib/context-menu/context-menu-placement.spec.ts` | ported |  |
+| `packages/vue/test/context-menu-start.test.ts` | `packages/angular/src/lib/context-menu/context-menu-target.spec.ts` | ported | Angular has no fragments: the spec checks that each start moves up and that the host rows stay below. The menu adds one separator below all starts. |
+| `packages/vue/test/context-menu-target.test.ts` | `packages/angular/src/lib/context-menu/context-menu-target.spec.ts` | todo | Ported (task 5.2): the pages, the canvas, painted text, a painted drop-down field, and the content mount open the menu; a form control beside the pages keeps the browser menu, its focus, and its selection; a right-click on the open menu keeps it in place. The link popup and dialog claims port with tasks 6.2 and 6.4. |
+| `packages/vue/test/context-menu.test.ts` | `packages/angular/src/lib/context-menu/context-menu.spec.ts` | todo | Ported (task 5.2): a right-click opens the panel at the pointer; engine changes keep the one listener; the default rows; Paste closes before the clipboard read settles; a refused read disables Paste with the reason; the form field row opens the field dialog; the table of contents rows and Remove. Added: the table rows, Insert row below, and Split cells. The claim that the dialog saves the field ports with task 6.4. |
 | `packages/vue/test/deferred-notifier.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/dialog-customization.test.ts` | | todo | Task 6.1 |
 | `packages/vue/test/document-refresh-edit.test.ts` | | todo | Task 10.3 |

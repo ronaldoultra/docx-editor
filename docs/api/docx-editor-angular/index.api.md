@@ -35,6 +35,8 @@ import { FontConfigurationFragment } from '@docx-editor.dev/core/editor';
 import { FontOrigin } from '@docx-editor.dev/core/editor';
 import { FontResolver } from '@docx-editor.dev/core/editor';
 import { FontShapingOptions } from '@docx-editor.dev/core/editor';
+import { HighlightHit } from '@docx-editor.dev/core/contracts/editor';
+import { HighlightRange } from '@docx-editor.dev/core/contracts/editor';
 import { HistoryGroupBindingOptions } from '@docx-editor.dev/core/editor';
 import { ImageDecodePort } from '@docx-editor.dev/core/editor';
 import { InjectionToken } from '@angular/core';
@@ -133,6 +135,37 @@ export interface ColorSplitConfig {
 
 export { ContentLockPolicy }
 
+// @public
+export interface ContextMenuAnchor {
+    readonly trigger: 'pointer' | 'keyboard';
+    readonly x: number;
+    readonly y: number;
+}
+
+// @internal
+export interface ContextMenuEntry {
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly kind: 'row' | 'separator';
+}
+
+// @public
+export type ContextMenuPackagedRow = Exclude<ContextMenuRowId, 'table.cellVerticalAlignment'> | 'image.editChart' | 'image.formatShape';
+
+// @public
+export type ContextMenuRowId = 'edit.cut' | 'edit.copy' | 'edit.paste' | 'edit.pasteWithoutFormatting' | 'edit.delete' | 'edit.selectAll' | 'format.copyFormatting' | 'format.pasteFormatting' | 'field.edit' | 'table.selectTable' | 'table.insertRowAbove' | 'table.insertRowBelow' | 'table.insertColumnLeft' | 'table.insertColumnRight' | 'table.mergeCells' | 'table.splitCell' | 'table.deleteRow' | 'table.deleteColumn' | 'table.deleteTable' | 'table.cellVerticalAlignment' | 'toc.refresh' | 'toc.refreshPageNumbers' | 'toc.remove';
+
+// @internal
+export interface ContextMenuRowOverride {
+    // (undocumented)
+    readonly hidden: boolean;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly template: TemplateRef<unknown>;
+}
+
 // @internal
 export interface DefaultEntry {
     readonly button: ChromeSlotId;
@@ -169,6 +202,113 @@ export class DocxChromeIconComponent {
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxChromeIconComponent, "svg[docxChromeIcon]", never, { "docxChromeIcon": { "alias": "docxChromeIcon"; "isSignal": true; "required": true; }; }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxChromeIconComponent, never>;
+}
+
+// @public
+export class DocxContextMenuCellAlignmentComponent {
+    // @internal (undocumented)
+    protected align(index: number): void;
+    // @internal (undocumented)
+    protected readonly commands: EditorCommandState[];
+    // @internal (undocumented)
+    protected readonly heading: _angular_core.Signal<string>;
+    readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    // @internal (undocumented)
+    protected readonly inTable: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly items: ({
+        alignment: "top";
+        icon: "vertical_align_top";
+        labelKey: "tableAdvanced.top";
+        paths: readonly string[];
+    } | {
+        alignment: "center";
+        icon: "vertical_align_center";
+        labelKey: "tableAdvanced.middle";
+        paths: readonly string[];
+    } | {
+        alignment: "bottom";
+        icon: "vertical_align_bottom";
+        labelKey: "tableAdvanced.bottom";
+        paths: readonly string[];
+    })[];
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxContextMenuCellAlignmentComponent, "docx-context-menu-cell-alignment", never, { "hidden": { "alias": "hidden"; "isSignal": true; "required": false; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxContextMenuCellAlignmentComponent, never>;
+}
+
+// @public
+export class DocxContextMenuItemComponent {
+    readonly activate: _angular_core.OutputEmitterRef<void>;
+    readonly active: _angular_core.InputSignal<boolean | undefined>;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly icon: _angular_core.InputSignal<readonly string[] | undefined>;
+    readonly label: _angular_core.InputSignal<string>;
+    readonly reason: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected run(): void;
+    readonly shortcut: _angular_core.InputSignal<string | undefined>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxContextMenuItemComponent, "docx-context-menu-item", never, { "active": { "alias": "active"; "isSignal": true; "required": false; }; "className": { "alias": "className"; "isSignal": true; "required": false; }; "disabled": { "alias": "disabled"; "isSignal": true; "required": false; }; "icon": { "alias": "icon"; "isSignal": true; "required": false; }; "label": { "alias": "label"; "isSignal": true; "required": true; }; "reason": { "alias": "reason"; "isSignal": true; "required": false; }; "shortcut": { "alias": "shortcut"; "isSignal": true; "required": false; }; }, { "activate": "activate"; }, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxContextMenuItemComponent, never>;
+}
+
+// @public
+export class DocxContextMenuRowComponent {
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    readonly destructive: _angular_core.InputSignal<boolean | undefined>;
+    // @internal (undocumented)
+    protected readonly enabled: _angular_core.Signal<boolean>;
+    readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly icon: _angular_core.InputSignal<readonly string[] | undefined>;
+    readonly labelKey: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly paths: _angular_core.Signal<readonly string[] | null>;
+    // @internal (undocumented)
+    protected readonly reason: _angular_core.Signal<string | null>;
+    readonly row: _angular_core.InputSignal<ContextMenuPackagedRow>;
+    // @internal (undocumented)
+    protected readonly rowClass: _angular_core.Signal<string | undefined>;
+    // @internal (undocumented)
+    protected run(): void;
+    // @internal (undocumented)
+    protected readonly shortcut: _angular_core.Signal<string | undefined>;
+    readonly shortcutKey: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly shown: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxContextMenuRowComponent, "docx-context-menu-row", never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "destructive": { "alias": "destructive"; "isSignal": true; "required": false; }; "hidden": { "alias": "hidden"; "isSignal": true; "required": false; }; "icon": { "alias": "icon"; "isSignal": true; "required": false; }; "labelKey": { "alias": "labelKey"; "isSignal": true; "required": false; }; "row": { "alias": "row"; "isSignal": true; "required": true; }; "shortcutKey": { "alias": "shortcutKey"; "isSignal": true; "required": false; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxContextMenuRowComponent, never>;
+}
+
+// @public
+export class DocxContextMenuRowDirective {
+    readonly docxContextMenuRow: _angular_core.InputSignal<"edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.selectTable" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.mergeCells" | "table.splitCell" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.cellVerticalAlignment" | "toc.refresh" | "toc.refreshPageNumbers" | "toc.remove" | "image.editChart" | "image.formatShape" | "format.painter" | "history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.protectDocument" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.authors" | "review.editingMode" | "contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "contentControl.remove" | "image.insert" | "image.properties" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderColor" | "table.borderStyle" | "table.borderWidth" | "table.cellFill" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark">;
+    readonly docxContextMenuRowHidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly template: TemplateRef<unknown>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxContextMenuRowDirective, "ng-template[docxContextMenuRow]", never, { "docxContextMenuRow": { "alias": "docxContextMenuRow"; "isSignal": true; "required": true; }; "docxContextMenuRowHidden": { "alias": "docxContextMenuRowHidden"; "isSignal": true; "required": false; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxContextMenuRowDirective, never>;
+}
+
+// @public
+export class DocxContextMenuStartComponent {
+    constructor();
+    // @internal
+    hasRows(): boolean;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxContextMenuStartComponent, "docx-context-menu-start", never, {}, {}, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxContextMenuStartComponent, never>;
 }
 
 // @public
@@ -254,6 +394,48 @@ export class DocxEditorContext {
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorContext, never>;
     // (undocumented)
     static ɵprov: _angular_core.ɵɵInjectableDeclaration<DocxEditorContext>;
+}
+
+// @public
+export class DocxEditorContextMenuComponent {
+    constructor();
+    // @internal (undocumented)
+    protected readonly anchor: Signal<ContextMenuAnchor | null>;
+    // @internal
+    protected readonly appended: Signal<ContextMenuRowOverride[]>;
+    // @internal (undocumented)
+    protected readonly chromeDir: Signal<DocxEditorDirection | undefined>;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    // @internal (undocumented)
+    protected readonly entries: Signal<readonly ContextMenuEntry[]>;
+    // @internal (undocumented)
+    protected isRow(id: string): id is ContextMenuPackagedRow;
+    // @internal (undocumented)
+    protected readonly label: Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected onPanelKey(event: KeyboardEvent): void;
+    readonly openChange: _angular_core.OutputEmitterRef<boolean>;
+    // @internal (undocumented)
+    protected readonly overrides: Signal<Map<string, ContextMenuRowOverride>>;
+    // @internal (undocumented)
+    protected readonly panelClass: Signal<string>;
+    // @internal (undocumented)
+    protected readonly placement: _angular_core.WritableSignal<{
+        readonly left: number;
+        readonly maxHeight: number;
+        readonly maxWidth: number;
+        readonly top: number;
+    } | null>;
+    readonly preset: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly splitCellHandler: _angular_core.InputSignal<(() => void) | undefined>;
+    // @internal (undocumented)
+    protected readonly startRows: _angular_core.WritableSignal<boolean>;
+    readonly t: _angular_core.InputSignal<DocxMenuTranslate | undefined>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorContextMenuComponent, "div[docxEditorContextMenu]", never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "disabled": { "alias": "disabled"; "isSignal": true; "required": false; }; "preset": { "alias": "preset"; "isSignal": true; "required": false; }; "splitCellHandler": { "alias": "splitCellHandler"; "isSignal": true; "required": false; }; "t": { "alias": "t"; "isSignal": true; "required": false; }; }, { "openChange": "openChange"; }, ["rowTemplates", "slotTemplates", "starts"], ["docx-context-menu-start", "*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorContextMenuComponent, never>;
 }
 
 // @public
@@ -791,7 +973,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly current: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
+        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
         state: EditorCommandState;
         text: string;
     }>;
@@ -804,7 +986,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly options: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
+        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
         state: EditorCommandState;
         text: string;
     }[]>;
@@ -1317,6 +1499,15 @@ export { ImageDecodePort }
 
 // @public
 export function injectChromeDir(): Signal<DocxEditorDirection | undefined>;
+
+// @public
+export function injectContextMenuAnchor(): Signal<ContextMenuAnchor | null>;
+
+// @public
+export function injectContextMenuHighlights<R extends HighlightRange = HighlightRange>(name?: string): Signal<readonly HighlightHit<R>[]>;
+
+// @public
+export function injectContextMenuTarget(): Signal<HTMLElement | null>;
 
 // @public
 export function injectDocxEditor(): Signal<DocxEditorInstance | null>;

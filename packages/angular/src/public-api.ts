@@ -98,6 +98,24 @@ export {
 export { DocxMenuSubmenuComponent } from './lib/menu/menu-submenu.component';
 export { DocxMenuReviewersComponent } from './lib/menu/menu-pickers.component';
 export type { DocxMenuTranslate } from './lib/menu/menu-state';
+export { DocxEditorContextMenuComponent } from './lib/context-menu/context-menu.component';
+export {
+  DocxContextMenuCellAlignmentComponent,
+  DocxContextMenuRowComponent,
+  type ContextMenuPackagedRow,
+} from './lib/context-menu/context-menu-row.component';
+export {
+  DocxContextMenuItemComponent,
+  DocxContextMenuRowDirective,
+  DocxContextMenuStartComponent,
+} from './lib/context-menu/context-menu-item.component';
+export {
+  injectContextMenuAnchor,
+  injectContextMenuHighlights,
+  injectContextMenuTarget,
+  type ContextMenuRowId,
+} from './lib/context-menu/context-menu-state';
+export type { ContextMenuAnchor } from './lib/context-menu/context-menu-target';
 // Internal types that the protected members of the toolbar parts name. They are not API.
 export type {
   BarGroup,
@@ -110,6 +128,10 @@ export type {
 export type { ToolbarArrangementKey } from './lib/toolbar/toolbar-parts';
 export type { ModeOption } from './lib/toolbar/toolbar-editing-mode.component';
 export type { DocxMenuBarState, MenuHandlers, MenuRegistration } from './lib/menu/menu-state';
+export type {
+  ContextMenuEntry,
+  ContextMenuRowOverride,
+} from './lib/context-menu/context-menu.component';
 export { ColorSplitBase, type ColorSplitConfig } from './lib/toolbar/toolbar-colors.component';
 export { TableColorBase, TableControlBase } from './lib/toolbar/toolbar-table.component';
 export { DocxTableChromeState, type TableSlotState } from './lib/toolbar/table-chrome-state';
