@@ -67,6 +67,7 @@ export {
   DocxToolbarZoomComponent,
 } from './lib/toolbar/toolbar-steppers.component';
 export { DocxToolbarEditingModeComponent } from './lib/toolbar/toolbar-editing-mode.component';
+export { DocxToolbarReviewersComponent } from './lib/toolbar/toolbar-reviewers.component';
 export {
   DocxToolbarFontColorComponent,
   DocxToolbarHighlightComponent,

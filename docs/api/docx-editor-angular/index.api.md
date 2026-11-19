@@ -291,7 +291,7 @@ export class DocxContextMenuRowComponent {
 
 // @public
 export class DocxContextMenuRowDirective {
-    readonly docxContextMenuRow: _angular_core.InputSignal<"edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.selectTable" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.mergeCells" | "table.splitCell" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.cellVerticalAlignment" | "toc.refresh" | "toc.refreshPageNumbers" | "toc.remove" | "image.editChart" | "image.formatShape" | "format.painter" | "history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.protectDocument" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.authors" | "review.editingMode" | "contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "contentControl.remove" | "image.insert" | "image.properties" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderColor" | "table.borderStyle" | "table.borderWidth" | "table.cellFill" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark">;
+    readonly docxContextMenuRow: _angular_core.InputSignal<"toc.refresh" | "toc.refreshPageNumbers" | "toc.remove" | "alignment.center" | "alignment.justify" | "table.splitCell" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.selectTable" | "table.mergeCells" | "table.borderColor" | "table.borderWidth" | "contentControl.remove" | "contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.protectDocument" | "history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.right" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.painter" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.authors" | "review.editingMode" | "image.insert" | "image.properties" | "image.editChart" | "image.formatShape" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderStyle" | "table.cellFill" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark" | "edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.cellVerticalAlignment">;
     readonly docxContextMenuRowHidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
     readonly template: TemplateRef<unknown>;
     // (undocumented)
@@ -973,7 +973,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly current: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
+        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
         state: EditorCommandState;
         text: string;
     }>;
@@ -986,7 +986,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly options: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
+        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
         state: EditorCommandState;
         text: string;
     }[]>;
@@ -1238,6 +1238,43 @@ export class DocxToolbarParagraphStyleComponent {
 
 // @public
 export type DocxToolbarPlacement = 'bar' | 'panel';
+
+// @public
+export class DocxToolbarReviewersComponent {
+    constructor();
+    // @internal (undocumented)
+    protected readonly allVisible: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly authors: _angular_core.Signal<readonly ReviewAuthorInfo[]>;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly command: EditorCommandState;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    // @internal (undocumented)
+    protected readonly hiddenSet: _angular_core.Signal<Set<string>>;
+    // @internal (undocumented)
+    protected readonly hostClass: _angular_core.Signal<string>;
+    // @internal (undocumented)
+    protected readonly iconPaths: readonly string[];
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected onMenuKey(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string>;
+    // @internal (undocumented)
+    protected toggle(author: string): void;
+    // @internal (undocumented)
+    protected toggleAll(): void;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarReviewersComponent, "div[docxToolbarReviewers]", never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "hidden": { "alias": "hidden"; "isSignal": true; "required": false; }; }, {}, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarReviewersComponent, never>;
+}
 
 // @public
 export class DocxToolbarSeparatorComponent {

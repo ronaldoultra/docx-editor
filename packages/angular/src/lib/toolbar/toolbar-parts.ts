@@ -8,6 +8,7 @@ import {
   DocxToolbarHighlightComponent,
 } from './toolbar-colors.component';
 import { DocxToolbarEditingModeComponent } from './toolbar-editing-mode.component';
+import { DocxToolbarReviewersComponent } from './toolbar-reviewers.component';
 import { DocxToolbarTableInsertComponent } from './toolbar-table-insert.component';
 import {
   DocxToolbarAlignmentComponent,
@@ -32,6 +33,7 @@ export const SHAPED_PARTS: Partial<Record<ToolbarArrangementKey, Type<unknown>>>
   'font.family': DocxToolbarFontFamilyComponent,
   'font.size': DocxToolbarFontSizeComponent,
   'review.editingMode': DocxToolbarEditingModeComponent,
+  'review.authors': DocxToolbarReviewersComponent,
   'text.color': DocxToolbarFontColorComponent,
   'text.highlight': DocxToolbarHighlightComponent,
   'list.lineSpacing': DocxToolbarLineSpacingComponent,
