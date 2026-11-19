@@ -2,7 +2,7 @@
 // engine's exact English in `DISABLED_REASON_KEYS`, so a paraphrase on either side would reach
 // every locale raw; this test is what notices.
 import { expect, test } from 'bun:test';
-import { createT, en, localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { createT, en, localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { BULK_REVIEW_REFUSALS } from '../docx-editor-review-commands.ts';
 
 const t = createT(en);

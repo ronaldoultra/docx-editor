@@ -20,6 +20,8 @@ export type LaneName =
   | 'output'
   | 'export'
   | 'automation'
+  | 'i18n'
+  | 'fonts'
   | 'editor';
 
 export type LaneEnvironment = 'neutral' | 'browser' | 'node';
@@ -161,10 +163,37 @@ export const CORE_LANES: Readonly<Record<LaneName, Lane>> = Object.freeze({
     environment: 'neutral',
     subpath: './automation',
   },
+  // UI strings and their helpers. It was the `@docx-editor.dev/core/i18n` package before this fork
+  // folded it into core. It reads `navigator` for the platform shortcut labels.
+  i18n: {
+    directory: 'src/i18n',
+    package: null,
+    mayImport: [],
+    environment: 'browser',
+    subpath: './i18n',
+  },
+  // Metric-compatible substitutes for Word's default faces. It was the `@docx-editor.dev/core/fonts`
+  // package. No lane imports it: an app opts in by passing its resolvers to `fonts`.
+  fonts: {
+    directory: 'src/fonts',
+    package: null,
+    mayImport: [],
+    environment: 'browser',
+    subpath: './fonts',
+  },
   editor: {
     directory: 'src/editor',
     package: null,
-    mayImport: ['contracts', 'store', 'collaboration', 'binding', 'layout', 'output', 'automation'],
+    mayImport: [
+      'contracts',
+      'store',
+      'collaboration',
+      'binding',
+      'layout',
+      'output',
+      'automation',
+      'i18n',
+    ],
     environment: 'browser',
     subpath: './editor',
   },
@@ -186,6 +215,7 @@ export const BROWSER_REACHABLE: readonly LaneName[] = [
   'output',
   'automation',
   'export',
+  'i18n',
   'editor',
 ];
 

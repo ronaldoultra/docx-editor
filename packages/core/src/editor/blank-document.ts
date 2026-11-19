@@ -58,7 +58,7 @@ const DOCUMENT_RELS =
 // Word's own headings name the theme's MAJOR typeface, which the Office theme sets to
 // Calibri Light, and a faithful template would say so. It does not, for a reason that is
 // about this engine rather than about Word: no metric-compatible substitute for Calibri
-// Light exists in `packages/fonts`, so a heading measures and paints in Calibri anyway,
+// Light exists in `packages/core/src/fonts`, so a heading measures and paints in Calibri anyway,
 // while the declared name lights the font-compatibility notice on a brand-new document —
 // a fidelity warning about a face nothing on the page uses. A template that says Calibri
 // says what it renders. Name Calibri Light here once the notice reports the families a

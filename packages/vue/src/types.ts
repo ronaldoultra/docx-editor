@@ -24,7 +24,7 @@ import type {
   FontConfigurationFragment,
   FontResolver,
 } from '@docx-editor.dev/core/editor';
-import type { Translations } from '@docx-editor.dev/i18n';
+import type { Translations } from '@docx-editor.dev/core/i18n';
 import type { DocxEditorMenuProps } from './editor/menu';
 import type { DocxEditorContextMenuProps } from './editor/contextmenu';
 import type { DocxEditorNavigationProps } from './editor/navigation';

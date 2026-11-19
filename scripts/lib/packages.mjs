@@ -12,11 +12,6 @@ import path from 'node:path';
 
 export const PACKAGES = [
   {
-    name: '@docx-editor.dev/i18n',
-    root: 'packages/i18n',
-    pkgSlug: 'docx-editor-i18n',
-  },
-  {
     name: '@docx-editor.dev/vue',
     root: 'packages/vue',
     pkgSlug: 'docx-editor-vue',
@@ -44,12 +39,6 @@ export const PACKAGES = [
         ],
       },
     },
-  },
-  {
-    name: '@docx-editor.dev/fonts',
-    root: 'packages/fonts',
-    pkgSlug: 'docx-editor-fonts',
-    tsconfigPath: 'packages/fonts/tsconfig.api.json',
   },
   {
     name: '@docx-editor.dev/angular',

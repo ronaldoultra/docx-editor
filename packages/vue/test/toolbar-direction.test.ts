@@ -8,7 +8,7 @@ import './dom-setup.ts';
 
 import { afterEach, describe, expect, test } from 'bun:test';
 import { createApp, h } from 'vue';
-import { en, ptBR, type Translations } from '@docx-editor.dev/i18n';
+import { en, ptBR, type Translations } from '@docx-editor.dev/core/i18n';
 
 /** Right-to-left catalogs as a host declares them. The package ships none. */
 const ar: Translations = { _lang: 'ar', _dir: 'rtl' };

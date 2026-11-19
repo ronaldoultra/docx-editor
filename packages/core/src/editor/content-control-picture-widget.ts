@@ -6,7 +6,7 @@
 // land through the surface's `replaceImage`, so the trust boundary, the undo unit and the
 // mode rules are the ones every image write already has.
 
-import type { TranslationKey } from '@docx-editor.dev/i18n';
+import type { TranslationKey } from '@docx-editor.dev/core/i18n';
 import { textFormTranslate } from './text-form-field-translations.ts';
 import { armContentControlMenuDismiss } from './content-control-widget-dismiss.ts';
 import {

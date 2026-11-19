@@ -1,7 +1,7 @@
 import { defineComponent, h, type PropType } from 'vue';
 import type { EditorSnapshot } from '@docx-editor.dev/core/contracts/editor';
 import { toolbarCommandState } from '@docx-editor.dev/core/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { useTranslation } from '../../i18n';
 import { useDocxEditor } from '../context';
 import { useEditorState } from '../useEditorState';

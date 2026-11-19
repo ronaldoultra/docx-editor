@@ -10,7 +10,7 @@ import {
   type Signal,
   type TemplateRef,
 } from '@angular/core';
-import type { TranslationKey } from '@docx-editor.dev/i18n';
+import type { TranslationKey } from '@docx-editor.dev/core/i18n';
 import { injectTranslation } from '../i18n';
 
 /**

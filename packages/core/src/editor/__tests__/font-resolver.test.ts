@@ -121,7 +121,7 @@ describe('the resolver mark', () => {
 
     expect((marked as unknown as Record<symbol, unknown>)[FONT_RESOLVER_BRAND]).toBe(true);
     // The string half is what `MarkedFontResolver` claims in the type and what lets
-    // `@docx-editor.dev/fonts` declare the same mark without importing from the engine.
+    // `@docx-editor.dev/core/fonts` declare the same mark without importing from the engine.
     expect(marked[FONT_RESOLVER_MARK_KEY]).toBe(true);
     expect(FONT_RESOLVER_MARK_KEY).toBe('docx-editor.dev/font-resolver');
   });

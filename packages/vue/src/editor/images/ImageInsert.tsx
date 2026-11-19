@@ -5,7 +5,7 @@ import {
   executeImageCommand,
   toolbarCommandState,
 } from '@docx-editor.dev/core/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { useTranslation, type TranslationKey } from '../../i18n';
 import { flattenChildren } from '../../lib/flattenChildren';
 import { useDocxEditor } from '../context';

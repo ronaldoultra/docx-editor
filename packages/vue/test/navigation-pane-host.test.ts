@@ -6,7 +6,7 @@ import './dom-setup.ts';
 
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import ptBRCatalog from '../../i18n/pt-BR.json';
+import ptBRCatalog from '../../core/src/i18n/pt-BR.json';
 import { resolve } from 'node:path';
 import { h, nextTick, ref } from 'vue';
 import { zipSync, strToU8 } from 'fflate';

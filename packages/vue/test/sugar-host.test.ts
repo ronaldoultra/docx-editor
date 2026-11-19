@@ -2,7 +2,7 @@ import './dom-setup.ts';
 
 import { afterEach, describe, expect, test } from 'bun:test';
 import { h, nextTick } from 'vue';
-import { createT, en, type TranslationKey, type Translations } from '@docx-editor.dev/i18n';
+import { createT, en, type TranslationKey, type Translations } from '@docx-editor.dev/core/i18n';
 import { CHROME_MENUS, defaultChromeGroups, chromeSlotId } from '@docx-editor.dev/core/editor';
 import { DocxEditor } from '../src/components/DocxEditor';
 import { DocxEditorMenu } from '../src/editor/menu';

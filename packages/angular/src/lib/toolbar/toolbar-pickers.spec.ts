@@ -5,7 +5,7 @@
 import { ChangeDetectionStrategy, Component, Directive, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import type { DocxEditorInstance, EditorModule } from '@docx-editor.dev/core/editor';
-import { en, type Translations } from '@docx-editor.dev/i18n';
+import { en, type Translations } from '@docx-editor.dev/core/i18n';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { headerDocx, paragraph, paragraphStyle, stylesDocx } from '../../testing/docx';
 import { configureZoneless, engineOf, render, settle } from '../../testing/harness';

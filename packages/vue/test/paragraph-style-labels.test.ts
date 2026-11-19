@@ -4,7 +4,7 @@ import './dom-setup.ts';
 import { afterEach, expect, test } from 'bun:test';
 import { h } from 'vue';
 import { zipSync, strToU8 } from 'fflate';
-import { en } from '@docx-editor.dev/i18n';
+import { en } from '@docx-editor.dev/core/i18n';
 import { LocaleProvider } from '../src/i18n';
 import { DocxEditorToolbar } from '../src/editor/toolbar';
 import { flush, mountEditorTree, type MountedEditor } from './helpers/mount';

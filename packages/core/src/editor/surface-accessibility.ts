@@ -1,4 +1,4 @@
-import { en } from '@docx-editor.dev/i18n';
+import { en } from '@docx-editor.dev/core/i18n';
 import type { PaginatedSurfaceOptions } from './paginated-surface-options.ts';
 
 /** The header and footer hover hints, as CSS custom properties the stylesheet reads. */

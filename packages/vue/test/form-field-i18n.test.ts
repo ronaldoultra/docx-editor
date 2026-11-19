@@ -1,7 +1,7 @@
 import './dom-setup.ts';
 import { expect, test } from 'bun:test';
 import { createApp, h, shallowRef } from 'vue';
-import { createT, deepMerge, en, type LocaleStrings } from '@docx-editor.dev/i18n';
+import { createT, deepMerge, en, type LocaleStrings } from '@docx-editor.dev/core/i18n';
 import { DocxEditor } from '../src/components/DocxEditor';
 import { DocxEditorRoot } from '../src/editor/DocxEditorRoot';
 import { DocxEditorViewport } from '../src/editor/DocxEditorViewport';

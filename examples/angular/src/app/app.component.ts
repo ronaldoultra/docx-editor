@@ -5,7 +5,7 @@ import {
   type DocxEditorColorMode,
   type DocxEditorMode,
 } from '@docx-editor.dev/angular';
-import { en, ptBR, type Translations } from '@docx-editor.dev/i18n';
+import { en, ptBR, type Translations } from '@docx-editor.dev/core/i18n';
 import { ComposedEditorComponent } from './composed/composed-editor.component';
 import { EXAMPLE_REVIEW_MODULE } from './review-module';
 

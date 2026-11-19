@@ -4,7 +4,7 @@ import { createApp, h, ref } from 'vue';
 import { DocxEditor } from '../src/components/DocxEditor';
 import { VerticalRuler } from '../src/components/ui/VerticalRuler';
 import type { DocxEditorInstance } from '@docx-editor.dev/core/editor';
-import type { Translations } from '@docx-editor.dev/i18n';
+import type { Translations } from '@docx-editor.dev/core/i18n';
 import { flush } from './helpers/fixtures';
 
 const cleanup: (() => void)[] = [];

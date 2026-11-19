@@ -6,7 +6,7 @@ import { GlobalRegistrator } from '@happy-dom/global-registrator';
 if (!GlobalRegistrator.isRegistered) GlobalRegistrator.register();
 
 import { expect, test } from 'bun:test';
-import { createT, en, localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { createT, en, localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
 import { chartexDocx, waterfallChartSpace } from '../../store/__tests__/chartex-fixture.ts';
 import { createDocxEditor, type DocxEditorInstance } from '../docx-editor.ts';

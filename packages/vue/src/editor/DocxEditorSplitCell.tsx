@@ -10,7 +10,7 @@ import {
   SPLIT_CELL_FALLBACK_MAX,
   type SplitCellLimits,
 } from '@docx-editor.dev/core/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import {
   Fragment,
   computed,

@@ -21,21 +21,21 @@ import { partOfNodeId } from './surface-scope.ts';
 
 /**
  * The engine's reason for a refused picture command on a chart. Adapters translate it through
- * `DISABLED_REASON_KEYS` in `@docx-editor.dev/i18n`, so the two sentences must stay the same.
+ * `DISABLED_REASON_KEYS` in `@docx-editor.dev/core/i18n`, so the two sentences must stay the same.
  */
 export const CHART_DRAWING_REASON =
   'this drawing is a chart; only delete applies, and it removes the whole chart';
 
 /**
  * The engine's reason for a picture-only command on a chart that takes frame edits. Adapters
- * translate it through `DISABLED_REASON_KEYS` in `@docx-editor.dev/i18n`.
+ * translate it through `DISABLED_REASON_KEYS` in `@docx-editor.dev/core/i18n`.
  */
 export const CHART_FRAME_REASON =
   'this drawing is a chart; only its size, position, wrap and alt text change';
 
 /**
  * The engine's reason for a picture-only command on a DrawingML diagram. Adapters translate it
- * through `DISABLED_REASON_KEYS` in `@docx-editor.dev/i18n`.
+ * through `DISABLED_REASON_KEYS` in `@docx-editor.dev/core/i18n`.
  */
 export const DIAGRAM_FRAME_REASON =
   'this drawing is a diagram; only its size, position, wrap and alt text change';

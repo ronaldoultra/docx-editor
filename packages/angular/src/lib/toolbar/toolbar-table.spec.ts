@@ -3,7 +3,7 @@
 // toolbar-host-groups.test.ts.
 import { ChangeDetectionStrategy, Component, Directive, signal, viewChild } from '@angular/core';
 import type { DocxEditorInstance } from '@docx-editor.dev/core/editor';
-import { createT, en, type TranslationKey } from '@docx-editor.dev/i18n';
+import { createT, en, type TranslationKey } from '@docx-editor.dev/core/i18n';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { docx, paragraph } from '../../testing/docx';
 import { configureZoneless, engineOf, render, settle } from '../../testing/harness';

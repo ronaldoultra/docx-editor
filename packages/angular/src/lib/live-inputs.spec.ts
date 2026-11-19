@@ -10,7 +10,7 @@ import type {
   LockedControlNavigation,
 } from '@docx-editor.dev/core/editor';
 import { paragraphTextOf, serializeOoxmlPart } from '@docx-editor.dev/core/store';
-import { ptBR, type Translations } from '@docx-editor.dev/i18n';
+import { ptBR, type Translations } from '@docx-editor.dev/core/i18n';
 import { docx, paragraph, run } from '../testing/docx';
 import { configureZoneless, engineOf, settle } from '../testing/harness';
 import type { DocxEditorColorMode } from './color-mode';

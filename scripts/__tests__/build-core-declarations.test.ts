@@ -47,7 +47,7 @@ test('a subpath without a source path or with nested types fails instead of ship
 test('a bare import is checked against the package that owns it', () => {
   expect(packageName('prosemirror-model')).toBe('prosemirror-model');
   expect(packageName('fflate/browser')).toBe('fflate');
-  expect(packageName('@docx-editor.dev/i18n/locales')).toBe('@docx-editor.dev/i18n');
+  expect(packageName('@docx-editor.dev/core/i18n')).toBe('@docx-editor.dev/core');
 });
 
 test('an import keeps its module kind when it resolves to a declaration file', () => {
@@ -59,16 +59,11 @@ test('an import keeps its module kind when it resolves to a declaration file', (
 });
 
 test('declaration builds drop sibling source paths and keep local aliases', () => {
-  // Vue reads core and i18n as siblings, so it reads both from dist.
+  // Vue reads core as a sibling, so it reads it from dist.
   const vue = declarationCompilerOptions(
     new URL('../../packages/vue/tsup.config.ts', import.meta.url)
   );
   expect(vue.paths).toEqual({});
-  // Fonts has core only as a development dependency, so it keeps core's source paths.
-  const fonts = declarationCompilerOptions(
-    new URL('../../packages/fonts/tsup.config.ts', import.meta.url)
-  );
-  expect(Object.keys(fonts.paths)).toContain('@docx-editor.dev/core');
 });
 
 test('a package checks every sibling it reads, including those behind core', () => {
@@ -76,6 +71,5 @@ test('a package checks every sibling it reads, including those behind core', () 
     [
       ...siblingsOf(fileURLToPath(new URL(`../../packages/${name}`, import.meta.url))).keys(),
     ].sort();
-  expect(siblings('vue')).toEqual(['@docx-editor.dev/core', '@docx-editor.dev/i18n']);
-  expect(siblings('fonts')).toEqual([]);
+  expect(siblings('vue')).toEqual(['@docx-editor.dev/core']);
 });

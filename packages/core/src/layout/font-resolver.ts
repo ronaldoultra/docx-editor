@@ -23,7 +23,7 @@ import { supportedFontFamilies } from './supported-font-families.ts';
 //   `FontResolverMark`, an interface with a namespaced string key — the TYPE-LEVEL mark,
 //   which is what makes handing an unmarked resolver to a `FontOrigin` list a compile
 //   error instead of a silent total loss of fonts. It has to be a string key, because
-//   `@docx-editor.dev/fonts` mirrors this contract STRUCTURALLY and cannot import from the
+//   `@docx-editor.dev/core/fonts` mirrors this contract STRUCTURALLY and cannot import from the
 //   engine: two `unique symbol` declarations in two packages are two different types,
 //   while two identical string keys are one.
 //
@@ -70,7 +70,7 @@ import {
  * The namespaced key carrying the type-level half of the mark, and the runtime property
  * name that backs it.
  *
- * A plain string rather than a symbol on purpose: `@docx-editor.dev/fonts` has no runtime
+ * A plain string rather than a symbol on purpose: `@docx-editor.dev/core/fonts` has no runtime
  * or type dependency on the engine, so it declares the same mark itself, and two
  * `unique symbol`s in two packages would not unify. Two identical string keys do.
  *
@@ -96,7 +96,7 @@ export const FONT_RESOLVER_BRAND: unique symbol = Symbol.for(
  * The type-level half of the mark: what {@link defineFontResolver} adds to a function's
  * type so a `FontOrigin` list can REQUIRE it.
  *
- * Declared with a string key so `@docx-editor.dev/fonts` can declare an identical
+ * Declared with a string key so `@docx-editor.dev/core/fonts` can declare an identical
  * interface and have the two unify without importing anything from the engine. Set at
  * runtime as well as in the type — non-enumerable, so it stays out of `Object.keys` and
  * out of a host's own spread.

@@ -363,7 +363,7 @@ describe('legacy chrome descriptor', () => {
     // names the control and its chord ("Format painter (Ctrl+Alt+C, Ctrl+Alt+V)"); anything
     // materially longer is prose, and prose belongs in the docs.
     const catalogue = JSON.parse(
-      readFileSync(resolve(import.meta.dir, '../../../../i18n/en.json'), 'utf8')
+      readFileSync(resolve(import.meta.dir, '../../i18n/en.json'), 'utf8')
     ) as Record<string, Record<string, unknown>>;
     const resolve_ = (key: string): string => {
       let node: unknown = catalogue;

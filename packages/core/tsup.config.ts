@@ -1,4 +1,4 @@
-import { copyFile, readFile } from 'node:fs/promises';
+import { copyFile, cp, readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type Options } from 'tsup';
@@ -100,6 +100,21 @@ async function copyHarfBuzzBinary(): Promise<void> {
 }
 
 /**
+ * Put the packaged font faces beside the bundles that resolve them.
+ *
+ * `src/fonts/manifest.generated.ts` finds each face with a literal
+ * `new URL('./assets/<face>', import.meta.url)`. In source that is `src/fonts/assets/`. In the
+ * build the manifest lands in a shared chunk at the root of `dist/`, so the faces must sit in
+ * `dist/assets/`. `scripts/fonts/check-built-assets.mjs` checks both halves after the build.
+ */
+async function copyFontAssets(): Promise<void> {
+  await cp(resolve(here, 'src/fonts/assets'), resolve(here, 'dist/assets'), {
+    recursive: true,
+    filter: (source) => !source.endsWith('.json'),
+  });
+}
+
+/**
  * Everything the two format builds agree on.
  *
  * They are separate builds for ONE reason, spelled out at `esm` below: the ESM bundle
@@ -123,6 +138,9 @@ const shared = {
     output: 'src/output/index.ts',
     store: 'src/store/index.ts',
     editor: 'src/editor/index.ts',
+    i18n: 'src/i18n/index.ts',
+    fonts: 'src/fonts/index.ts',
+    'fonts/google': 'src/fonts/google-fonts.ts',
   },
   // Same reason the adapter sets it: tsup defaults to `node`, which resolves
   // bundled deps through their `node` export condition, and fflate's node build
@@ -168,6 +186,9 @@ const shared = {
       '@docx-editor.dev/core/output': resolve(here, 'src/output/index.ts'),
       '@docx-editor.dev/core/store': resolve(here, 'src/store/index.ts'),
       '@docx-editor.dev/core/editor': resolve(here, 'src/editor/index.ts'),
+      '@docx-editor.dev/core/i18n': resolve(here, 'src/i18n/index.ts'),
+      '@docx-editor.dev/core/fonts/google': resolve(here, 'src/fonts/google-fonts.ts'),
+      '@docx-editor.dev/core/fonts': resolve(here, 'src/fonts/index.ts'),
     };
   },
 } satisfies Options;
@@ -186,7 +207,10 @@ export default defineConfig([
     // whichever runtime the consumer selects.
     dts: false,
     clean: false,
-    onSuccess: copyHarfBuzzBinary,
+    onSuccess: async () => {
+      await copyHarfBuzzBinary();
+      await copyFontAssets();
+    },
     // THE POINT OF THE SPLIT. Left external, harfbuzzjs reaches the consumer's bundler with
     // an `await import("module")` that no browser target can resolve, and every host has to
     // answer for it in its own config (#282). Inlined, the `module` alias above answers it

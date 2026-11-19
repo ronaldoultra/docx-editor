@@ -7,7 +7,7 @@ import {
   input,
   output,
 } from '@angular/core';
-import { platformShortcut } from '@docx-editor.dev/i18n';
+import { platformShortcut } from '@docx-editor.dev/core/i18n';
 import { DocxChromeIconComponent } from '../toolbar/chrome-icon.component';
 import { popupId } from '../toolbar/toolbar-popup';
 import { guardToolbarMousedown } from '../toolbar/toolbar-registry';

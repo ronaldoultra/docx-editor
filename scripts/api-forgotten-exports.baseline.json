@@ -230,6 +230,11 @@
       "Watermark",
       "ZoomMode"
     ],
+    "i18n": [
+      "AnyRecord",
+      "DotPath",
+      "enJson"
+    ],
     "index": [
       "EditorCollaborationSession",
       "OoxmlElement",
@@ -396,19 +401,6 @@
       "VectorImageMime",
       "W14_NAMESPACE_URI",
       "WithoutPartResult"
-    ]
-  },
-  "@docx-editor.dev/i18n": {
-    "en": [
-      "LocaleStrings"
-    ],
-    "index": [
-      "AnyRecord",
-      "DotPath",
-      "enJson"
-    ],
-    "pt-BR": [
-      "PartialLocaleStrings"
     ]
   },
   "@docx-editor.dev/vue": {

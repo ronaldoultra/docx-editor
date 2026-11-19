@@ -22,7 +22,6 @@
     "test": "ng test"
   },
   "dependencies": {
-    "@docx-editor.dev/i18n": "^2.39.0",
     "tslib": "^2.8.1"
   },
   "peerDependencies": {

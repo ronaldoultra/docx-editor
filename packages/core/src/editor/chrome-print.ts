@@ -1,4 +1,4 @@
-import { isApplePlatform } from '@docx-editor.dev/i18n';
+import { isApplePlatform } from '@docx-editor.dev/core/i18n';
 import type { Editor, EditorSnapshot } from '../contracts/editor.ts';
 import type { ReviewDisplayMode } from '../layout/revision-projection.ts';
 import {

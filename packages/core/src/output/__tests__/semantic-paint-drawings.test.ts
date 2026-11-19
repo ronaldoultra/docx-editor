@@ -552,7 +552,7 @@ describe('paints non-fetching refusal cards', () => {
   });
 
   test('placeholder labels name each kind through the translated catalog', async () => {
-    const en = (await import('../../../../i18n/en.json')).default as {
+    const en = (await import('../../i18n/en.json')).default as {
       image: { placeholder: Record<string, string> };
     };
     const { drawingPaintStringsFromTranslate } = await import('../drawing-paint-strings.ts');

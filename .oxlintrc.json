@@ -13,7 +13,7 @@
     "/*.config.js",
     "/*.config.ts",
     // Generated font catalog data; `bun run google:check` and the catalog tests guard it.
-    "packages/fonts/src/google-catalog.generated.ts"
+    "packages/core/src/fonts/google-catalog.generated.ts"
   ],
   "overrides": [
     {

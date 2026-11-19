@@ -227,7 +227,7 @@ export interface PaginatedSurfaceOptions {
   ) => boolean;
   /**
    * Localized accessible names for core-owned table insertion furniture.
-   * Defaults to English from `@docx-editor.dev/i18n` when omitted.
+   * Defaults to English from `@docx-editor.dev/core/i18n` when omitted.
    */
   readonly tableInteractionLabel?: (key: TableInteractionLabelKey) => string;
   /** Localized drawing refusal labels; defaults to English when omitted. */

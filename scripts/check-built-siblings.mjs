@@ -7,8 +7,7 @@
 // package is built by itself.
 //
 // The siblings are the `@docx-editor.dev/*` `dependencies` and `peerDependencies` of the
-// package in the current directory, followed transitively: core's declarations import
-// i18n's, so every package that reads core also reads i18n.
+// package in the current directory, followed transitively.
 //
 // Usage, from a package directory: node ../../scripts/check-built-siblings.mjs
 
@@ -69,8 +68,7 @@ export function staleness(name, dir) {
   const built = mtimes(join(dir, 'dist'), (file) => file.endsWith('.d.ts'));
   if (built.length === 0) return `${name} has no built declarations`;
   // Everything that shapes the emitted declarations: sources, package.json exports, the
-  // tsconfig files, and en.json, the locale i18n's types come from. The other locale files
-  // do not change any type.
+  // tsconfig files, and en.json. The other locale files do not change any type.
   const inputs = [
     ...mtimes(
       join(dir, 'src'),

@@ -13,7 +13,7 @@ import { CHROME_GROUPS, chromeSlotId } from '../chrome-controls.ts';
 
 const repositoryRoot = resolve(import.meta.dir, '../../../../..');
 const en = JSON.parse(
-  readFileSync(resolve(repositoryRoot, 'packages/i18n/en.json'), 'utf8')
+  readFileSync(resolve(repositoryRoot, 'packages/core/src/i18n/en.json'), 'utf8')
 ) as Record<string, unknown>;
 
 function keyExists(catalogue: Record<string, unknown>, key: string): boolean {

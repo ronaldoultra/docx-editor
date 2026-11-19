@@ -8,7 +8,7 @@ if (!GlobalRegistrator.isRegistered) GlobalRegistrator.register();
 
 import { expect, test } from 'bun:test';
 import { strToU8, zipSync } from 'fflate';
-import { createT, en, localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { createT, en, localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { diagnosticCodeOfRefusal } from '../diagnostic-codes.ts';
 import { createDocxEditor, type DocxEditorInstance } from '../docx-editor.ts';
 import { toolbarCommandState } from '../toolbar-commands.ts';

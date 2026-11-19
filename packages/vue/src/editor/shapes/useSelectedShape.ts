@@ -13,7 +13,7 @@ import {
   type ShapePaneChange,
 } from '@docx-editor.dev/core/editor';
 import type { EditorSnapshot, ExecResult } from '@docx-editor.dev/core/contracts/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { useTranslation } from '../../i18n';
 import { useDocxEditor } from '../context';
 import { useEditorState } from '../useEditorState';

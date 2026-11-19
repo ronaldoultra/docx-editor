@@ -4,7 +4,7 @@ import {
   toolbarCommandState,
   type ChromeSlotId,
 } from '@docx-editor.dev/core/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { useTranslation } from '../../i18n';
 import { useDocxEditor, useEditorStateTick } from '../context';
 import { usePlatformShortcut } from '../usePlatformShortcut';

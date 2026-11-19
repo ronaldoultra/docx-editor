@@ -2,7 +2,7 @@
 // packages/vue/test/form-field-i18n.test.ts. The toolbar claims port with the toolbar (phase 4).
 import { ChangeDetectionStrategy, Component, signal, viewChild, viewChildren } from '@angular/core';
 import { blankDocumentBytes } from '@docx-editor.dev/core/editor';
-import { en, ptBR, type Translations } from '@docx-editor.dev/i18n';
+import { en, ptBR, type Translations } from '@docx-editor.dev/core/i18n';
 import { configureZoneless, engineOf, render, settle } from '../testing/harness';
 import { DocxEditorContentComponent } from './content.component';
 import {

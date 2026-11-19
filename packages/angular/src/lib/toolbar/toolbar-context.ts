@@ -1,5 +1,5 @@
 import { Injectable, InjectionToken, computed, inject, signal, type Signal } from '@angular/core';
-import type { TranslationKey } from '@docx-editor.dev/i18n';
+import type { TranslationKey } from '@docx-editor.dev/core/i18n';
 import { injectTranslation } from '../i18n';
 
 /**

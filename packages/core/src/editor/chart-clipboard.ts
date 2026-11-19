@@ -19,7 +19,7 @@ export const CHART_CLIPBOARD_ATTRIBUTE = 'data-docx-editor-chart';
 
 /**
  * The engine's reason for a refused paste of a chart that is no longer in memory. Adapters
- * translate it through `DISABLED_REASON_KEYS` in `@docx-editor.dev/i18n`.
+ * translate it through `DISABLED_REASON_KEYS` in `@docx-editor.dev/core/i18n`.
  */
 export const CHART_CLIPBOARD_STALE_REASON =
   'the copied chart is no longer available; copy the chart again';

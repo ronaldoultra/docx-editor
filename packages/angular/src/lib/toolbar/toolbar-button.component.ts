@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { chromeSlotIsToggle, type ChromeSlotId } from '@docx-editor.dev/core/editor';
-import { platformShortcut } from '@docx-editor.dev/i18n';
+import { platformShortcut } from '@docx-editor.dev/core/i18n';
 import { injectEditorCommand, type EditorCommandState } from '../editor-command';
 import { DocxChromeIconComponent } from './chrome-icon.component';
 import { DocxToolbarState, injectToolbarLabel } from './toolbar-context';

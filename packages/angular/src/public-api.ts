@@ -194,4 +194,4 @@ export type {
   ObjectSlotValueMap,
   ToolbarValueMap,
 } from '@docx-editor.dev/core/editor';
-export type { LocaleStrings, TFunction, Translations } from '@docx-editor.dev/i18n';
+export type { LocaleStrings, TFunction, Translations } from '@docx-editor.dev/core/i18n';

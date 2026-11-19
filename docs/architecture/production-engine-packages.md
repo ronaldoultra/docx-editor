@@ -27,7 +27,9 @@ The DAG was kept identical to the package graph it replaced. A lane quietly gain
 | `output` | `src/output` | `./output` | contracts, store, layout | — | browser |
 | `export` | `src/export` | `./export` | contracts, store, layout | — | neutral |
 | `automation` | `src/automation` | `./automation` | contracts, store, collaboration, layout, export | — | neutral |
-| `editor` | `src/editor` | `./editor` | contracts, store, collaboration, binding, layout, output, automation | — | browser |
+| `i18n` | `src/i18n` | `./i18n` | — | — | browser |
+| `fonts` | `src/fonts` | `./fonts` | — | — | browser |
+| `editor` | `src/editor` | `./editor` | contracts, store, collaboration, binding, layout, output, automation, i18n | — | browser |
 
 Responsibilities:
 
@@ -37,6 +39,8 @@ Responsibilities:
 - **`binding`** — the ONLY ProseMirror-aware lane: projects a tree revision into a PM doc, and maps an edited doc back into tree ops or refuses.
 - **`layout`** — resolved caches, shaping, convergent pagination, positioned semantic layout records. Emits geometry, never paints.
 - **`output`** — the painter over those records. Never rederives geometry or interprets CSS.
+- **`i18n`** — the UI strings, locale types, and translation helpers. It was the `@docx-editor.dev/i18n` package. It reads `navigator` for the platform shortcut labels, so it is a browser lane.
+- **`fonts`** — metric-compatible substitutes for Word's default faces, and the Google Fonts catalog at `./fonts/google`. It was the `@docx-editor.dev/fonts` package. No lane imports it. An app opts in when it passes its resolvers to the `fonts` option. The core build copies its faces from `src/fonts/assets/` to `dist/assets/`.
 - **`automation`** — the transport-neutral host port an automation object model programs against (`@docx-editor.dev/editor-api`). It reaches the store, collaboration, layout and export lanes, and contracts only for DOM-free public types such as the editor's `HistoryGroup` handle. A server has to be able to run it, so reaching into binding, output or editor would put a DOM in a headless host.
 - **`editor`** — the browser composition root. Composes the tree session, pagination and the paginated surface into the `Editor`/`EditorHost` contract.
 

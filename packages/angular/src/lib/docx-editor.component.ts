@@ -37,7 +37,7 @@ import {
   type ImageDecodePort,
   type LockedControlNavigation,
 } from '@docx-editor.dev/core/editor';
-import type { Translations } from '@docx-editor.dev/i18n';
+import type { Translations } from '@docx-editor.dev/core/i18n';
 import type { DocxEditorColorMode } from './color-mode';
 import { DocxEditorContentComponent } from './content.component';
 import { DOCX_EDITOR_SCOPED } from './context';

@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref, watch, type CSSProperties } from 'vue';
 import type { EquationActivation } from '@docx-editor.dev/core/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { useTranslation } from '../i18n';
 import { formatPx } from '../lib/units';
 import { useStableDocxId } from '../lib/stable-id';

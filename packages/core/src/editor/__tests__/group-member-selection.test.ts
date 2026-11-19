@@ -12,7 +12,7 @@ import {
   GROUP_MEMBER_REASON,
   leaveGroupMember,
 } from '../group-member-selection.ts';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { selectedDrawingOverlayTargetOf } from '../drawing-overlay-target.ts';
 import type { DocxEditorInstance } from '../docx-editor.ts';
 import type { AnchoredDrawingRecord } from '../../layout/drawing-layout.ts';

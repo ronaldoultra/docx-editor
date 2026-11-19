@@ -1,7 +1,7 @@
 // Insert › Bookmark. Kept in its own file, so the menu parts file stays under its line cap.
 
 import { defineComponent } from 'vue';
-import { isApplePlatform } from '@docx-editor.dev/i18n';
+import { isApplePlatform } from '@docx-editor.dev/core/i18n';
 import type { EditorCommand } from '@docx-editor.dev/core/contracts/editor';
 import { useEditorCommand } from '../useEditorCommand';
 import { MenuItem } from './parts';

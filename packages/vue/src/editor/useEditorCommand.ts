@@ -8,7 +8,7 @@ import {
   type ChromeSlotId,
 } from '@docx-editor.dev/core/editor';
 import type { EditorCommand } from '@docx-editor.dev/core/contracts/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import type { MaybeRefOrGetter } from '../maybe-ref-or-getter';
 import { useTranslation } from '../i18n';
 import { useDocxEditor } from './context';

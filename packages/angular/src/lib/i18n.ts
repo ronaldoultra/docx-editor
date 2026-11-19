@@ -18,7 +18,7 @@ import {
   type LocaleStrings,
   type TFunction,
   type Translations,
-} from '@docx-editor.dev/i18n';
+} from '@docx-editor.dev/core/i18n';
 
 /** A writing direction of the editor chrome. @public */
 export type DocxEditorDirection = 'ltr' | 'rtl';
@@ -99,7 +99,7 @@ export interface DocxEditorI18nOptions {
  *
  * @example
  * ```ts
- * import { ptBR } from '@docx-editor.dev/i18n';
+ * import { ptBR } from '@docx-editor.dev/core/i18n';
  *
  * @Component({ providers: [provideDocxEditorI18n(ptBR)], … })
  * ```

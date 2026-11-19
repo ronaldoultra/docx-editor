@@ -7,7 +7,7 @@
  *   node scripts/validate-i18n.mjs validate --fix  Auto-repair: add missing keys as null, remove extras, regenerate typed exports
  *   node scripts/validate-i18n.mjs new <lang>      Scaffold a new locale file AND auto-wire it into the typed exports
  *   node scripts/validate-i18n.mjs status          Show translation coverage for all locales
- *   node scripts/validate-i18n.mjs codegen         Regenerate the typed exports in packages/i18n/src/index.ts from on-disk JSONs
+ *   node scripts/validate-i18n.mjs codegen         Regenerate the typed exports in packages/core/src/i18n/index.ts from on-disk JSONs
  *
  * Shorthand (no subcommand = validate):
  *   node scripts/validate-i18n.mjs                 Same as `validate`
@@ -22,12 +22,12 @@ import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
 import { join } from 'path';
 import { getLeafPaths } from './lib/i18n-keys.mjs';
 import { deleteNestedValue, setNestedValue } from './lib/nested-object.mjs';
-import { checkLocaleIntegrity } from '../packages/i18n/i18n-integrity.mjs';
-import { BCP47_FILENAME, readLocaleCodes } from '../packages/i18n/locale-files.mjs';
+import { checkLocaleIntegrity } from './lib/i18n-integrity.mjs';
+import { BCP47_FILENAME, readLocaleCodes } from './lib/locale-files.mjs';
 
-// Locale files live in the shared @docx-editor.dev/i18n package — both
-// the React and Vue adapters read their defaults from here.
-const I18N_DIR = join(import.meta.dirname, '..', 'packages', 'i18n');
+// Locale files live in the i18n lane of core (`@docx-editor.dev/core/i18n`).
+// Every adapter reads its defaults from here.
+const I18N_DIR = join(import.meta.dirname, '..', 'packages', 'core', 'src', 'i18n');
 const EN_PATH = join(I18N_DIR, 'en.json');
 
 /** Build a skeleton object mirroring en.json structure with all leaves set to null */
@@ -43,9 +43,8 @@ function buildSkeleton(obj) {
   return result;
 }
 
-// BCP47_FILENAME and readLocaleCodes live in `packages/i18n/locale-files.mjs`
-// so tsup.config.ts and this script share one rule for "which JSON files are
-// locale data" — a future change to the filename pattern lands in one place.
+// BCP47_FILENAME and readLocaleCodes live in `scripts/lib/locale-files.mjs`
+// so every script shares one rule for "which JSON files are locale data".
 
 function getLocaleFiles() {
   return readdirSync(I18N_DIR)
@@ -59,14 +58,13 @@ function pct(n, total) {
 }
 
 // ---------------------------------------------------------------------------
-// Codegen — rewrite the GENERATED block inside packages/i18n/src/index.ts
+// Codegen — rewrite the GENERATED block inside packages/core/src/i18n/index.ts
 // from the on-disk locale JSON filenames. Called by `cmdNew` after creating
 // a new JSON file; runs as its own `i18n:codegen` command; and `cmdValidate`
 // errors if the on-disk block has drifted from the JSON filenames.
 // ---------------------------------------------------------------------------
 
-const INDEX_PATH = join(I18N_DIR, 'src', 'index.ts');
-const I18N_PKG_JSON = join(I18N_DIR, 'package.json');
+const INDEX_PATH = join(I18N_DIR, 'index.ts');
 const GEN_START = '// ─── GENERATED START — `bun run i18n:codegen` ───';
 const GEN_END = '// ─── GENERATED END ───';
 const LANG_DISPLAY = new Intl.DisplayNames(['en'], { type: 'language' });
@@ -102,7 +100,7 @@ function sortLocales(codes) {
   return [...codes].sort((a, b) => (a === 'en' ? -1 : b === 'en' ? 1 : a.localeCompare(b)));
 }
 
-/** Read every `<code>.json` filename in `packages/i18n/`. Returns codes only. */
+/** Read every `<code>.json` filename in the i18n lane. Returns codes only. */
 function readShippedLocales() {
   return readLocaleCodes(I18N_DIR);
 }
@@ -113,13 +111,13 @@ function renderGeneratedBlock(codes) {
 
   lines.push(GEN_START);
   lines.push('// DO NOT EDIT — this block is rewritten from the on-disk');
-  lines.push('// `packages/i18n/*.json` filenames whenever `bun run i18n:codegen`');
+  lines.push('// `packages/core/src/i18n/*.json` filenames whenever `bun run i18n:codegen`');
   lines.push('// runs (and `bun run i18n:new <lang>` runs it automatically).');
   lines.push('// `bun run i18n:validate` fails CI if hand-edits drift from the');
   lines.push('// JSON files. Edit the JSON, not this block.');
   lines.push('');
   for (const code of sorted) {
-    lines.push(`import ${toIdentifier(code)}Json from '../${code}.json';`);
+    lines.push(`import ${toIdentifier(code)}Json from './${code}.json';`);
   }
   lines.push('');
   lines.push('/**');
@@ -218,136 +216,11 @@ function regenerateLocaleExports() {
   return false;
 }
 
-// ---------------------------------------------------------------------------
-// Per-locale subpath sources — `import ptBR from '@docx-editor.dev/i18n/pt-BR'`
-// only ships that one locale's JSON, instead of pulling every locale through
-// the named exports in index.ts. Each `src/<code>.ts` re-exports its JSON as
-// a typed `PartialLocaleStrings` (or `LocaleStrings` for English). tsup
-// scans these alongside the main entry.
-// ---------------------------------------------------------------------------
-
-const LOCALE_SRC_DIR = join(I18N_DIR, 'src');
-
-function renderLocaleSource(code) {
-  const id = toIdentifier(code);
-  const name = localeDisplayName(code);
-  const isEnglish = code === 'en';
-  const typeName = isEnglish ? 'LocaleStrings' : 'PartialLocaleStrings';
-  const lead = isEnglish
-    ? `${name} (\`${code}\`) locale strings — the source of truth, 100% covered.`
-    : `${name} (\`${code}\`) locale strings. Community-maintained; null leaves fall back to English.`;
-
-  return `/**
- * @docx-editor.dev/i18n/${code}
- *
- * ${name} (\`${code}\`) — direct locale subpath for per-locale code-splitting.
- *
- * \`\`\`ts
- * // Static — bundler ships only this locale's strings
- * import ${id} from '@docx-editor.dev/i18n/${code}';
- *
- * // Dynamic — splits into its own chunk, loaded on demand
- * const ${id} = (await import('@docx-editor.dev/i18n/${code}')).default;
- * \`\`\`
- *
- * For multi-locale apps, prefer the per-locale subpaths over importing
- * \`locales\` from the package root — \`locales\` pulls every locale into
- * the bundle.
- *
- * @packageDocumentation
- * @public
- */
-import data from '../${code}.json';
-import type { ${typeName} } from './index';
-
-/**
- * ${lead}
- *
- * Identical content to the named \`${id}\` export from the package root;
- * this subpath just lets bundlers code-split it.
- *
- * @public
- */
-export const ${id}: ${typeName} = data;
-
-export default ${id};
-`;
-}
-
-/**
- * Write every shipped locale's `src/<code>.ts` from the template above.
- * Returns the number of files created or rewritten.
- */
-function regenerateLocaleSourceFiles() {
-  const codes = readShippedLocales();
-  let changed = 0;
-  for (const code of codes) {
-    const filePath = join(LOCALE_SRC_DIR, `${code}.ts`);
-    const expected = renderLocaleSource(code);
-    const current = existsSync(filePath) ? readFileSync(filePath, 'utf-8') : null;
-    if (current !== expected) {
-      writeFileSync(filePath, expected, 'utf-8');
-      changed++;
-    }
-  }
-  return changed;
-}
-
-/**
- * Build the package.json `exports` map from on-disk locales. Order: root
- * (`.`), every locale subpath in {@link sortLocales} order, then
- * `./package.json` (so tooling that needs to read the raw package.json
- * still has a stable resolution).
- */
-function buildLocaleExportsMap() {
-  const codes = sortLocales(readShippedLocales());
-  const exportsMap = {
-    '.': {
-      types: './dist/index.d.ts',
-      import: './dist/index.mjs',
-      require: './dist/index.js',
-    },
-  };
-  for (const code of codes) {
-    exportsMap[`./${code}`] = {
-      types: `./dist/${code}.d.ts`,
-      import: `./dist/${code}.mjs`,
-      require: `./dist/${code}.js`,
-    };
-  }
-  exportsMap['./package.json'] = './package.json';
-  return exportsMap;
-}
-
-/**
- * Rewrite the `exports` field in `packages/i18n/package.json` so every
- * shipped locale has a `./<code>` subpath. Returns `true` if the file
- * actually changed.
- */
-function regenerateLocalePackageJsonExports() {
-  const raw = readFileSync(I18N_PKG_JSON, 'utf-8');
-  const pkg = JSON.parse(raw);
-  const expected = buildLocaleExportsMap();
-  if (JSON.stringify(pkg.exports) === JSON.stringify(expected)) return false;
-  pkg.exports = expected;
-  writeFileSync(I18N_PKG_JSON, JSON.stringify(pkg, null, 2) + '\n', 'utf-8');
-  return true;
-}
-
 function cmdCodegen() {
-  const indexChanged = regenerateLocaleExports();
-  const sourceChanged = regenerateLocaleSourceFiles();
-  const pkgChanged = regenerateLocalePackageJsonExports();
-  if (indexChanged || sourceChanged > 0 || pkgChanged) {
-    const bits = [];
-    if (indexChanged) bits.push('src/index.ts');
-    if (sourceChanged > 0) bits.push(`${sourceChanged} src/<locale>.ts`);
-    if (pkgChanged) bits.push('package.json exports');
-    console.log(
-      `Synced packages/i18n from ${readShippedLocales().length} locale files: ${bits.join(', ')}.`
-    );
+  if (regenerateLocaleExports()) {
+    console.log(`Synced src/i18n/index.ts from ${readShippedLocales().length} locale files.`);
   } else {
-    console.log('packages/i18n already in sync with on-disk locales.');
+    console.log('src/i18n/index.ts already in sync with on-disk locales.');
   }
 }
 
@@ -451,23 +324,12 @@ function cmdValidate(fix) {
     }
   }
 
-  // Codegen sync check — `src/index.ts` must list every on-disk locale,
-  // every locale must have a matching `src/<code>.ts` subpath source, and
-  // `package.json` exports must enumerate every locale subpath.
-  // `i18n:new` keeps these aligned; this catches the case where a JSON file
+  // Codegen sync check — `index.ts` must list every on-disk locale.
+  // `i18n:new` keeps it aligned; this catches the case where a JSON file
   // was added by hand (or removed) without running the codegen.
   if (fix) {
-    const indexChanged = regenerateLocaleExports();
-    if (indexChanged) {
-      console.log(`✓ src/index.ts — regenerated from ${readShippedLocales().length} locale files`);
-    }
-    const sourceChanged = regenerateLocaleSourceFiles();
-    if (sourceChanged > 0) {
-      console.log(`✓ src/<locale>.ts — regenerated ${sourceChanged} subpath sources`);
-    }
-    const pkgChanged = regenerateLocalePackageJsonExports();
-    if (pkgChanged) {
-      console.log('✓ package.json — regenerated locale subpath exports');
+    if (regenerateLocaleExports()) {
+      console.log(`✓ index.ts — regenerated from ${readShippedLocales().length} locale files`);
     }
   } else {
     const current = readFileSync(INDEX_PATH, 'utf-8');
@@ -477,25 +339,7 @@ function cmdValidate(fix) {
     if (onDisk !== expected) {
       hasErrors = true;
       console.error(
-        '✗ src/index.ts — GENERATED block out of sync with on-disk locales. Run `bun run i18n:fix` (or `bun run i18n:codegen`) to regenerate.'
-      );
-    }
-    for (const code of readShippedLocales()) {
-      const filePath = join(LOCALE_SRC_DIR, `${code}.ts`);
-      const wanted = renderLocaleSource(code);
-      const actual = existsSync(filePath) ? readFileSync(filePath, 'utf-8') : null;
-      if (actual !== wanted) {
-        hasErrors = true;
-        console.error(
-          `✗ src/${code}.ts — subpath source out of sync. Run \`bun run i18n:fix\` to regenerate.`
-        );
-      }
-    }
-    const pkg = JSON.parse(readFileSync(I18N_PKG_JSON, 'utf-8'));
-    if (JSON.stringify(pkg.exports) !== JSON.stringify(buildLocaleExportsMap())) {
-      hasErrors = true;
-      console.error(
-        '✗ package.json — `exports` map out of sync with on-disk locales. Run `bun run i18n:fix` to regenerate.'
+        '✗ index.ts — GENERATED block out of sync with on-disk locales. Run `bun run i18n:fix` (or `bun run i18n:codegen`) to regenerate.'
       );
     }
   }
@@ -548,20 +392,16 @@ function cmdNew(lang) {
 
   // Wire the new locale into the typed public surface — adds the import,
   // the typed `export const`, extends `LocaleCode`, and slots it into the
-  // `locales` record. Contributors only edit the JSON. Also writes a
-  // `src/<lang>.ts` re-export and slots it into `package.json` so the
-  // per-locale subpath (`@docx-editor.dev/i18n/<lang>`) works.
+  // `locales` record. Contributors only edit the JSON.
   regenerateLocaleExports();
-  regenerateLocaleSourceFiles();
-  regenerateLocalePackageJsonExports();
 
   console.log(`Created ${lang}.json with ${leafCount} keys (all set to null).`);
   console.log(
-    `Wired \`${lang}\` into packages/i18n/src/index.ts, src/${lang}.ts, and package.json exports.`
+    `Wired \`${lang}\` into packages/core/src/i18n/index.ts.`
   );
   console.log('');
   console.log('Next steps:');
-  console.log(`  1. Open packages/i18n/${lang}.json`);
+  console.log(`  1. Open packages/core/src/i18n/${lang}.json`);
   console.log('  2. Replace null values with translations');
   console.log('     (partial is fine — null keys fall back to English)');
   console.log('  3. Run: bun run i18n:status');

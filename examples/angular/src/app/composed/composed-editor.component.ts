@@ -20,7 +20,7 @@ import {
   type DocxEditorDirection,
   type DocxEditorRootMode,
 } from '@docx-editor.dev/angular';
-import { en, ptBR, type Translations } from '@docx-editor.dev/i18n';
+import { en, ptBR, type Translations } from '@docx-editor.dev/core/i18n';
 import { EditorStatusComponent } from './editor-status.component';
 import { FormatBarComponent } from './format-bar.component';
 

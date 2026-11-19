@@ -3,7 +3,7 @@
 import { NgZone, computed, inject, untracked, type Signal } from '@angular/core';
 import type { EditorSnapshot, ZoomMode } from '@docx-editor.dev/core/contracts/editor';
 import { FIT_WIDTH_ZOOM_MODE, commandForSlotValue } from '@docx-editor.dev/core/editor';
-import type { TFunction, TranslationKey } from '@docx-editor.dev/i18n';
+import type { TFunction, TranslationKey } from '@docx-editor.dev/core/i18n';
 import { injectDocxEditor } from '../context';
 import { injectEditorCommand } from '../editor-command';
 import { injectEditorState } from '../editor-state';

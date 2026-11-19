@@ -1,7 +1,7 @@
 import { computed, defineComponent, nextTick, ref, watch, type PropType } from 'vue';
 import type { DocxEditorChildren } from '../../docx-editor-children';
 import type { EditorSnapshot } from '@docx-editor.dev/core/contracts/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import {
   hostDocumentOf,
   listenForOutsidePress,

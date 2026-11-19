@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component, Directive, signal, viewChild } from '@angular/core';
 import type { DocxEditorInstance } from '@docx-editor.dev/core/editor';
 import { serializeOoxmlPart } from '@docx-editor.dev/core/store';
-import { en, type Translations } from '@docx-editor.dev/i18n';
+import { en, type Translations } from '@docx-editor.dev/core/i18n';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { docx } from '../../testing/docx';
 import { configureZoneless, engineOf, render, settle } from '../../testing/harness';

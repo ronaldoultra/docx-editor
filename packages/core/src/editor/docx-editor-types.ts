@@ -76,7 +76,7 @@ export interface DocxEditorConfig {
    * Font bytes for Word-accurate (HarfBuzz-shaped) line wrap and pagination. Omitted,
    * layout falls back to a fixed-width estimate; fonts embedded in the document are
    * wired in automatically either way. For Word's default faces (Calibri, Times New
-   * Roman, …) pass `await loadDefaultFonts()` from `@docx-editor.dev/fonts` — a bare
+   * Roman, …) pass `await loadDefaultFonts()` from `@docx-editor.dev/core/fonts` — a bare
    * fragment (`{ sources, substitutions }`) is accepted and composed with defaults, or
    * merge several origins yourself with `composeFontConfiguration`. Sampled per load;
    * failures degrade to the fixed measurer and report through `onFontError`.

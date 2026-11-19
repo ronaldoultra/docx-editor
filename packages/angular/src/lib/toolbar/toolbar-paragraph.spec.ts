@@ -3,7 +3,7 @@
 // the color claims of toolbar-picker-accessibility.test.ts.
 import { ChangeDetectionStrategy, Component, Directive, signal, viewChild } from '@angular/core';
 import type { DocxEditorInstance } from '@docx-editor.dev/core/editor';
-import { en } from '@docx-editor.dev/i18n';
+import { en } from '@docx-editor.dev/core/i18n';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { docx, headerDocx, paragraph } from '../../testing/docx';
 import { configureZoneless, engineOf, render, settle } from '../../testing/harness';

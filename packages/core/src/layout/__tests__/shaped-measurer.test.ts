@@ -240,7 +240,7 @@ describe('line metrics come from the font, not from a multiplier (task 7.7)', ()
     // apart. Liberation Sans carries Arial\u2019s metrics exactly \u2014 hhea 1854 / -434 / 67
     // over 2048 units \u2014 so the shipped substitute has to land on the same number.
     const bytes = new Uint8Array(
-      readFileSync(new URL('../../../../fonts/assets/LiberationSans-Regular.ttf', import.meta.url))
+      readFileSync(new URL('../../fonts/assets/LiberationSans-Regular.ttf', import.meta.url))
     );
     const request: FontRequest = { family: 'Liberation Sans', weight: 400, style: 'normal' };
     const snapshot = createFontResourceSnapshot({

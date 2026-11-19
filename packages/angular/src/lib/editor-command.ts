@@ -25,7 +25,7 @@ import {
   type ObjectSlotValueMap,
   type ToolbarValueMap,
 } from '@docx-editor.dev/core/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { injectDocxEditor } from './context';
 import { injectEditorState } from './editor-state';
 import { injectTranslation } from './i18n';

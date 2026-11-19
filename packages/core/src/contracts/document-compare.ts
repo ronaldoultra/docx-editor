@@ -18,7 +18,7 @@ export interface CompareDocumentsEngineOptions {
 /**
  * Why the compare engine refused a compare, as a stable code: the codes that the engine,
  * `compareDocuments`, and a background engine return. `compareDocuments.errors.<code>` in
- * `@docx-editor.dev/i18n` translates every code.
+ * `@docx-editor.dev/core/i18n` translates every code.
  *
  * @public
  */
@@ -46,7 +46,7 @@ export type CompareDocumentsEngineErrorCode =
 
 /**
  * Why a compare was refused, as a stable code. `compareDocuments.errors.<code>` in
- * `@docx-editor.dev/i18n` translates every code. The engine and `compareDocuments` return
+ * `@docx-editor.dev/core/i18n` translates every code. The engine and `compareDocuments` return
  * {@link CompareDocumentsEngineErrorCode} values. The editor command and dialog can also return
  * the editor-only codes.
  *
@@ -79,7 +79,7 @@ export type CompareDocumentsErrorCode =
 
 /**
  * What an `unsupportedContent` refusal is about, as a stable code.
- * `compareDocuments.reasons.<reason>` in `@docx-editor.dev/i18n` translates every reason.
+ * `compareDocuments.reasons.<reason>` in `@docx-editor.dev/core/i18n` translates every reason.
  *
  * @public
  */

@@ -23,7 +23,7 @@ import { readDocumentProtection } from '../store/package/document-protection.ts'
 import { settingsPartOf } from '../store/package/note-properties.ts';
 import { commandProtectionRefusal } from './command-protection.ts';
 import { createEditorAnnouncer } from './editor-announcer.ts';
-import { createT, en } from '@docx-editor.dev/i18n';
+import { createT, en } from '@docx-editor.dev/core/i18n';
 import { hostTimers } from './host-realm.ts';
 import { PRO_REVIEW_REASON } from './opening-editing-mode.ts';
 import type { PaginatedSurface } from './paginated-surface-contract.ts';
@@ -38,7 +38,7 @@ import {
 
 /**
  * Stable refusal while a collaboration session is attached. `DISABLED_REASON_KEYS` in
- * `@docx-editor.dev/i18n` translates it; the two must stay the same sentence.
+ * `@docx-editor.dev/core/i18n` translates it; the two must stay the same sentence.
  */
 export const COMPARE_COLLABORATION_REASON =
   'documents cannot be compared while a collaboration session is attached';

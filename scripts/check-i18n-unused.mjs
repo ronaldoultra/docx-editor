@@ -19,7 +19,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const CATALOGUE = join(ROOT, 'packages/i18n/en.json');
+const CATALOGUE = join(ROOT, 'packages/core/src/i18n/en.json');
 
 /** Directories that never hold usage. */
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'coverage', '.next', 'build', '.astro']);
@@ -34,7 +34,7 @@ const UNSHIPPED = /^(packages|examples)\/(vue|nuxt)\//;
 const SOURCE_FILE = /\.(ts|tsx|js|jsx|mjs|cjs|vue|astro|svelte|json|html|css)$/;
 const TEST_FILE = /(^|\/)(test|tests|__tests__)\/|\.(test|spec)\./;
 /** The locale JSONs are the catalogue, not a reference to it. */
-const LOCALE_JSON = /packages\/i18n\/[A-Za-z-]+\.json$/;
+const LOCALE_JSON = /packages\/core\/src\/i18n\/[A-Za-z-]+\.json$/;
 
 /** `"prefix.` immediately followed by an interpolation or a concatenation. */
 const DYNAMIC_PREFIX = /[`'"]([A-Za-z][A-Za-z0-9_]*(?:\.[A-Za-z0-9_]+)*\.)(?:\$\{|['"]\s*\+)/g;
@@ -124,7 +124,7 @@ console.error(`✖ i18n: ${unused.length} of ${keys.length} keys in en.json are 
 for (const key of unused.slice(0, 40)) console.error(`    - ${key}`);
 if (unused.length > 40) console.error(`    ... and ${unused.length - 40} more`);
 console.error(
-  '\nDelete them from packages/i18n/en.json and run `bun run i18n:fix`, or reference them.\n' +
+  '\nDelete them from packages/core/src/i18n/en.json and run `bun run i18n:fix`, or reference them.\n' +
     'A key built at runtime is fine — write the static part as one literal so it is visible\n' +
     "here (`t(`navigation.tabs.${'${id}'}`)`), not assembled from fragments."
 );

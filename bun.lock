@@ -40,7 +40,6 @@
         "@angular/platform-browser": "~20.3.0",
         "@docx-editor.dev/angular": "workspace:*",
         "@docx-editor.dev/core": "workspace:*",
-        "@docx-editor.dev/i18n": "workspace:*",
         "rxjs": "~7.8.2",
         "tslib": "^2.8.1",
         "zone.js": "~0.15.1",
@@ -56,7 +55,6 @@
       "name": "@docx-editor.dev/angular",
       "version": "0.1.0",
       "dependencies": {
-        "@docx-editor.dev/i18n": "^2.39.0",
         "tslib": "^2.8.1",
       },
       "devDependencies": {
@@ -86,7 +84,6 @@
       "name": "@docx-editor.dev/core",
       "version": "2.39.0",
       "dependencies": {
-        "@docx-editor.dev/i18n": "^2.39.0",
         "bidi-js": "1.1.0",
         "emf-converter": "4.28.0",
         "fast-xml-parser": "^5.12.0",
@@ -108,30 +105,9 @@
         "typescript7": "npm:typescript@^7.0.2",
       },
     },
-    "packages/fonts": {
-      "name": "@docx-editor.dev/fonts",
-      "version": "2.39.0",
-      "devDependencies": {
-        "@docx-editor.dev/core": "workspace:*",
-        "@happy-dom/global-registrator": "^21.0.4",
-        "fflate": "^0.8.2",
-        "typescript7": "npm:typescript@^7.0.2",
-      },
-    },
-    "packages/i18n": {
-      "name": "@docx-editor.dev/i18n",
-      "version": "2.39.0",
-      "devDependencies": {
-        "tsup": "^9.0.0",
-        "typescript7": "npm:typescript@^7.0.2",
-      },
-    },
     "packages/vue": {
       "name": "@docx-editor.dev/vue",
       "version": "2.39.0",
-      "dependencies": {
-        "@docx-editor.dev/i18n": "^2.39.0",
-      },
       "devDependencies": {
         "@docx-editor.dev/core": "workspace:*",
         "fflate": "^0.8.2",
@@ -257,10 +233,6 @@
     "@docx-editor.dev/angular": ["@docx-editor.dev/angular@workspace:packages/angular"],
 
     "@docx-editor.dev/core": ["@docx-editor.dev/core@workspace:packages/core"],
-
-    "@docx-editor.dev/fonts": ["@docx-editor.dev/fonts@workspace:packages/fonts"],
-
-    "@docx-editor.dev/i18n": ["@docx-editor.dev/i18n@workspace:packages/i18n"],
 
     "@docx-editor.dev/vue": ["@docx-editor.dev/vue@workspace:packages/vue"],
 

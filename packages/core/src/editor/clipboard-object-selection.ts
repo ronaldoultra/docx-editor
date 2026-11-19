@@ -12,7 +12,7 @@ import { paragraphOffsetIndex } from '../store/store/tree-op-segments.ts';
 /**
  * The engine's reason for a refused copy, cut or paste of content that holds a chart with other
  * content; one selected chart copies through `chart-clipboard.ts`. Adapters
- * translate it through `DISABLED_REASON_KEYS` in `@docx-editor.dev/i18n`, so the two sentences
+ * translate it through `DISABLED_REASON_KEYS` in `@docx-editor.dev/core/i18n`, so the two sentences
  * must stay the same.
  */
 export const CHART_CLIPBOARD_REASON =

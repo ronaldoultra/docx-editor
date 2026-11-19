@@ -24,13 +24,13 @@ import type {
   CompareDocumentsErrorCode,
   CompareDocumentsRefusalReason,
 } from '../../contracts/document-compare.ts';
-import en from '../../../../i18n/en.json' with { type: 'json' };
+import en from '../../i18n/en.json' with { type: 'json' };
 import { PRO_REVIEW_REASON } from '../opening-editing-mode.ts';
 import { COMPARE_COLLABORATION_REASON } from '../compare-documents-state.ts';
 import { setPreviewWriteGuard, setRefreshWriteGuard } from '../refresh-write-guard.ts';
 import { EDITOR_ANNOUNCER_CLASS } from '../editor-announcer.ts';
-import { createT, type LocaleStrings } from '@docx-editor.dev/i18n';
-import { DISABLED_REASON_KEYS } from '../../../../i18n/src/disabled-reasons.ts';
+import { createT, type LocaleStrings } from '@docx-editor.dev/core/i18n';
+import { DISABLED_REASON_KEYS } from '../../i18n/disabled-reasons.ts';
 import { stubCollaborationModule, stubCollaborationSession } from './collaboration-test-module.ts';
 
 const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';

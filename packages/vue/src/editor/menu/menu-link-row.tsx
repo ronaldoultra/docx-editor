@@ -9,7 +9,7 @@
 
 import { defineComponent } from 'vue';
 import { runToolbarCommand, toolbarCommandState } from '@docx-editor.dev/core/editor';
-import { localizeDisabledReason } from '@docx-editor.dev/i18n';
+import { localizeDisabledReason } from '@docx-editor.dev/core/i18n';
 import { useDocxEditor, useEditorStateTick } from '../context';
 import { chromeControlForSlot, chromeIcon } from '../toolbar/ToolbarButton';
 import { useMenuContext, useMenuLabel } from './menu-context';

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, viewChildren } from '@angular/core';
 import { blankDocumentBytes } from '@docx-editor.dev/core/editor';
-import { en } from '@docx-editor.dev/i18n';
+import { en } from '@docx-editor.dev/core/i18n';
 import { configureZoneless, engineOf, render, settle, typeText } from '../testing/harness';
 import { DocxEditorContentComponent } from './content.component';
 import { DocxEditorRootDirective } from './root.directive';

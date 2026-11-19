@@ -13,7 +13,7 @@ export const COMPARE_DOCUMENTS_ACCEPT =
   '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 /**
- * The `@docx-editor.dev/i18n` key of the message for a refused compare:
+ * The `@docx-editor.dev/core/i18n` key of the message for a refused compare:
  * `compareDocuments.reasons.<reason>` when the refusal names a reason, else
  * `compareDocuments.errors.<code>`.
  *

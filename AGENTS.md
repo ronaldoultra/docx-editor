@@ -31,12 +31,10 @@ One engine. Thin chrome on top.
 | Package | What | Status |
 | --- | --- | --- |
 | `angular` | The Angular adapter: one standalone `<docx-editor>` component (load, pages, text editing, save). Built with `ng-packagr`. | publishable |
-| `core` | **The engine.** `store/` (canonical tree, ops, OPC read/write), `layout/` (DOM-free), `output/` (paint), `editor/` (facade, surface, chrome registry), `contracts/`, `binding/`, `automation/` | published |
-| `i18n` | Shared strings | published |
-| `fonts` | Metric-compatible substitutes for Word's defaults | published |
+| `core` | **The engine.** `store/` (canonical tree, ops, OPC read/write), `layout/` (DOM-free), `output/` (paint), `editor/` (facade, surface, chrome registry), `contracts/`, `binding/`, `automation/`, `i18n/` (shared strings, `@docx-editor.dev/core/i18n`), `fonts/` (metric-compatible substitutes for Word's defaults, `@docx-editor.dev/core/fonts`) | published |
 | `vue` | The upstream Vue 3 adapter. Reference for the Angular port only; it leaves in a later step. | reference |
 
-This fork removed the upstream `pro`, `editor-api`, `docx-to-pdf`, and `telemetry` packages (EigenPal Pro License), and `react`, `nuxt`, `docx-to-markdown`, and `fonts-cjk`. Never copy code from those upstream packages into this repository.
+This fork removed the upstream `pro`, `editor-api`, `docx-to-pdf`, and `telemetry` packages (EigenPal Pro License), and `react`, `nuxt`, `docx-to-markdown`, and `fonts-cjk`. The former `i18n` and `fonts` packages are now the `i18n` and `fonts` lanes of `core`. Never copy code from those upstream packages into this repository.
 
 **The engine must resolve to ONE copy.** It holds module-level state — the HarfBuzz shaper and its cache budget, the grapheme boundary strategy, layout caches keyed by object identity. Two copies in a tree do not crash; they load the shaper twice and miss every identity-keyed cache, quietly. So `core` is a **peer** of every adapter. Never move `core` to a regular `dependency` of an adapter.
 
@@ -132,9 +130,9 @@ Fix sibling sinks when you fix one. The HTML sinks in that grep are also lint er
 
 ## i18n
 
-`packages/i18n/en.json` is source of truth; other locales mirror its shape with `null` = fall back to English. A missing key fails `bun run i18n:validate`.
+`packages/core/src/i18n/en.json` is source of truth; other locales mirror its shape with `null` = fall back to English. A missing key fails `bun run i18n:validate`.
 
-The published catalogs cover only UI shipped by the library packages. Files under `examples/` must not add translation keys to `packages/i18n`. Keep example-only text in the example or `examples/shared/example-text.ts`. Examples may reuse existing keys for shipped editor controls. Examples use English unless the task explicitly requires local translations.
+The published catalogs cover only UI shipped by the library packages. Files under `examples/` must not add translation keys to `packages/core/src/i18n`. Keep example-only text in the example or `examples/shared/example-text.ts`. Examples may reuse existing keys for shipped editor controls. Examples use English unless the task explicitly requires local translations.
 
 ```ts
 const { t } = useTranslation();

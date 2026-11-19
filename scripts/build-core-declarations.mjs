@@ -24,7 +24,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
+import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { rollup } from 'rollup';
 import dts from 'rollup-plugin-dts';
@@ -37,6 +37,7 @@ import {
   packageName,
   runTypeScript7,
 } from './lib/declaration-files.mjs';
+import { jsonType } from './build-declarations.mjs';
 
 export { declarationCandidates, packageName };
 
@@ -131,6 +132,13 @@ function declarationResolver(entries, outDir) {
     resolveId(source, importer) {
       const self = selfImports.get(source);
       if (self) return self;
+      if (source.startsWith('.') && source.endsWith('.json') && importer) {
+        // The i18n lane imports its locale JSON. Emitted files mirror `src/`, so the JSON
+        // resolves against the same relative path in the sources.
+        const json = resolve(src, relative(outDir, dirname(importer)), source);
+        if (!existsSync(json)) throw new Error(`Cannot resolve ${source} from ${importer}.`);
+        return `${json.slice(0, -'.json'.length)}${JSON_MODULE}`;
+      }
       if (source.startsWith('.') && importer) {
         const target = resolve(dirname(importer), source);
         for (const candidate of declarationCandidates(target)) {
@@ -153,8 +161,20 @@ function declarationResolver(entries, outDir) {
       }
       return null;
     },
+    load(id) {
+      if (!id.endsWith(JSON_MODULE)) return null;
+      const json = `${id.slice(0, -JSON_MODULE.length)}.json`;
+      const type = jsonType(JSON.parse(readFileSync(json, 'utf8')));
+      // Keep the source's binding name (`en.json` → `enJson`), so the API reports read
+      // `typeof enJson`, as the sources do.
+      const name = `${basename(json, '.json').replace(/[^A-Za-z0-9]+(.)?/g, (_, c = '') => c.toUpperCase())}Json`;
+      return `declare const ${name}: ${type};\nexport default ${name};\n`;
+    },
   };
 }
+
+/** Suffix of the virtual declaration module that stands in for a JSON import. */
+const JSON_MODULE = '.json.d.ts';
 
 async function bundleDeclarations(entries, outDir) {
   const bundle = await rollup({

@@ -38,7 +38,7 @@ const ALLOWED_ENGINE_DEPS = new Set([
   '@docx-editor.dev/core/editor',
   // A leaf string catalogue, not an engine lane: no document model, geometry, or editing
   // authority, so it cannot violate the "no engine internals in an adapter" rule.
-  '@docx-editor.dev/i18n',
+  '@docx-editor.dev/core/i18n',
 ]);
 
 /** Source tokens that indicate geometry derivation or PM bypass (comments stripped). */

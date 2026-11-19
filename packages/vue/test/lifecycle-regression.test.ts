@@ -6,7 +6,7 @@ import { createApp, defineComponent, h, nextTick, ref, watch } from 'vue';
 import { zipSync, strToU8 } from 'fflate';
 import type { Editor } from '@docx-editor.dev/core/contracts/editor';
 import type { DocxEditorInstance } from '@docx-editor.dev/core/editor';
-import type { Translations } from '@docx-editor.dev/i18n';
+import type { Translations } from '@docx-editor.dev/core/i18n';
 import {
   DocxEditorRoot,
   provideDocxEditor,
