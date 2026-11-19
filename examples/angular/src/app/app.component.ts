@@ -60,8 +60,8 @@ type Variant = 'packaged' | 'composed';
         <label>
           Tema
           <select data-testid="packaged-theme" (change)="colorMode.set(pick($event))">
-            <option value="light">Claro</option>
             <option value="dark">Escuro</option>
+            <option value="light">Claro</option>
             <option value="system">Sistema</option>
           </select>
         </label>
@@ -113,7 +113,7 @@ export class AppComponent {
   );
   protected readonly mode = signal<DocxEditorMode>('edit');
   protected readonly author = signal('');
-  protected readonly colorMode = signal<DocxEditorColorMode>('light');
+  protected readonly colorMode = signal<DocxEditorColorMode>('dark');
   protected readonly language = signal<Language>('pt-BR');
   protected readonly catalog = computed(() => CATALOGS[this.language()]);
   protected readonly zoom = signal(1);

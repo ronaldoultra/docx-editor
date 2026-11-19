@@ -62,8 +62,8 @@ const LOCALES: Record<Language, string> = { en: 'en-US', 'pt-BR': 'pt-BR' };
       <label>
         Tema
         <select data-testid="composed-theme" (change)="colorMode.set(pick($event))">
-          <option value="light">Claro</option>
           <option value="dark">Escuro</option>
+          <option value="light">Claro</option>
           <option value="system" selected>Sistema</option>
         </select>
       </label>
@@ -119,7 +119,7 @@ export class ComposedEditorComponent {
 
   protected readonly mode = signal<DocxEditorRootMode>('edit');
   protected readonly author = signal('Exemplo Angular');
-  protected readonly colorMode = signal<DocxEditorColorMode>('dark');
+  protected readonly colorMode = signal<DocxEditorColorMode>('system');
   protected readonly language = signal<Language>('pt-BR');
   protected readonly direction = signal<DocxEditorDirection | ''>('');
   protected readonly popout = signal(false);
