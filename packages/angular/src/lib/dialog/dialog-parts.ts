@@ -1,19 +1,14 @@
 import {
   Directive,
-  EmbeddedViewRef,
   Injectable,
-  Renderer2,
   TemplateRef,
-  ViewContainerRef,
   booleanAttribute,
-  computed,
-  effect,
   inject,
   input,
-  signal,
-  untracked,
+  type Provider,
   type Signal,
 } from '@angular/core';
+import { DocxPartRegistry } from '../parts/part-slot';
 
 /**
  * The draft state and the actions of a packaged dialog. Inject it with `injectDialog()` in a
@@ -124,15 +119,14 @@ export class DocxDialogPartDirective {
 }
 
 /**
- * The state and the part templates of one packaged dialog. Each packaged dialog provides one
- * and connects it in its constructor.
+ * The state and the part templates of one packaged dialog. A packaged dialog provides it with
+ * `provideDialogParts()` and connects it in its constructor.
  *
  * @internal
  */
 @Injectable()
-export class DocxDialogParts {
+export class DocxDialogParts extends DocxPartRegistry {
   private current: DocxDialogState<object> | null = null;
-  private overrides: Signal<readonly DocxDialogPartDirective[]> = signal([]);
 
   /** The dialog state. */
   get state(): DocxDialogState<object> | null {
@@ -145,17 +139,13 @@ export class DocxDialogParts {
     overrides: Signal<readonly DocxDialogPartDirective[]>
   ): void {
     this.current = state;
-    this.overrides = overrides;
+    this.connectParts(overrides, (part) => part.docxDialogPart());
   }
+}
 
-  /** The last template for the part `name`. */
-  override(name: string): DocxDialogPartDirective | undefined {
-    const all = this.overrides();
-    for (let index = all.length - 1; index >= 0; index -= 1) {
-      if (all[index]!.docxDialogPart() === name) return all[index];
-    }
-    return undefined;
-  }
+/** The providers of a packaged dialog's parts. @internal */
+export function provideDialogParts(): Provider[] {
+  return [DocxDialogParts, { provide: DocxPartRegistry, useExisting: DocxDialogParts }];
 }
 
 /**
@@ -244,128 +234,4 @@ export class DocxDialogResetDirective {
 export class DocxDialogFieldDirective {
   /** The field name. */
   readonly docxDialogField = input.required<string>();
-}
-
-/** The context of a part's default template: the host's content template, if any. @internal */
-export interface DocxDialogSlotContext {
-  $implicit: TemplateRef<unknown> | null;
-}
-
-const PROTECTED_ATTRIBUTES = new Set([
-  'type',
-  'disabled',
-  'class',
-  'style',
-  'data-docx-part',
-  'data-docx-field',
-]);
-
-/** True for an attribute that a host may set on a part's element. */
-function allowedAttribute(name: string): boolean {
-  const lower = name.toLowerCase();
-  return !PROTECTED_ATTRIBUTES.has(lower) && !lower.startsWith('on');
-}
-
-/**
- * Render a dialog part: the host's template for it, or the packaged default with the host's
- * presentation inputs. Packaged dialogs only.
- *
- * ```html
- * <button *docxDialogSlot="'apply'; let content" docxDialogApply class="docx-dialog__button">
- *   @if (content) { <ng-container [ngTemplateOutlet]="content" /> } @else { Apply }
- * </button>
- * ```
- *
- * @internal
- */
-@Directive({ selector: '[docxDialogSlot]' })
-export class DocxDialogSlotDirective {
-  readonly docxDialogSlot = input.required<string>();
-
-  private readonly parts = inject(DocxDialogParts);
-  private readonly template = inject<TemplateRef<DocxDialogSlotContext>>(TemplateRef);
-  private readonly container = inject(ViewContainerRef);
-  private readonly renderer = inject(Renderer2);
-  private readonly element = signal<Element | null>(null);
-  private rendered: readonly unknown[] = [];
-  private applied: { classes: string[]; styles: string[]; attributes: string[] } = {
-    classes: [],
-    styles: [],
-    attributes: [],
-  };
-
-  constructor() {
-    const part = computed(() => this.parts.override(this.docxDialogSlot()));
-    effect(() => {
-      const override = part();
-      const key = [
-        override,
-        override?.hidden() ?? false,
-        override?.asChild() ?? false,
-        override?.keepContent() ?? false,
-      ];
-      untracked(() => this.render(key));
-    });
-    effect(() => {
-      const element = this.element();
-      const override = part();
-      const presentation = {
-        classes: (override?.className() ?? '').split(/\s+/).filter(Boolean),
-        styles: override?.styles() ?? {},
-        attributes: override?.attributes() ?? {},
-      };
-      untracked(() => this.present(element, presentation));
-    });
-  }
-
-  private render(key: readonly unknown[]): void {
-    if (key.every((value, index) => value === this.rendered[index])) return;
-    this.rendered = key;
-    this.container.clear();
-    this.applied = { classes: [], styles: [], attributes: [] };
-    const [override, hidden, asChild, keepContent] = key as [
-      DocxDialogPartDirective | undefined,
-      boolean,
-      boolean,
-      boolean,
-    ];
-    if (hidden) {
-      this.element.set(null);
-      return;
-    }
-    if (override && asChild) {
-      this.container.createEmbeddedView(override.template);
-      this.element.set(null);
-      return;
-    }
-    const view: EmbeddedViewRef<DocxDialogSlotContext> = this.container.createEmbeddedView(
-      this.template,
-      { $implicit: override && !keepContent ? override.template : null }
-    );
-    const element = view.rootNodes.find((node): node is Element => node.nodeType === 1) ?? null;
-    this.element.set(element);
-  }
-
-  private present(
-    element: Element | null,
-    next: { classes: string[]; styles: Readonly<Record<string, string>>; attributes: object }
-  ): void {
-    if (!element) return;
-    for (const name of this.applied.classes) this.renderer.removeClass(element, name);
-    for (const name of this.applied.styles) this.renderer.removeStyle(element, name);
-    for (const name of this.applied.attributes) this.renderer.removeAttribute(element, name);
-    const attributes = Object.entries(next.attributes as Record<string, string>).filter(([name]) =>
-      allowedAttribute(name)
-    );
-    for (const name of next.classes) this.renderer.addClass(element, name);
-    for (const [name, value] of Object.entries(next.styles)) {
-      this.renderer.setStyle(element, name, value);
-    }
-    for (const [name, value] of attributes) this.renderer.setAttribute(element, name, value);
-    this.applied = {
-      classes: next.classes,
-      styles: Object.keys(next.styles),
-      attributes: attributes.map(([name]) => name),
-    };
-  }
 }

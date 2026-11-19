@@ -22,11 +22,12 @@ import {
   DocxDialogFieldDirective,
   DocxDialogPartDirective,
   DocxDialogParts,
-  DocxDialogSlotDirective,
+  provideDialogParts,
   injectDialog,
   type DocxDialogState,
 } from './dialog-parts';
 import { DocxNativeDialogComponent } from './native-dialog.component';
+import { DocxPartSlotDirective } from '../parts/part-slot';
 
 interface FieldSession {
   readonly defaultText: string;
@@ -46,12 +47,12 @@ interface Fields {
   imports: [
     NgTemplateOutlet,
     DocxNativeDialogComponent,
-    DocxDialogSlotDirective,
+    DocxPartSlotDirective,
     DocxDialogApplyDirective,
     DocxDialogCancelDirective,
     DocxDialogFieldDirective,
   ],
-  providers: [DocxDialogParts],
+  providers: provideDialogParts(),
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (open()) {
@@ -64,7 +65,7 @@ interface Fields {
       >
         @if (preset()) {
           <div
-            *docxDialogSlot="'header'; let content"
+            *docxPartSlot="'header'; let content"
             class="docx-dialog__header"
             data-docx-part="header"
           >
@@ -75,7 +76,7 @@ interface Fields {
             }
           </div>
           <label
-            *docxDialogSlot="'field:defaultText'"
+            *docxPartSlot="'field:defaultText'"
             docxDialogField="defaultText"
             class="docx-dialog__row"
           >
@@ -86,7 +87,7 @@ interface Fields {
             />
           </label>
           <span
-            *docxDialogSlot="'error'; let content"
+            *docxPartSlot="'error'; let content"
             role="alert"
             class="docx-dialog__error"
             data-docx-part="error"
@@ -98,7 +99,7 @@ interface Fields {
             }
           </span>
           <button
-            *docxDialogSlot="'cancel'; let content"
+            *docxPartSlot="'cancel'; let content"
             docxDialogCancel
             class="docx-dialog__button docx-dialog__cancel"
           >
@@ -109,7 +110,7 @@ interface Fields {
             }
           </button>
           <button
-            *docxDialogSlot="'apply'; let content"
+            *docxPartSlot="'apply'; let content"
             docxDialogApply
             class="docx-dialog__button docx-dialog__apply"
           >
@@ -331,7 +332,7 @@ describe('dialog parts', () => {
       });
       const button = element.querySelector<HTMLButtonElement>('[data-docx-part="apply"]')!;
       expect(button.textContent?.trim()).toBe('Save field');
-      const expected = asChild ? ['app-action', 'app-active'] : ['paired-class'];
+      const expected = asChild ? ['app-action', 'app-active', 'paired-class'] : ['paired-class'];
       for (const name of expected) expect(button.classList.contains(name)).toBe(true);
       // `asChild` hands the look to the host: the packaged classes stay off its element.
       expect(button.classList.contains('docx-dialog__button')).toBe(!asChild);

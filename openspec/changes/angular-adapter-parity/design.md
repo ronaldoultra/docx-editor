@@ -111,6 +111,8 @@ Why not `NgComponentOutlet`: it keeps the instance for a new session. A keyed `@
 
 A packaged dialog renders each part through an internal structural directive. A host changes a part with an `ng-template docxDialogPart="<name>"` inside the dialog. The template replaces the content of the part's element, and the element keeps its wiring. With `asChild`, the template replaces the element, and the host wires its own element with `docxDialogApply`, `docxDialogCancel`, `docxDialogReset`, or `docxDialogField`. The presentation inputs (`className`, `styles`, `attributes`, `hidden`, `keepContent`) apply to the packaged element. The part's own wiring wins a collision.
 
+The hyperlink popup uses the same mechanism with `ng-template docxHyperlinkPart` and its own wiring directives (`docxHyperlinkUrl`, `docxHyperlinkCopy`, and the rest). The shared structural directive lives in `parts/part-slot.ts`. With `asChild`, `className` reaches the host's element, as in Vue.
+
 Why: this keeps the Vue part semantics (replace content, own the element, keep the wiring) with the D3 template override model. Alternative: a configuration object for each part. Rejected, because it cannot carry host markup.
 
 ## Risks / Trade-offs

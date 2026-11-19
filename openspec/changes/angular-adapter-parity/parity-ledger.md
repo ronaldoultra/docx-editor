@@ -178,8 +178,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorHeaderFooterChrome` | const | | todo | |
 | `DocxEditorHeaderFooterChromeProps` | interface | | todo | |
 | `DocxEditorHorizontalRuler` | const | | todo | |
-| `DocxEditorHyperLink` | const | | todo | |
-| `DocxEditorHyperLinkNamespace` | interface | | todo | |
+| `DocxEditorHyperLink` | const | `DocxEditorHyperlinkComponent` | ported | `<docx-editor-hyperlink>`. Put it inside the viewport, or name it as the `hyperlink` entry of the popup registry. The parts are `docxHyperlinkPart` templates. |
+| `DocxEditorHyperLinkNamespace` | interface | `DocxHyperlinkPartDirective`, `DocxHyperlinkUrlDirective`, `DocxHyperlinkCopyDirective`, `DocxHyperlinkEditDirective`, `DocxHyperlinkUnlinkDirective`, `DocxHyperlinkApplyDirective`, `DocxHyperlinkCancelDirective` | ported | Vue `Url`, `Copy`, `Edit`, `Unlink`, `Fields`, `Error`, `Apply`, and `Cancel` are part names of a `docxHyperlinkPart` template. The wiring directives wire a host's `asChild` element. `Fields` and `Error` have no wiring directive. |
 | `DocxEditorImageAltTextPopup` | const | | todo | |
 | `DocxEditorImageAltTextPopupProps` | interface | | todo | |
 | `DocxEditorImageInsertErrorDialog` | const | | todo | |
@@ -315,12 +315,12 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `HighlightSource` | re-export from core | | todo | |
 | `HorizontalRuler` | const | | todo | |
 | `HorizontalRulerProps` | interface | | todo | |
-| `HyperLinkActionProps` | interface | | todo | |
-| `HyperLinkPartProps` | interface | | todo | |
-| `HyperlinkPopupAnchor` | interface | | todo | |
-| `HyperlinkPopupMode` | type | | todo | |
-| `HyperlinkPopupState` | interface | | todo | |
-| `HyperLinkProps` | interface | | todo | |
+| `HyperLinkActionProps` | interface | `DocxHyperlinkPartDirective` | ported | `icon` is the template content of the action part. |
+| `HyperLinkPartProps` | interface | `DocxHyperlinkPartDirective` | ported | `className`, `asChild`, and `hidden` are inputs of the part template, and `children` is its content. Added: `styles`, `attributes`, `keepContent`. |
+| `HyperlinkPopupAnchor` | interface | `HyperlinkPopupAnchor` | ported | |
+| `HyperlinkPopupMode` | type | `HyperlinkPopupMode` | ported | |
+| `HyperlinkPopupState` | interface | `HyperlinkPopupState` | ported | |
+| `HyperLinkProps` | interface | `DocxEditorHyperlinkComponent` | ported | `className`, `preset`, and `hidden` are inputs. Dropped: `asChild` on the panel, because the panel's class carries its position. |
 | `ImageAltText` | const | | todo | |
 | `ImageInsertProvider` | const | | todo | |
 | `ImageInsertTrigger` | const | | todo | |
@@ -329,7 +329,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `ImageWrap` | const | | todo | |
 | `ImageWrapTarget` | re-export from core | | todo | |
 | `IndentUpdate` | interface | | todo | |
-| `isFieldLink` | function | | todo | |
+| `isFieldLink` | function | `isFieldLink` | ported | |
 | `isFontResolver` | re-export from core | | todo | |
 | `ListState` | interface | | todo | |
 | `ListType` | type | | todo | |
@@ -582,9 +582,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `UseHighlightsReturn` | interface | | todo | |
 | `useHistoryGroup` | function | `injectHistoryGroup` | ported |  |
 | `UseHistoryGroupReturn` | interface | `HistoryGroupState` | ported |  |
-| `useHyperlinkPopup` | function | | todo | |
-| `useHyperlinkPopupInstance` | function | | todo | |
-| `UseHyperlinkPopupResult` | interface | | todo | |
+| `useHyperlinkPopup` | function | `injectHyperlinkPopup` | ported | Inside a root, the caller counts as a view of the shared popup until Angular destroys it. |
+| `useHyperlinkPopupInstance` | function | `injectHyperlinkPopupInstance` | ported | |
+| `UseHyperlinkPopupResult` | interface | `HyperlinkPopup` | ported | `state` is a signal. |
 | `useNavigationPane` | function | | todo | |
 | `UseNavigationPaneOptions` | interface | | todo | |
 | `UseNavigationPaneResult` | interface | | todo | |
@@ -660,10 +660,10 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/context-menu-add-comment.test.ts` | | todo | |
 | `packages/vue/test/context-menu-chart.test.ts` | `packages/angular/src/lib/context-menu/context-menu.spec.ts` | ported |  |
 | `packages/vue/test/context-menu-keyboard.test.ts` | `packages/angular/src/lib/context-menu/context-menu-keyboard.spec.ts` | ported | Keeps: a keyboard-opened menu opens below the caret and follows the caret; a right-click opens at the pointer and names its target; a row that stays mounted follows a keyboard reopen of an open menu; with no painted caret, the menu opens at the document corner. Changed: Angular creates the rows in `docx-context-menu-start` once with the menu, so the probe row reads each open from `injectContextMenuAnchor` and `injectContextMenuTarget`, and the spec counts its creations. |
-| `packages/vue/test/context-menu-link.test.ts` | `packages/angular/src/lib/context-menu/context-menu-link.spec.ts` | todo | Ported (task 5.2): the row is enabled and opens the registered link UI; in viewing mode it is disabled with the engine reason; a `text.link` slot template replaces the row; on a link the row says Edit link. The claims about the link popup and the focus after it closes port with task 6.2. |
+| `packages/vue/test/context-menu-link.test.ts` | `packages/angular/src/lib/context-menu/context-menu-link.spec.ts`, `packages/angular/src/lib/hyperlink/link-row-chrome.spec.ts` | ported | Keeps (task 5.2): the row is enabled and opens the registered link UI; in viewing mode it is disabled with the engine reason; a `text.link` slot template replaces the row; on a link the row says Edit link. Keeps (task 6.2): on a link the row opens the edit fields with the address; Escape, Enter, and Cancel close the popup and give the focus back to the document, and Escape keeps the selection. Changed: jsdom cannot focus the pages, so the specs count the engine's `focus` calls. Added: an empty address refuses Apply with an alert, and a press outside closes the popup. |
 | `packages/vue/test/context-menu-placement.test.ts` | `packages/angular/src/lib/context-menu/context-menu-placement.spec.ts` | ported |  |
 | `packages/vue/test/context-menu-start.test.ts` | `packages/angular/src/lib/context-menu/context-menu-target.spec.ts` | ported | Angular has no fragments: the spec checks that each start moves up and that the host rows stay below. The menu adds one separator below all starts. |
-| `packages/vue/test/context-menu-target.test.ts` | `packages/angular/src/lib/context-menu/context-menu-target.spec.ts` | todo | Ported (task 5.2): the pages, the canvas, painted text, a painted drop-down field, and the content mount open the menu; a form control beside the pages keeps the browser menu, its focus, and its selection; a right-click on the open menu keeps it in place. The link popup and dialog claims port with tasks 6.2 and 6.4. |
+| `packages/vue/test/context-menu-target.test.ts` | `packages/angular/src/lib/context-menu/context-menu-target.spec.ts`, `packages/angular/src/lib/hyperlink/link-row-chrome.spec.ts` | todo | Ported (task 5.2): the pages, the canvas, painted text, a painted drop-down field, and the content mount open the menu; a form control beside the pages keeps the browser menu, its focus, and its selection; a right-click on the open menu keeps it in place. Ported (task 6.2), in `packages/angular/src/lib/hyperlink/link-row-chrome.spec.ts`: the link popup renders inside the content mount; a right-click in its address field, on the panel, or on its buttons keeps the browser menu, the focus, the draft, and the selection. The dialog claims port with task 6.4. |
 | `packages/vue/test/context-menu.test.ts` | `packages/angular/src/lib/context-menu/context-menu.spec.ts` | todo | Ported (task 5.2): a right-click opens the panel at the pointer; engine changes keep the one listener; the default rows; Paste closes before the clipboard read settles; a refused read disables Paste with the reason; the form field row opens the field dialog; the table of contents rows and Remove. Added: the table rows, Insert row below, and Split cells. The claim that the dialog saves the field ports with task 6.4. |
 | `packages/vue/test/deferred-notifier.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/dialog-customization.test.ts` | `packages/angular/src/lib/dialog/dialog-parts.spec.ts` | ported | Keeps, on a spec dialog with the Field Options session contract: a custom Apply keeps the field wiring and closes only after an accepted write; a refused write stays open with an alert, and an abort closes the dialog; host classes merge with the packaged classes, and `asChild` keeps the packaged classes off the host element; a part forwards host attributes but keeps its own wiring; replacement content keeps its markup, a live label, the element, and the wiring. Changed: a host's own `(click)` on its element runs beside the part's handler, because Angular adds listeners and cannot drop them; the attribute `onclick` does not apply. Dropped: the SFC `children` forwarding claim (Vue-only mechanism). Added: a hidden part, `keepContent`, a component in a part template that reads `injectDialog()`, `preset` false, and the native dialog's focus, Escape, and scope class. |
@@ -683,14 +683,14 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/highlights-background-layout.test.ts` | | todo | Task 7.2 |
 | `packages/vue/test/host-window-chrome.test.ts` | `packages/angular/src/lib/host-window.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts` | ported | Keeps: the window panel renders in the pop-out while open and comes back on close; turning `open` off moves the panel back before the window closes; a picker in the pop-out closes on a press in its own window, not in the opener. |
 | `packages/vue/test/hydration-renderer-slots.test.ts` | | todo | Task 10.5 |
-| `packages/vue/test/hyperlink-as-child.test.ts` | | todo | Task 6.2 |
+| `packages/vue/test/hyperlink-as-child.test.ts` | `packages/angular/src/lib/hyperlink/hyperlink.spec.ts` | ported | Keeps, over a stub popup: `asChild` keeps the packaged class off the host element and the wiring on it, and `className` reaches it; `asChild` with no `className` leaves only the host's class; without `asChild` the packaged part keeps its class beside `className`. Added: `keepContent` keeps the packaged icon. |
 | `packages/vue/test/image-authoring.test.ts` | | todo | Task 8.1 |
 | `packages/vue/test/image-decode-port-prop.test.ts` | `packages/angular/src/lib/construction-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` decode the picture with the port and keep its bytes on save; a new port creates a new engine that uses it; destroying the editor aborts a running decode. |
 | `packages/vue/test/image-insert-refusal.test.ts` | | todo | Task 8.1 |
 | `packages/vue/test/image-overlay-history.test.ts` | | todo | Task 8.1 |
 | `packages/vue/test/image-panel-rows.test.ts` | | todo | Task 8.1 |
-| `packages/vue/test/lifecycle-regression.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts`, `packages/angular/src/lib/fonts.spec.ts`, `packages/angular/src/lib/root.directive.spec.ts` | todo | Ported: `ready` fires after pages paint; the `'blank'` source opens without warnings; a new inline `translate` keeps the engine and undo; an unrelated render keeps the engine; `ready`, `change`, and `fontError` emit once; destroy releases the engine; `injectDocxSource` follows a byte signal and aborts a stale fetch; `injectFonts` reads the current origin. Dropped: the `provideDocxEditor` claims (Vue-only mechanism). The hyperlink popup claim ports with task 6.2, the search debounce and navigation observer claims with task 7.1. |
-| `packages/vue/test/link-row-chrome.test.ts` | | todo | Task 6.2 |
+| `packages/vue/test/lifecycle-regression.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts`, `packages/angular/src/lib/fonts.spec.ts`, `packages/angular/src/lib/root.directive.spec.ts` | todo | Ported: `ready` fires after pages paint; the `'blank'` source opens without warnings; a new inline `translate` keeps the engine and undo; an unrelated render keeps the engine; `ready`, `change`, and `fontError` emit once; destroy releases the engine; `injectDocxSource` follows a byte signal and aborts a stale fetch; `injectFonts` reads the current origin. Dropped: the `provideDocxEditor` claims (Vue-only mechanism). The hyperlink popup state claim is in `packages/angular/src/lib/hyperlink/hyperlink.spec.ts` (task 6.2). The search debounce and navigation observer claims with task 7.1. |
+| `packages/vue/test/link-row-chrome.test.ts` | `packages/angular/src/lib/hyperlink/link-row-chrome.spec.ts` | ported | Keeps: with the popup, the toolbar button and the context menu row are enabled; without a link UI, both are disabled with the engine reason and open nothing; a host's own link UI enables both and they open it, and its removal disables them again; a host part that calls `injectHyperlinkPopup()` keeps the controls working; a caret inside a word opens the popup with that word, and Apply links it. Changed: the specs compose the root with `<docx-editor-hyperlink>` in the place of the packaged `hyperlinkPopup` flag, which lands with task 6.7. |
 | `packages/vue/test/live-props.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | todo | Ported: author, mode, translate, and locale apply to the same engine; another input change does not restore the host mode; a catalog change and then `translate` reach the engine; an equal new `translate` publishes no selection change; `colorMode` applies. The `title` claim is in `packages/angular/src/lib/packaged-menus.spec.ts`. The `rulers` and `navigation` claims port with tasks 9.6 and 7.3. |
 | `packages/vue/test/loading-continued.test.ts` | | todo | Task 9.5 |
 | `packages/vue/test/loading-indicator.test.ts` | | todo | Task 9.5 |
@@ -723,7 +723,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/runtime-audit.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/scope-dispose.test.ts` | `packages/angular/src/lib/color-mode.spec.ts` | ported | Keeps: mounting the composed editor logs no warning and no error. |
 | `packages/vue/test/scoped-chrome-anchor.test.ts` | | todo | Task 10.5 |
-| `packages/vue/test/security.test.ts` | | todo | Task 6.2 |
+| `packages/vue/test/security.test.ts` | `packages/angular/src/lib/hyperlink/hyperlink.spec.ts` | todo | Ported (task 6.2): `sanitizeHref` refuses `javascript:` targets; the popup shows a `javascript:` link as inert, with no Copy action, and following it opens nothing. Added: an `http` link is a button that opens its address. The `v-html` scan claim ports with task 11.1, with the lint fixtures. |
 | `packages/vue/test/selection-range-state.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/slot-ref.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/sugar-host.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts` | todo | Ported: `ready` emits once and the methods exist; `change` and `fontError` emit. Not kept: a new `document` value keeps the engine and calls `load()`, which the Angular browser test checks. The menu, title, save, open, context menu, and chrome band claims are in `packages/angular/src/lib/packaged-menus.spec.ts`. The loading, ruler, and navigation claims port with tasks 9.5, 9.6, and 7.3. |

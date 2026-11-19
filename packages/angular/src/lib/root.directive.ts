@@ -38,6 +38,7 @@ import {
 } from '@docx-editor.dev/core/editor';
 import { resolveIsDark, subscribeSystemDark, type DocxEditorColorMode } from './color-mode';
 import { DocxEditorContext } from './context';
+import { DocxHyperlinkPopupRegistry } from './hyperlink/hyperlink-state';
 import { injectTranslation } from './i18n';
 import { DocxEditorPopupRegistry, type DocxEditorPopups } from './popups/popup-config';
 import {
@@ -84,7 +85,7 @@ export type DocxEditorTranslate = (key: string, params?: Record<string, string |
 @Directive({
   selector: '[docxEditorRoot]',
   exportAs: 'docxEditorRoot',
-  providers: [DocxEditorContext, DocxEditorPopupRegistry],
+  providers: [DocxEditorContext, DocxEditorPopupRegistry, DocxHyperlinkPopupRegistry],
 })
 export class DocxEditorRootDirective implements OnInit {
   /**

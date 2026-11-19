@@ -218,3 +218,22 @@ export {
   type DocxDialogState,
 } from './lib/dialog/dialog-parts';
 export { DocxNativeDialogComponent } from './lib/dialog/native-dialog.component';
+export {
+  injectHyperlinkPopup,
+  injectHyperlinkPopupInstance,
+  isFieldLink,
+  type HyperlinkPopup,
+  type HyperlinkPopupAnchor,
+  type HyperlinkPopupMode,
+  type HyperlinkPopupState,
+} from './lib/hyperlink/hyperlink-state';
+export {
+  DocxHyperlinkApplyDirective,
+  DocxHyperlinkCancelDirective,
+  DocxHyperlinkCopyDirective,
+  DocxHyperlinkEditDirective,
+  DocxHyperlinkPartDirective,
+  DocxHyperlinkUnlinkDirective,
+  DocxHyperlinkUrlDirective,
+} from './lib/hyperlink/hyperlink-parts';
+export { DocxEditorHyperlinkComponent } from './lib/hyperlink/hyperlink.component';

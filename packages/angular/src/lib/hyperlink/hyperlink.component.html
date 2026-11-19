@@ -1,0 +1,195 @@
+<ng-template #projected><ng-content /></ng-template>
+@if (state().mode !== 'closed') {
+  @if (hidden()) {
+    <ng-container [ngTemplateOutlet]="projected" />
+  } @else {
+    <div
+      #panel
+      class="docx-hyperlink-popup"
+      [class]="className() ?? ''"
+      data-testid="hyperlink-popup"
+      [attr.data-mode]="state().mode"
+      role="dialog"
+      aria-modal="false"
+      [attr.aria-label]="title()"
+      [style.left]="placement()?.left ?? null"
+      [style.top]="placement()?.top ?? null"
+      (mousedown)="guard($event)"
+    >
+      @if (preset()) {
+        @if (state().mode === 'editing') {
+          <div *docxPartSlot="'fields'" class="docx-hyperlink-popup__fields">
+            <label class="docx-editor-sr-only" [attr.for]="textId">
+              {{ label('hyperlinkPopup.displayTextPlaceholder') }}
+            </label>
+            <input
+              [id]="textId"
+              data-testid="hyperlink-popup-text"
+              class="docx-hyperlink-popup__input"
+              [value]="state().text"
+              [attr.dir]="state().text ? 'auto' : null"
+              [placeholder]="label('hyperlinkPopup.displayTextPlaceholder')"
+              (input)="popup.setText(inputValue($event))"
+              (keydown)="onFieldKeydown($event)"
+            />
+            <label class="docx-editor-sr-only" [attr.for]="urlId">
+              {{ label('hyperlinkPopup.urlLabel') }}
+            </label>
+            <!-- An address reads left to right in any interface. -->
+            <input
+              #url
+              [id]="urlId"
+              data-testid="hyperlink-popup-url-input"
+              class="docx-hyperlink-popup__input"
+              [value]="state().url"
+              dir="ltr"
+              [placeholder]="label('hyperlinkPopup.urlPlaceholder')"
+              (input)="popup.setUrl(inputValue($event))"
+              (keydown)="onFieldKeydown($event)"
+            />
+          </div>
+          @if (state().error) {
+            <div
+              *docxPartSlot="'error'; let content"
+              class="docx-hyperlink-popup__error"
+              data-testid="hyperlink-popup-error"
+              role="alert"
+            >
+              @if (content) {
+                <ng-container [ngTemplateOutlet]="content" />
+              } @else {
+                {{ label('hyperlinkPopup.refused') }}
+              }
+            </div>
+          }
+          <div class="docx-hyperlink-popup__actions">
+            <button
+              *docxPartSlot="'apply'; let content"
+              docxHyperlinkApply
+              class="docx-hyperlink-popup__apply"
+            >
+              @if (content) {
+                <ng-container [ngTemplateOutlet]="content" />
+              } @else {
+                {{ label('hyperlinkPopup.apply') }}
+              }
+            </button>
+            <button
+              *docxPartSlot="'cancel'; let content"
+              docxHyperlinkCancel
+              class="docx-hyperlink-popup__cancel"
+            >
+              @if (content) {
+                <ng-container [ngTemplateOutlet]="content" />
+              } @else {
+                {{ label('hyperlinkPopup.cancel') }}
+              }
+            </button>
+          </div>
+        } @else if (state().link; as link) {
+          @if (link.href) {
+            <button
+              *docxPartSlot="'url'; let content"
+              docxHyperlinkUrl
+              class="docx-hyperlink-popup__url"
+            >
+              @if (content) {
+                <ng-container [ngTemplateOutlet]="content" />
+              } @else {
+                <bdi [attr.dir]="link.kind === 'internal' ? null : 'ltr'">{{
+                  link.kind === 'internal' ? '#' + (link.anchor ?? '') : link.authored
+                }}</bdi>
+              }
+              <svg
+                viewBox="0 -960 960 960"
+                width="16"
+                height="16"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path [attr.d]="icons.open" fill="currentColor" />
+              </svg>
+            </button>
+          } @else {
+            <span
+              *docxPartSlot="'url'; let content"
+              docxHyperlinkUrl
+              class="docx-hyperlink-popup__url"
+            >
+              @if (content) {
+                <ng-container [ngTemplateOutlet]="content" />
+              } @else {
+                <bdi dir="ltr">{{ link.authored }}</bdi>
+              }
+              <span class="docx-editor-sr-only">{{ label('hyperlinkPopup.inertTarget') }}</span>
+            </span>
+          }
+          <div class="docx-hyperlink-popup__actions">
+            @if (link.href) {
+              <button
+                *docxPartSlot="'copy'; let content"
+                docxHyperlinkCopy
+                class="docx-hyperlink-popup__action"
+              >
+                @if (content) {
+                  <ng-container [ngTemplateOutlet]="content" />
+                } @else {
+                  <svg
+                    viewBox="0 -960 960 960"
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path [attr.d]="icons.copy" fill="currentColor" />
+                  </svg>
+                }
+              </button>
+            }
+            @if (editable()) {
+              <button
+                *docxPartSlot="'edit'; let content"
+                docxHyperlinkEdit
+                class="docx-hyperlink-popup__action"
+              >
+                @if (content) {
+                  <ng-container [ngTemplateOutlet]="content" />
+                } @else {
+                  <svg
+                    viewBox="0 -960 960 960"
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path [attr.d]="icons.edit" fill="currentColor" />
+                  </svg>
+                }
+              </button>
+              <button
+                *docxPartSlot="'unlink'; let content"
+                docxHyperlinkUnlink
+                class="docx-hyperlink-popup__action"
+              >
+                @if (content) {
+                  <ng-container [ngTemplateOutlet]="content" />
+                } @else {
+                  <svg
+                    viewBox="0 -960 960 960"
+                    width="16"
+                    height="16"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path [attr.d]="icons.unlink" fill="currentColor" />
+                  </svg>
+                }
+              </button>
+            }
+          </div>
+        }
+      }
+      <ng-container [ngTemplateOutlet]="projected" />
+    </div>
+  }
+}
