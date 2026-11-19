@@ -125,9 +125,7 @@ describe('full-document fidelity through the real surface', () => {
   const SAMPLE = RICH_CLIPBOARD_FIXTURE;
 
   test('select-all copy of the drawing showcase refuses chart content explicitly', () => {
-    const bytes = new Uint8Array(
-      readFileSync(`${import.meta.dir}/fixtures/sample.docx`)
-    );
+    const bytes = new Uint8Array(readFileSync(`${import.meta.dir}/fixtures/sample.docx`));
     const container = document.createElement('div');
     const mounted = mountPaginatedSurface(container, bytes, { scale: 1 });
     if (!mounted.ok) throw new Error(mounted.reason);

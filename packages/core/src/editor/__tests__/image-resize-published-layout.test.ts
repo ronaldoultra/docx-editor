@@ -14,9 +14,7 @@ import { createDocxEditor } from '../docx-editor.ts';
 // section session, the final call identity-returns against it, and the span-reuse gate in
 // `layoutMultiSectionDocument` then republished the PREVIOUS pass's sheets — the image
 // repainted at the new size while the published fragment kept the pre-resize frame.
-const SAMPLE = new Uint8Array(
-  readFileSync(new URL('./fixtures/sample.docx', import.meta.url))
-);
+const SAMPLE = new Uint8Array(readFileSync(new URL('./fixtures/sample.docx', import.meta.url)));
 
 function testDecodePort(): ImageDecodePort {
   return Object.freeze({

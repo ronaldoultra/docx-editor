@@ -10,9 +10,7 @@ import { selectedDrawingOverlayTargetOf } from '../drawing-overlay-target.ts';
 import { overlayFrameToSheetCssPixels } from '../surface-overlay-coordinates.ts';
 import { decodePort } from './image-decode-harness.ts';
 
-const SAMPLE = new Uint8Array(
-  readFileSync(new URL('./fixtures/sample.docx', import.meta.url))
-);
+const SAMPLE = new Uint8Array(readFileSync(new URL('./fixtures/sample.docx', import.meta.url)));
 
 test('overlay sheet box matches the painted wrap-square drawing', async () => {
   const container = document.createElement('div');
