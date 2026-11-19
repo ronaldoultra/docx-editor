@@ -158,7 +158,7 @@ for (const mode of [
 
     test('view mode refuses edits until edit mode returns', async ({ page }) => {
       await open(page, SAMPLE);
-      await page.getByLabel('Somente leitura').check();
+      await page.getByTestId('packaged-mode').selectOption('view');
       await caretAtStart(page, HEADING);
       const before = await changeCount(page);
       await page.keyboard.type('X');
@@ -167,7 +167,7 @@ for (const mode of [
       expect(await paragraphText(page, HEADING)).toBe('DOCX-EDITOR.DEV');
       expect(await changeCount(page)).toBe(before);
 
-      await page.getByLabel('Somente leitura').uncheck();
+      await page.getByTestId('packaged-mode').selectOption('edit');
       await caretAtStart(page, HEADING);
       await page.keyboard.type('X');
       await expect.poll(() => paragraphText(page, HEADING)).toBe('XDOCX-EDITOR.DEV');
@@ -238,6 +238,48 @@ for (const mode of [
 
       await open(page, path);
       expect(await paragraphText(page, HEADING)).toBe('SALVO123 DOCX-EDITOR.DEV');
+    });
+
+    test('a zoom change repaints the pages without a reload', async ({ page }) => {
+      await open(page, SAMPLE);
+      await caretAtStart(page, HEADING);
+      await page.keyboard.type('Z ');
+      await expect.poll(() => paragraphText(page, HEADING)).toBe('Z DOCX-EDITOR.DEV');
+      const pageWidth = () =>
+        page.evaluate(() => document.querySelector('.docx-page')!.getBoundingClientRect().width);
+      const before = await pageWidth();
+      await page.evaluate(() => {
+        (window as unknown as { surface: Element }).surface =
+          document.querySelector('.docx-paginated-surface')!;
+      });
+
+      await page.getByRole('button', { name: 'Aumentar zoom' }).click();
+      await page.getByRole('button', { name: 'Aumentar zoom' }).click();
+      await expect(page.getByTestId('packaged-zoom')).toHaveText('150%');
+      await expect.poll(pageWidth).toBeCloseTo(before * 1.5, 0);
+
+      // The same surface and the edit stay: the engine was not created again.
+      expect(
+        await page.evaluate(() => (window as unknown as { surface: Element }).surface.isConnected)
+      ).toBe(true);
+      expect(await paragraphText(page, HEADING)).toBe('Z DOCX-EDITOR.DEV');
+    });
+
+    test('suggesting mode saves typing as a tracked insertion by the author', async ({ page }) => {
+      await open(page, SAMPLE);
+      await page.getByLabel('Autor').fill('Ada');
+      await page.getByLabel('Autor').press('Tab');
+      await page.getByTestId('packaged-mode').selectOption('suggesting');
+      await caretAtStart(page, HEADING);
+      await page.keyboard.type('NOVO ');
+      await expect.poll(() => paragraphText(page, HEADING)).toContain('NOVO');
+
+      const download = page.waitForEvent('download');
+      await page.getByRole('button', { name: 'Salvar' }).click();
+      const parts = unzipSync(new Uint8Array(readFileSync(await (await download).path())));
+      const xml = strFromU8(parts['word/document.xml']!);
+      expect(xml).toMatch(/<w:ins [^>]*w:author="Ada"/);
+      expect(xml).toContain('NOVO');
     });
   });
 }

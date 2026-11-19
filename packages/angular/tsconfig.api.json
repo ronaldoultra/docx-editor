@@ -1,0 +1,15 @@
+{
+  // API Extractor's view of this package: the declarations that ng-packagr writes to `dist`.
+  // Core and i18n resolve as external packages, as for the other adapters, so their types are
+  // references, not forgotten exports of this package.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "files": ["dist/index.d.ts"]
+}

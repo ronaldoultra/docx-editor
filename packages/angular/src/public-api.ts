@@ -56,4 +56,41 @@ export {
   type EditorColorModeState,
   type ResolvedColorMode,
 } from './lib/color-mode';
-export type { DocumentChange } from '@docx-editor.dev/core/contracts/editor';
+// The engine and i18n types that the signatures above use, so a host can name them without a
+// second import path. These are type exports only: the engine stays one peer copy.
+export type {
+  DocumentChange,
+  DocumentHandle,
+  DocumentOpenFailure,
+  DocumentSource,
+  Editor,
+  EditorCommand,
+  EditorError,
+  EditorEvents,
+  EditorExecOptions,
+  EditorFontError,
+  EditorScope,
+  EditorSnapshot,
+  ExecResult,
+  FontConfiguration,
+  ZoomMode,
+} from '@docx-editor.dev/core/contracts/editor';
+export type {
+  ChromeSlotId,
+  ContentLockPolicy,
+  DocxEditorConfig,
+  DocxEditorInstance,
+  EditorModule,
+  FieldResultsMode,
+  FontConfigurationFragment,
+  FontOrigin,
+  FontResolver,
+  FontShapingOptions,
+  HistoryGroupBindingOptions,
+  ImageDecodePort,
+  LockedControlNavigation,
+  MarkedFontResolver,
+  ObjectSlotValueMap,
+  ToolbarValueMap,
+} from '@docx-editor.dev/core/editor';
+export type { LocaleStrings, TFunction, Translations } from '@docx-editor.dev/i18n';

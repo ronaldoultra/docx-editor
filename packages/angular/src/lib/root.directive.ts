@@ -17,8 +17,11 @@ import {
 import type {
   DocumentChange,
   DocumentSource,
+  DocumentOpenFailure,
   Editor,
+  EditorError,
   EditorFontError,
+  EditorSnapshot,
   ZoomMode,
 } from '@docx-editor.dev/core/contracts/editor';
 import {
@@ -166,6 +169,18 @@ export class DocxEditorRootDirective implements OnInit {
   /** Emits for each change that the engine commits: an edit, undo, redo, or a load. */
   readonly change = output<DocumentChange>();
 
+  /** Emits the snapshot after each selection change that the engine publishes. */
+  readonly selectionChange = output<EditorSnapshot>();
+
+  /** Emits the errors that the engine publishes, such as a refused command or document. */
+  readonly error = output<EditorError>();
+
+  /**
+   * Emits when the engine refuses to open a document: a damaged file, a file that is not DOCX,
+   * or a file over the size limits. The snapshot's `openFailure` holds the same value.
+   */
+  readonly openFailure = output<DocumentOpenFailure>();
+
   /** The context that this root provides. */
   readonly context = inject(DocxEditorContext, { self: true });
 
@@ -244,6 +259,16 @@ export class DocxEditorRootDirective implements OnInit {
         });
       });
     });
+    let reportedFailure: DocumentOpenFailure | null = null;
+    effect(() => {
+      // The engine publishes a refused open as a state change, so read it after each tick.
+      this.context.revision();
+      const editor = this.context.editor();
+      const failure = editor ? (untracked(() => editor.snapshot()).openFailure ?? null) : null;
+      if (failure === reportedFailure) return;
+      reportedFailure = failure;
+      if (failure) untracked(() => this.openFailure.emit(failure));
+    });
     inject(DestroyRef).onDestroy(() => this.release());
   }
 
@@ -306,7 +331,11 @@ export class DocxEditorRootDirective implements OnInit {
     this.appliedZoom.mode = zoomMode;
     Object.assign(this.created, { fieldResults, contentLockPolicy, lockedControlNavigation });
     this.releases.push(
-      editor.on('change', (change) => this.zone.run(() => this.change.emit(change)))
+      editor.on('change', (change) => this.zone.run(() => this.change.emit(change))),
+      editor.on('selectionChange', (snapshot) =>
+        this.zone.run(() => this.selectionChange.emit(snapshot))
+      ),
+      editor.on('error', (error) => this.zone.run(() => this.error.emit(error)))
     );
     this.releases.push(this.context.connect(editor));
     this.emitReadyWhenOpen(editor);

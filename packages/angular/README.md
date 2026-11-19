@@ -7,7 +7,7 @@ The package has two levels:
 - `<docx-editor>` is a packaged component for a page that needs only the pages.
 - The composition API is a set of parts that you put together in your own layout. Use it to add your own controls.
 
-The package has no toolbar, menus, context menu, or dialogs yet.
+The package has no toolbar, menus, context menu, or dialogs yet. `<docx-editor>` shows the pages with a `.docx-editor` wrapper that carries the color mode and the chrome direction.
 
 ## Requirements
 
@@ -229,17 +229,96 @@ The following template adds a button that moves the pages to a pop-out window:
 </ng-container>
 ```
 
+## Load a document and its fonts
+
+`injectDocxSource` loads a document from bytes or from a URL, and holds it back until its eager fonts settle. An eager font origin is a configuration, a fragment, a promise, or a loader with no argument. A resolver from `defineFontResolver` needs the open document, so the document opens at once and the resolver answers for each document. Call `injectDocxSource` in an injection context:
+
+```ts
+import { injectDocxSource } from '@docx-editor.dev/angular';
+
+export class AppComponent {
+  readonly url = signal('/files/report.docx');
+  readonly source = injectDocxSource(() => this.url(), { fonts: myFonts });
+}
+```
+
+Bind both values to the editor:
+
+```html
+<docx-editor [document]="source.document()" [fonts]="source.fonts()" />
+```
+
+`injectFonts` composes several font origins into one resolver. The first origin wins for a face that two origins supply. A signal origin is read again for each document. Any other function is a resolver, so to build an origin lazily, pass a `computed`:
+
+```ts
+readonly fonts = injectFonts(brandFonts, computed(() => this.extraFonts()));
+```
+
 ## Packaged component API
 
-| Member | Kind | Description |
-| --- | --- | --- |
-| `document` | input | `ArrayBuffer` or `Uint8Array` with the DOCX bytes. A new value loads the new document into the same engine instance. `null` releases the document. |
-| `mode` | input | `'edit'` (default) or `'view'`. A change applies without a reload. |
-| `viewportLabel` | input | The accessible name of the page region. |
-| `change` | output | The engine `change` event: an edit, undo, redo, or load. |
-| `save()` | method | Returns `Promise<ArrayBuffer>` with the DOCX bytes. |
+`<docx-editor>` composes the same public parts that the previous section describes: `docxEditorRoot`, `<docx-editor-viewport>`, and `<docx-editor-content>`. The root inputs have the same names and the same behavior.
 
-The engine has no `ready` event, so the component has no `ready` output.
+### Inputs that apply live
+
+A change to one of these inputs applies to the open document without a reload. The engine, the edits, and the undo history stay.
+
+| Input | Description |
+| --- | --- |
+| `document` | `ArrayBuffer` or `Uint8Array` with the DOCX bytes. A new value opens the new document in the same engine. `null` destroys the engine and its document. |
+| `mode` | `'edit'` (default), `'view'`, or `'suggesting'`. Suggesting needs a review module in `modules` and an `author`. Without an author, the editor stays in editing until `author` has a value. |
+| `author` | The author of later comments, replies, and tracked changes. |
+| `colorMode` | `'light'` (default), `'dark'`, or `'system'`, which follows the operating system. |
+| `i18n` | A translation catalog. Missing keys fall back to an outer `docxEditorI18n` provider, then to English. A right-to-left catalog mirrors the chrome. |
+| `translate` | A function for the labels that the engine paints. Defaults to the active catalog. |
+| `locale` | The BCP-47 locale for date input and the labels that the engine makes. Defaults to `en-US`. |
+| `zoom` | The zoom factor, where `1` is 100 percent. |
+| `zoomMode` | A fixed zoom, or a zoom that fits the page or its width to the viewport. |
+| `fonts` | Font sources: a configuration, fragments, or a resolver. A new value replaces the fonts of the same engine. See `injectFonts` and `injectDocxSource`. |
+
+### Inputs that create a new engine
+
+A change to one of these inputs creates a new engine. The new engine opens the `document` input again, so edits that you did not save are lost.
+
+| Input | Description |
+| --- | --- |
+| `modules` | Engine modules, such as a review module. Keep one array for the life of the editor. |
+| `fontShaping` | Font shaping limits. Only a changed `maxFontBytes` creates a new engine. |
+| `imageDecodePort` | The decoder for raster images. Destroying the engine aborts the decodes that still run. |
+
+### Inputs that the engine reads once
+
+The engine reads these inputs when it is created. A later change has no effect, and a development build warns once.
+
+| Input | Description |
+| --- | --- |
+| `fieldResults` | `'atomic'` (default) keeps each field one unit. `'editable'` allows edits inside the saved result. |
+| `contentLockPolicy` | `{ allowFormattingInLockedContent: true }` lets readers format locked content controls. |
+| `lockedControlNavigation` | `'characters'` (default) or `'atomic'`: how the caret moves through a locked inline control. |
+
+### Outputs
+
+| Output | Description |
+| --- | --- |
+| `ready` | Emits once for each engine, when it finished opening its first document. |
+| `change` | The engine `change` event: an edit, undo, redo, or load. |
+| `selectionChange` | The engine snapshot after each selection change. |
+| `error` | The errors that the engine publishes, such as a refused command or document. |
+| `openFailure` | The reason when the engine refuses to open a document: damaged, not DOCX, or too large. |
+| `fontError` | A font that failed to load. The engine keeps measuring with its fallback. |
+
+### Methods
+
+Get the component with `viewChild(DocxEditorComponent)`, then call these methods:
+
+| Method | Description |
+| --- | --- |
+| `save()` | Returns `Promise<ArrayBuffer>` with the DOCX bytes. Rejects without a document, and when the engine refuses, for example for a form field value that its format does not accept. |
+| `load(document)` | Opens another document in the same engine. The `document` input does not change. |
+| `exec(command, options)` | Runs an engine command. Without an engine, returns a `notFound` refusal. |
+| `snapshot(options)` | The engine snapshot. Without an engine, the empty loading snapshot. |
+| `focus()` | Moves the keyboard focus to the pages. |
+| `getEditor()` | The engine instance, or `null`. |
+| `getDocumentHandle()` | A handle on the open document, or `null`. |
 
 ## Zone.js
 

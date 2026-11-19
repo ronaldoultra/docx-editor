@@ -11,6 +11,7 @@ import {
   inject,
   untracked,
   viewChild,
+  type Signal,
 } from '@angular/core';
 import {
   editorDropHandled,
@@ -18,7 +19,7 @@ import {
   type DocxEditorInstance,
 } from '@docx-editor.dev/core/editor';
 import { injectDocxEditorContext } from './context';
-import { injectChromeDir } from './i18n';
+import { injectChromeDir, type DocxEditorDirection } from './i18n';
 
 /**
  * The element that the engine paints the pages into. The painted pages are the editable
@@ -52,7 +53,7 @@ export class DocxEditorContentComponent {
   private attached: DocxEditorInstance | null = null;
 
   /** @internal */
-  protected readonly chromeDir = injectChromeDir();
+  protected readonly chromeDir: Signal<DocxEditorDirection | undefined> = injectChromeDir();
 
   constructor() {
     effect(() => {

@@ -2,11 +2,18 @@ import { ChangeDetectionStrategy, Component, computed, signal, viewChild } from 
 import {
   DocxEditorComponent,
   type DocumentChange,
+  type DocxEditorColorMode,
   type DocxEditorMode,
 } from '@docx-editor.dev/angular';
+import { en, ptBR, type Translations } from '@docx-editor.dev/i18n';
 import { ComposedEditorComponent } from './composed/composed-editor.component';
+import { EXAMPLE_REVIEW_MODULE } from './review-module';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+type Language = 'en' | 'pt-BR';
+const CATALOGS: Record<Language, Translations> = { en, 'pt-BR': ptBR };
+const ZOOM_LEVELS = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 /** `packaged` shows `<docx-editor>`. `composed` shows the composition API. */
 type Variant = 'packaged' | 'composed';
@@ -32,19 +39,60 @@ type Variant = 'packaged' | 'composed';
           <option value="composed" [selected]="variant() === 'composed'">API de composição</option>
         </select>
       </label>
-      @if (variant() === 'packaged') {
-        <label>
-          <input type="checkbox" [checked]="mode() === 'view'" (change)="toggleView($event)" />
-          Somente leitura
-        </label>
-      }
       <button type="button" [disabled]="!bytes() || saving()" (click)="save()">Salvar</button>
       <button type="button" [disabled]="!bytes()" (click)="close()">Fechar</button>
       <span class="status" data-testid="status">{{ status() }}</span>
     </div>
+    @if (variant() === 'packaged') {
+      <div class="options">
+        <label>
+          Modo
+          <select data-testid="packaged-mode" (change)="mode.set(pick($event))">
+            <option value="edit">Edição</option>
+            <option value="view">Somente leitura</option>
+            <option value="suggesting">Sugestão</option>
+          </select>
+        </label>
+        <label>
+          Autor
+          <input type="text" [value]="author()" (change)="author.set(text($event))" />
+        </label>
+        <label>
+          Tema
+          <select data-testid="packaged-theme" (change)="colorMode.set(pick($event))">
+            <option value="light">Claro</option>
+            <option value="dark">Escuro</option>
+            <option value="system">Sistema</option>
+          </select>
+        </label>
+        <label>
+          Idioma
+          <select data-testid="packaged-language" (change)="language.set(pick($event))">
+            <option value="pt-BR">Português</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <span class="zoom">
+          <button type="button" aria-label="Diminuir zoom" (click)="stepZoom(-1)">−</button>
+          <output data-testid="packaged-zoom">{{ zoomPercent() }}%</output>
+          <button type="button" aria-label="Aumentar zoom" (click)="stepZoom(1)">+</button>
+        </span>
+      </div>
+    }
     @if (bytes(); as document) {
       @if (variant() === 'packaged') {
-        <docx-editor [document]="document" [mode]="mode()" (change)="onChange($event)" />
+        <docx-editor
+          [document]="document"
+          [mode]="mode()"
+          [author]="author() || undefined"
+          [colorMode]="colorMode()"
+          [i18n]="catalog()"
+          [locale]="language()"
+          [zoom]="zoom()"
+          [modules]="modules"
+          (change)="onChange($event)"
+          (openFailure)="lastSource.set('falha ao abrir')"
+        />
       } @else {
         <app-composed-editor
           [document]="document"
@@ -64,6 +112,14 @@ export class AppComponent {
     new URLSearchParams(location.search).has('composed') ? 'composed' : 'packaged'
   );
   protected readonly mode = signal<DocxEditorMode>('edit');
+  protected readonly author = signal('');
+  protected readonly colorMode = signal<DocxEditorColorMode>('light');
+  protected readonly language = signal<Language>('pt-BR');
+  protected readonly catalog = computed(() => CATALOGS[this.language()]);
+  protected readonly zoom = signal(1);
+  protected readonly zoomPercent = computed(() => Math.round(this.zoom() * 100));
+  /** Construction-time input: one array for the life of the app, so the engine stays. */
+  protected readonly modules = [EXAMPLE_REVIEW_MODULE];
   protected readonly saving = signal(false);
   protected readonly changes = signal(0);
   protected readonly lastSource = signal('');
@@ -102,8 +158,22 @@ export class AppComponent {
     this.reset();
   }
 
-  protected toggleView(event: Event) {
-    this.mode.set((event.target as HTMLInputElement).checked ? 'view' : 'edit');
+  protected pick<T extends string>(event: Event): T {
+    return (event.target as HTMLSelectElement).value as T;
+  }
+
+  protected text(event: Event): string {
+    return (event.target as HTMLInputElement).value;
+  }
+
+  /** The next or previous zoom level. The `zoom` input applies it without a reload. */
+  protected stepZoom(direction: 1 | -1) {
+    const zoom = this.zoom();
+    const next =
+      direction > 0
+        ? ZOOM_LEVELS.find((level) => level > zoom + 0.001)
+        : [...ZOOM_LEVELS].reverse().find((level) => level < zoom - 0.001);
+    if (next !== undefined) this.zoom.set(next);
   }
 
   protected onChange(change: DocumentChange) {

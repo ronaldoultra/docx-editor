@@ -26,9 +26,9 @@
 
 - [x] 3.1 Rebuild `<docx-editor>` on the base layer (D4) with `document`, `mode` including `suggesting`, `locale`, `i18n`, `colorMode`, `zoom`, `zoomMode`, `author`, `fieldResults`, `contentLockPolicy`, and `lockedControlNavigation`; port the claims of `live-props.test.ts`, `field-results-prop.test.ts`, `content-lock-policy-prop.test.ts`, `locked-control-navigation-prop.test.ts`, and `editing-mode-author.test.ts`, and the packaged-editor claims of `form-field-i18n.test.ts` and `toolbar-direction.test.ts`
 - [x] 3.2 Add construction-time inputs `modules`, `fonts`, `fontShaping`, and `imageDecodePort` that recreate the engine; port the claims of `fonts-prop.test.ts`, `font-origins.test.ts`, `font-shaping-lifecycle.test.ts`, and `image-decode-port-prop.test.ts`
-- [ ] 3.3 Add outputs `change`, `selectionChange`, `openFailure`, `error`, and methods `load`, `save`, `focus`, `exec`, `snapshot`, `getEditor`; port the claims of `lifecycle-regression.test.ts`, `sugar-host.test.ts`, and `paginated-form-save.test.ts`
-- [ ] 3.4 Update `examples/angular` to use the new inputs, extend `examples/angular/e2e/editor.e2e.ts` for live zoom and save, and verify `bun run test:e2e:angular` passes
-- [ ] 3.5 Re-extract the API snapshot, update the ledger and README, and verify `bun run api:check` and `bun run check:angular-parity` pass
+- [x] 3.3 Add outputs `change`, `selectionChange`, `openFailure`, `error`, and methods `load`, `save`, `focus`, `exec`, `snapshot`, `getEditor`; port the claims of `lifecycle-regression.test.ts`, `sugar-host.test.ts`, and `paginated-form-save.test.ts`
+- [x] 3.4 Update `examples/angular` to use the new inputs, extend `examples/angular/e2e/editor.e2e.ts` for live zoom and save, and verify `bun run test:e2e:angular` passes
+- [x] 3.5 Re-extract the API snapshot, update the ledger and README, and verify `bun run api:check` and `bun run check:angular-parity` pass
 
 ## 4. Toolbar
 

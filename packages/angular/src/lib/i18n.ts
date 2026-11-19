@@ -5,6 +5,7 @@ import {
   inject,
   input,
   signal,
+  type InputSignal,
   type Provider,
   type Signal,
 } from '@angular/core';
@@ -142,7 +143,9 @@ export function provideDocxEditorI18n(
 })
 export class DocxEditorI18nDirective {
   /** The catalog. Missing keys fall back to the outer provider, then to English. */
-  readonly docxEditorI18n = input<Translations | undefined>(undefined);
+  readonly docxEditorI18n: InputSignal<Translations | undefined> = input<Translations | undefined>(
+    undefined
+  );
 
   /** The writing direction of the chrome. See {@link DocxEditorI18nOptions.dir}. */
   readonly docxEditorDir = input<DocxEditorDirection | undefined>(undefined);

@@ -51,6 +51,14 @@ export const PACKAGES = [
     pkgSlug: 'docx-editor-fonts',
     tsconfigPath: 'packages/fonts/tsconfig.api.json',
   },
+  {
+    name: '@docx-editor.dev/angular',
+    // ng-packagr writes the typed `exports` map into the built package.json, so the
+    // extractor reads the built package, not the source one.
+    root: 'packages/angular/dist',
+    pkgSlug: 'docx-editor-angular',
+    tsconfigPath: 'packages/angular/tsconfig.api.json',
+  },
 ];
 
 // Derived: build invocation hint shown in `api:check` drift error

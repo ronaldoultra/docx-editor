@@ -8,26 +8,39 @@ import {
   input,
   output,
   viewChild,
+  type InputSignal,
+  type Signal,
 } from '@angular/core';
 import type {
   DocumentChange,
+  DocumentHandle,
+  DocumentOpenFailure,
+  DocumentSource,
+  Editor,
+  EditorCommand,
+  EditorError,
+  EditorExecOptions,
   EditorFontError,
+  EditorScope,
+  EditorSnapshot,
+  ExecResult,
   ZoomMode,
 } from '@docx-editor.dev/core/contracts/editor';
-import type {
-  ContentLockPolicy,
-  DocxEditorInstance,
-  EditorModule,
-  FieldResultsMode,
-  FontShapingOptions,
-  ImageDecodePort,
-  LockedControlNavigation,
+import {
+  LOADING_SNAPSHOT,
+  type ContentLockPolicy,
+  type DocxEditorInstance,
+  type EditorModule,
+  type FieldResultsMode,
+  type FontShapingOptions,
+  type ImageDecodePort,
+  type LockedControlNavigation,
 } from '@docx-editor.dev/core/editor';
 import type { Translations } from '@docx-editor.dev/i18n';
 import type { DocxEditorColorMode } from './color-mode';
 import { DocxEditorContentComponent } from './content.component';
 import { DOCX_EDITOR_SCOPED } from './context';
-import { DocxEditorI18n, injectChromeDir } from './i18n';
+import { DocxEditorI18n, injectChromeDir, type DocxEditorDirection } from './i18n';
 import {
   DocxEditorRootDirective,
   type DocxEditorFonts,
@@ -106,7 +119,11 @@ export type DocxEditorMode = DocxEditorRootMode;
           [fontShaping]="fontShaping()"
           [modules]="modules()"
           [imageDecodePort]="imageDecodePort()"
+          (ready)="ready.emit($event)"
           (change)="change.emit($event)"
+          (selectionChange)="selectionChange.emit($event)"
+          (error)="error.emit($event)"
+          (openFailure)="openFailure.emit($event)"
           (fontError)="fontError.emit($event)"
         >
           <docx-editor-viewport style="flex: 1; min-height: 0; min-width: 0; overflow-anchor: none">
@@ -135,7 +152,7 @@ export class DocxEditorComponent {
    * The translation catalog of the chrome. Missing keys fall back to an outer
    * `docxEditorI18n` provider, then to English. A right-to-left catalog mirrors the chrome.
    */
-  readonly i18n = input<Translations | undefined>(undefined);
+  readonly i18n: InputSignal<Translations | undefined> = input<Translations | undefined>(undefined);
 
   /** Labels that the engine paints. Defaults to the active translations. */
   readonly translate = input<DocxEditorTranslate | undefined>(undefined);
@@ -179,6 +196,18 @@ export class DocxEditorComponent {
    */
   readonly change = output<DocumentChange>();
 
+  /** Emits once for each engine, when it finished opening its first document. */
+  readonly ready = output<Editor>();
+
+  /** Emits the snapshot after each selection change that the engine publishes. */
+  readonly selectionChange = output<EditorSnapshot>();
+
+  /** Emits the errors that the engine publishes, such as a refused command or document. */
+  readonly error = output<EditorError>();
+
+  /** Emits when the engine refuses to open a document. */
+  readonly openFailure = output<DocumentOpenFailure>();
+
   /** Emits when a font fails to load. The engine keeps measuring with its fallback. */
   readonly fontError = output<EditorFontError>();
 
@@ -186,7 +215,7 @@ export class DocxEditorComponent {
   private readonly root = viewChild(DocxEditorRootDirective);
 
   /** @internal */
-  protected readonly chromeDir = injectChromeDir();
+  protected readonly chromeDir: Signal<DocxEditorDirection | undefined> = injectChromeDir();
   /** @internal */
   protected readonly dark = computed(() => this.root()?.context.dark() ?? false);
 
@@ -200,13 +229,46 @@ export class DocxEditorComponent {
   }
 
   /**
+   * Open another document in the same engine. The `document` input does not change, so a later
+   * change of the input opens that value. Does nothing before the engine exists.
+   */
+  load(document: DocumentSource): void {
+    const editor = this.getEditor();
+    if (editor) this.zone.runOutsideAngular(() => editor.load(document));
+  }
+
+  /**
    * Serializes the current document to DOCX bytes.
    *
-   * Rejects when no document is loaded, or when the engine refuses the save.
+   * Rejects when no document is loaded, or when the engine refuses the save, for example
+   * because a form field holds a value that its format does not accept.
    */
   save(): Promise<ArrayBuffer> {
     const editor = this.getEditor();
     if (!editor) return Promise.reject(new Error('docx-editor: no document is loaded.'));
     return this.zone.runOutsideAngular(() => editor.save());
+  }
+
+  /** Move the keyboard focus to the pages. */
+  focus(): void {
+    const editor = this.getEditor();
+    if (editor) this.zone.runOutsideAngular(() => editor.focus());
+  }
+
+  /** Run an engine command. Before the engine exists, the result is a `notFound` refusal. */
+  exec(command: EditorCommand, options?: EditorExecOptions): ExecResult {
+    const editor = this.getEditor();
+    if (!editor) return { ok: false, code: 'notFound', reason: 'no editor is mounted' };
+    return this.zone.runOutsideAngular(() => editor.exec(command, options));
+  }
+
+  /** The engine snapshot. Before the engine exists, the empty loading snapshot. */
+  snapshot(options?: { scope?: EditorScope }): EditorSnapshot {
+    return this.getEditor()?.snapshot(options) ?? LOADING_SNAPSHOT;
+  }
+
+  /** A handle on the open document, or `null` before the engine exists. */
+  getDocumentHandle(): DocumentHandle | null {
+    return this.getEditor()?.getDocumentHandle() ?? null;
   }
 }

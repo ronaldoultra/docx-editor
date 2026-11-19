@@ -166,6 +166,52 @@ describe('injectDocxSource: the on-demand path does not wait', () => {
   });
 });
 
+describe('injectDocxSource follows its source', () => {
+  beforeEach(() => configureZoneless());
+
+  it('follows a signal of bytes', async () => {
+    const other = new Uint8Array([4, 5, 6]);
+    const bytes = signal<Uint8Array>(BYTES);
+    const result = TestBed.runInInjectionContext(() => injectDocxSource(bytes));
+    await flush();
+    expect(result.document()).toBe(BYTES);
+    bytes.set(other);
+    await flush();
+    expect(result.document()).toBe(other);
+  });
+
+  it('aborts the fetch of an old URL, and ignores its late answer', async () => {
+    let answerFirst!: (response: Response) => void;
+    let firstSignal: AbortSignal | undefined;
+    const fetch = vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
+      if (String(input).endsWith('first.docx')) {
+        firstSignal = init?.signal ?? undefined;
+        return new Promise<Response>((resolve) => {
+          answerFirst = resolve;
+        });
+      }
+      return Promise.resolve(new Response(new Uint8Array(BYTES), { status: 200 }));
+    });
+    try {
+      const url = signal('/first.docx');
+      const result = TestBed.runInInjectionContext(() => injectDocxSource(url));
+      await flush();
+      url.set('/second.docx');
+      await flush();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flush();
+      expect(firstSignal?.aborted).toBe(true);
+      expect(result.document()).toEqual(BYTES);
+      answerFirst(new Response(new Uint8Array([9, 9, 9]), { status: 200 }));
+      await flush();
+      expect(result.document()).toEqual(BYTES);
+      expect(result.error()).toBeNull();
+    } finally {
+      fetch.mockRestore();
+    }
+  });
+});
+
 describe('injectFonts takes each origin in the same shape', () => {
   it('calls a marked resolver once, with the request', async () => {
     let calls = 0;

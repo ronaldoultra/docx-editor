@@ -49,7 +49,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `ChromeMenuSeparatorEntry` | re-export from core | | todo | |
 | `chromeMenuSlots` | re-export from core | | todo | |
 | `ChromeMenuSubmenuEntry` | re-export from core | | todo | |
-| `ChromeSlotId` | re-export from core | | todo | |
+| `ChromeSlotId` | re-export from core | `ChromeSlotId` | ported |  |
 | `ChromeTranslate` | type | | todo | |
 | `ClearAnchorHighlightOptions` | re-export from core | | todo | |
 | `ClearRefreshHighlightsOptions` | re-export from core | | todo | |
@@ -124,7 +124,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `definePopup` | function | | todo | |
 | `DialogCustomizationProps` | interface | | todo | |
 | `DialogPartProps` | interface | | todo | |
-| `DocumentOpenFailure` | re-export from core | | todo | |
+| `DocumentOpenFailure` | re-export from core | `DocumentOpenFailure` | ported |  |
 | `DocumentOpenFailureReason` | re-export from core | | todo | |
 | `DocumentOutline` | const | | todo | |
 | `DocumentRefresh` | re-export from core | | todo | |
@@ -136,7 +136,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocumentSearchOptions` | re-export from core | | todo | |
 | `DocumentStyleSummary` | type | | todo | |
 | `DocxDocument` | re-export from core | | todo | |
-| `DocxEditor` | const | | todo | |
+| `DocxEditor` | const | `DocxEditorComponent` | todo | `<docx-editor>` composes the root, the viewport, and the content. The chrome parts (toolbar, menus, rulers, navigation, dialogs) and the compound members (`DocxEditor.Toolbar` and the rest) port with phases 4 to 10. |
 | `DocxEditorAuthorStyle` | const | | todo | |
 | `DocxEditorAuthorStyleProps` | interface | | todo | |
 | `DocxEditorBookmarkDialog` | const | | todo | |
@@ -227,16 +227,16 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorPopups` | interface | | todo | |
 | `DocxEditorPrintDialog` | const | | todo | |
 | `DocxEditorPrintDialogProps` | interface | | todo | |
-| `DocxEditorProps` | interface | | todo | |
-| `DocxEditorRef` | interface | | todo | |
+| `DocxEditorProps` | interface | `DocxEditorComponent` | todo | Has `document`, `mode`, `colorMode`, `i18n`, `translate` (Vue `t`), `locale`, `author`, `zoom`, `zoomMode`, `fieldResults`, `contentLockPolicy`, `lockedControlNavigation`, `fonts`, `fontShaping`, `modules`, `imageDecodePort`, and the outputs `ready`, `change`, `selectionChange`, `error`, `openFailure`, `fontError`. Missing: `chrome` (4.6), `menu`, `contextMenu`, `title`, `onSave`, `onOpen`, `onTitleChange` (5.4), `popups`, `hyperlinkPopup` (6.7), `navigation` (7.3), `rulers`, `openFailure` dialog (9.6), `revisionMarkup`, `reviewDisplayMode` (10.4), `class` (hosts set it on the element). |
+| `DocxEditorRef` | interface | `DocxEditorComponent` | ported | The methods `load`, `save`, `getDocumentHandle`, `getEditor`, `focus`, `exec`, and `snapshot` are on the component instance. `save` rejects without an engine. |
 | `DocxEditorRefCallback` | type | | todo | |
 | `DocxEditorRevisionMarkup` | const | | todo | |
 | `DocxEditorRevisionMarkupDialog` | const | | todo | |
 | `DocxEditorRevisionMarkupDialogProps` | interface | | todo | |
 | `DocxEditorRevisionMarkupProps` | interface | | todo | |
 | `DocxEditorRoot` | const | `DocxEditorRootDirective` | ported | Directive `docxEditorRoot`. The props and listeners rows track the inputs and outputs that are still missing. |
-| `DocxEditorRootListeners` | interface | `DocxEditorRootDirective` | todo | Has the `ready` and `change` outputs. Missing: `fontError` (3.2), `revisionMarkupChange` (10.4). |
-| `DocxEditorRootProps` | interface | `DocxEditorRootDirective` | todo | Has `document`, `mode`, `colorMode`, `locale`, `translate`, `author`. Missing: `fonts`, `fontShaping`, `imageDecodePort`, `modules`, `zoom`, `zoomMode`, `fieldResults`, `contentLockPolicy`, `lockedControlNavigation` (tasks 3.1, 3.2), `popups` (6.1), `revisionMarkup`, `reviewDisplayMode` (10.4), `tableInteractionLabel` (4.4). |
+| `DocxEditorRootListeners` | interface | `DocxEditorRootDirective` | todo | Has the `ready`, `change`, `fontError`, `selectionChange`, `error`, and `openFailure` outputs. Missing: `revisionMarkupChange` (10.4). |
+| `DocxEditorRootProps` | interface | `DocxEditorRootDirective` | todo | Has `document`, `mode`, `colorMode`, `locale`, `translate`, `author`, `fonts`, `fontShaping`, `imageDecodePort`, `modules`, `zoom`, `zoomMode`, `fieldResults`, `contentLockPolicy`, `lockedControlNavigation`. Missing: `popups` (6.1), `revisionMarkup`, `reviewDisplayMode` (10.4), `tableInteractionLabel` (4.4). |
 | `DocxEditorRulerProps` | interface | | todo | |
 | `DocxEditorShapeFill` | const | | todo | |
 | `DocxEditorShapeFillTransparency` | const | | todo | |
@@ -272,20 +272,20 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DrawingGraphicKind` | re-export from core | | todo | |
 | `DrawingSupport` | re-export from core | | todo | |
 | `DrawingSupportIssue` | re-export from core | | todo | |
-| `Editor` | re-export from core | | todo | |
+| `Editor` | re-export from core | `Editor` | ported |  |
 | `EditorCaret` | interface | | todo | |
-| `EditorCommand` | re-export from core | | todo | |
+| `EditorCommand` | re-export from core | `EditorCommand` | ported |  |
 | `EditorCommandState` | interface | `EditorCommandState` | ported |  |
-| `EditorFontError` | re-export from core | | todo | |
+| `EditorFontError` | re-export from core | `EditorFontError` | ported |  |
 | `EditorFontErrorCode` | re-export from core | | todo | |
 | `EditorMode` | type | | todo | |
 | `EditorQuery` | re-export from core | | todo | |
-| `EditorScope` | re-export from core | | todo | |
-| `EditorSnapshot` | re-export from core | | todo | |
+| `EditorScope` | re-export from core | `EditorScope` | ported |  |
+| `EditorSnapshot` | re-export from core | `EditorSnapshot` | ported |  |
 | `EditorValueCommandState` | interface | `EditorValueCommandState` | ported |  |
-| `FontConfiguration` | re-export from core | | todo | |
+| `FontConfiguration` | re-export from core | `FontConfiguration` | ported |  |
 | `FontConfigurationBase` | re-export from core | | todo | |
-| `FontConfigurationFragment` | re-export from core | | todo | |
+| `FontConfigurationFragment` | re-export from core | `FontConfigurationFragment` | ported |  |
 | `FontFaceRequest` | re-export from core | | todo | |
 | `FontFamilyItemProps` | interface | | todo | |
 | `FontFamilyNamespace` | interface | | todo | |
@@ -294,9 +294,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `FontLoadFailure` | re-export from core | | todo | |
 | `FontLoadFailureReason` | re-export from core | | todo | |
 | `FontOption` | interface | | todo | |
-| `FontOrigin` | re-export from core | | todo | |
+| `FontOrigin` | re-export from core | `FontOrigin` | ported |  |
 | `FontResolutionRequest` | re-export from core | | todo | |
-| `FontResolver` | re-export from core | | todo | |
+| `FontResolver` | re-export from core | `FontResolver` | ported |  |
 | `FontResolverMark` | re-export from core | | todo | |
 | `FontsInput` | type | `FontOriginInput` | ported | Angular reads a signal origin with `isSignal`; every other function is a resolver. |
 | `FontSource` | re-export from core | | todo | |
@@ -339,7 +339,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `LOADING_SNAPSHOT` | re-export from core | | todo | |
 | `LocaleProvider` | const | `DocxEditorI18nDirective`, `provideDocxEditorI18n` | ported |  |
 | `LocaleProviderProps` | interface | `DocxEditorI18nDirective`, `DocxEditorI18nOptions` | ported | `i18n` is the `docxEditorI18n` input, `dir` is the `docxEditorDir` input. |
-| `MarkedFontResolver` | re-export from core | | todo | |
+| `MarkedFontResolver` | re-export from core | `MarkedFontResolver` | ported |  |
 | `MAX_RESOLVER_FAMILIES` | re-export from core | | todo | |
 | `MaybeRefOrGetter` | type | | todo | |
 | `MenuActionProps` | interface | | todo | |
@@ -389,7 +389,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `ObjectPartComponent` | type | | todo | |
 | `ObjectSlotId` | type | | todo | |
 | `ObjectSlotReadValueMap` | re-export from core | | todo | |
-| `ObjectSlotValueMap` | re-export from core | | todo | |
+| `ObjectSlotValueMap` | re-export from core | `ObjectSlotValueMap` | ported |  |
 | `ObjectToggleControl` | interface | | todo | |
 | `ObjectToggleSlotId` | re-export from core | | todo | |
 | `OUTLINE_BUTTON_LEFT_OFFSET` | const | | todo | |
@@ -406,7 +406,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `PageSetupUpdate` | interface | | todo | |
 | `PaginatedDocxEditor` | const | | todo | The proposal lists it with the deprecated shell, but the snapshot has no `@deprecated` tag. |
 | `PaginatedDocxEditorExpose` | type | | todo | |
-| `PaginatedDocxEditorHandle` | interface | | todo | |
+| `PaginatedDocxEditorHandle` | interface | | dropped | Deprecated shell: the proposal does not port `PaginatedDocxEditor`. `DocxEditorComponent` has the same save, load, and command methods. |
 | `PaginatedDocxEditorProps` | interface | | todo | |
 | `PaginatedDocxEditorShellProps` | interface | | todo | |
 | `PANE_SECTIONS` | re-export from core | | todo | |
@@ -429,8 +429,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `ParagraphTextProofing` | re-export from core | | todo | |
 | `ParagraphTextReadOptions` | re-export from core | | todo | |
 | `ParagraphTextSpan` | re-export from core | | todo | |
-| `provideDocxEditor` | function | | todo | |
-| `ProvideDocxEditorResult` | interface | | todo | |
+| `provideDocxEditor` | function | | dropped | Vue-only mechanism. In Angular, `docxEditorRoot` owns the engine, and a host reads it with `injectDocxEditor` or the directive's `context`. |
+| `ProvideDocxEditorResult` | interface | | dropped | Vue-only mechanism, see `provideDocxEditor`. |
 | `PX_PER_CM` | re-export from core | | todo | |
 | `PX_PER_INCH` | re-export from core | | todo | |
 | `RefreshChange` | re-export from core | | todo | |
@@ -689,7 +689,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/image-insert-refusal.test.ts` | | todo | Task 8.1 |
 | `packages/vue/test/image-overlay-history.test.ts` | | todo | Task 8.1 |
 | `packages/vue/test/image-panel-rows.test.ts` | | todo | Task 8.1 |
-| `packages/vue/test/lifecycle-regression.test.ts` | | todo | Task 3.3 |
+| `packages/vue/test/lifecycle-regression.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts`, `packages/angular/src/lib/fonts.spec.ts`, `packages/angular/src/lib/root.directive.spec.ts` | todo | Ported: `ready` fires after pages paint; the `'blank'` source opens without warnings; a new inline `translate` keeps the engine and undo; an unrelated render keeps the engine; `ready`, `change`, and `fontError` emit once; destroy releases the engine; `injectDocxSource` follows a byte signal and aborts a stale fetch; `injectFonts` reads the current origin. Dropped: the `provideDocxEditor` claims (Vue-only mechanism). The hyperlink popup claim ports with task 6.2, the search debounce and navigation observer claims with task 7.1. |
 | `packages/vue/test/link-row-chrome.test.ts` | | todo | Task 6.2 |
 | `packages/vue/test/live-props.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | todo | Ported: author, mode, translate, and locale apply to the same engine; another input change does not restore the host mode; a catalog change and then `translate` reach the engine; an equal new `translate` publishes no selection change; `colorMode` applies. The `rulers`, `navigation`, and `title` claims port with tasks 9.6, 7.3, and 5.4. |
 | `packages/vue/test/loading-continued.test.ts` | | todo | Task 9.5 |
@@ -709,7 +709,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/package-version.test.ts` | | todo | |
 | `packages/vue/test/page-number-opening.test.ts` | | todo | Task 9.4 |
 | `packages/vue/test/page-number.test.ts` | | todo | Task 9.4 |
-| `packages/vue/test/paginated-form-save.test.ts` | | todo | Task 3.3 |
+| `packages/vue/test/paginated-form-save.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts` | ported | Keeps: `save()` refuses (`invalidArgs`) a form field value that its format does not accept, and saves the value again after undo. The Angular spec uses `<docx-editor>`, because `PaginatedDocxEditor` is not ported. |
 | `packages/vue/test/paragraph-dialog.test.ts` | | todo | Task 6.3 |
 | `packages/vue/test/paragraph-hooks-lock-state.test.ts` | | todo | Task 6.3 |
 | `packages/vue/test/paragraph-style-labels.test.ts` |  | todo | Needs the paragraph style picker. Ports with task 4.2. |
@@ -726,7 +726,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/security.test.ts` | | todo | Task 6.2 |
 | `packages/vue/test/selection-range-state.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/slot-ref.test.ts` | | todo | Task 10.5 |
-| `packages/vue/test/sugar-host.test.ts` | | todo | Task 3.3 |
+| `packages/vue/test/sugar-host.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts` | todo | Ported: `ready` emits once and the methods exist; `change` and `fontError` emit. Not kept: a new `document` value keeps the engine and calls `load()`, which the Angular browser test checks. The loading, ruler, toolbar, menu, title, context menu, navigation, and chrome band claims port with tasks 9.5, 9.6, 4.6, 5.4, 7.3. |
 | `packages/vue/test/text-highlights.test.ts` | | todo | Task 7.2 |
 | `packages/vue/test/toolbar-dev-warnings.test.ts` | | todo | Task 4.2 |
 | `packages/vue/test/toolbar-direction.test.ts` | `packages/angular/src/lib/i18n.spec.ts` | todo | Ported: the provider `dir` wins over the catalog; a right-to-left catalog mirrors the composed parts; a left-to-right catalog leaves the host direction. The direction button claims port with task 4.5, the packaged-editor claim is in `live-inputs.spec.ts` (Arabic and Hebrew mirror the `.docx-editor` wrapper, Portuguese leaves it). |
