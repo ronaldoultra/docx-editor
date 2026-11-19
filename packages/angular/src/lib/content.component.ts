@@ -20,6 +20,7 @@ import {
 } from '@docx-editor.dev/core/editor';
 import { injectDocxEditorContext } from './context';
 import { injectChromeDir, type DocxEditorDirection } from './i18n';
+import { DocxConfiguredPopupsComponent } from './popups/configured-popups.component';
 
 /**
  * The element that the engine paints the pages into. The painted pages are the editable
@@ -32,6 +33,7 @@ import { injectChromeDir, type DocxEditorDirection } from './i18n';
  */
 @Component({
   selector: 'docx-editor-content',
+  imports: [DocxConfiguredPopupsComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: { class: 'docx-content-mount' },
@@ -43,6 +45,7 @@ import { injectChromeDir, type DocxEditorDirection } from './i18n';
       (dblclick)="onDoubleClick($event)"
     ></div>
     <div class="docx-dialog-mount" [attr.dir]="chromeDir()"></div>
+    <docx-configured-popups />
   `,
 })
 export class DocxEditorContentComponent {

@@ -39,6 +39,7 @@ import {
 import { resolveIsDark, subscribeSystemDark, type DocxEditorColorMode } from './color-mode';
 import { DocxEditorContext } from './context';
 import { injectTranslation } from './i18n';
+import { DocxEditorPopupRegistry, type DocxEditorPopups } from './popups/popup-config';
 import {
   applyZoomInputs,
   warnCreationOptionChanged,
@@ -83,7 +84,7 @@ export type DocxEditorTranslate = (key: string, params?: Record<string, string |
 @Directive({
   selector: '[docxEditorRoot]',
   exportAs: 'docxEditorRoot',
-  providers: [DocxEditorContext],
+  providers: [DocxEditorContext, DocxEditorPopupRegistry],
 })
 export class DocxEditorRootDirective implements OnInit {
   /**
@@ -160,6 +161,13 @@ export class DocxEditorRootDirective implements OnInit {
    */
   readonly imageDecodePort = input<ImageDecodePort | undefined>(undefined);
 
+  /**
+   * The popups that the root hosts, by id. Each entry replaces the same entry of a provided
+   * `DOCX_EDITOR_POPUPS`. A change applies at once: a new component renders, and `false` removes
+   * the popup.
+   */
+  readonly popups = input<DocxEditorPopups | undefined>(undefined);
+
   /** Emits once for each engine, when it finished opening its first document. */
   readonly ready = output<Editor>();
 
@@ -208,6 +216,7 @@ export class DocxEditorRootDirective implements OnInit {
   });
 
   constructor() {
+    inject(DocxEditorPopupRegistry, { self: true }).use(() => this.popups());
     this.context.useDark(() => resolveIsDark(this.colorMode() ?? 'light', this.systemDark()));
     effect((onCleanup) => {
       if (this.colorMode() !== 'system' || !this.isBrowser) return;

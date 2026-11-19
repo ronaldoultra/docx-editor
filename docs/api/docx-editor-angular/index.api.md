@@ -8,6 +8,7 @@ import * as _angular_core from '@angular/core';
 import { ChromeGroupId } from '@docx-editor.dev/core/editor';
 import { ChromeMenuEntry } from '@docx-editor.dev/core/editor';
 import { ChromeSlotId } from '@docx-editor.dev/core/editor';
+import { ContentControlWidgetSession } from '@docx-editor.dev/core/editor';
 import { ContentLockPolicy } from '@docx-editor.dev/core/editor';
 import { DocumentChange } from '@docx-editor.dev/core/contracts/editor';
 import { DocumentEditingMode } from '@docx-editor.dev/core/contracts/editor';
@@ -42,6 +43,7 @@ import { ImageDecodePort } from '@docx-editor.dev/core/editor';
 import { InjectionToken } from '@angular/core';
 import { InputSignal } from '@angular/core';
 import { InputSignalWithTransform } from '@angular/core';
+import { InvalidTextFormFieldSession } from '@docx-editor.dev/core/editor';
 import { LineSpacingMenuRow } from '@docx-editor.dev/core/editor';
 import { LocaleStrings } from '@docx-editor.dev/core/i18n';
 import { LockedControlNavigation } from '@docx-editor.dev/core/editor';
@@ -176,6 +178,23 @@ export interface DefaultEntry {
     readonly slot: ToolbarArrangementKey;
 }
 
+// @public
+export interface DialogCustomizationProps {
+    className?: string;
+    preset?: boolean;
+    styles?: Readonly<Record<string, string>>;
+}
+
+// @public
+export interface DialogPartProps {
+    asChild?: boolean;
+    attributes?: Readonly<Record<string, string>>;
+    className?: string;
+    hidden?: boolean;
+    keepContent?: boolean;
+    styles?: Readonly<Record<string, string>>;
+}
+
 export { DocumentChange }
 
 export { DocumentHandle }
@@ -183,6 +202,9 @@ export { DocumentHandle }
 export { DocumentOpenFailure }
 
 export { DocumentSource }
+
+// @public
+export const DOCX_EDITOR_POPUPS: InjectionToken<DocxEditorPopups>;
 
 // @public
 export const DOCX_PARAGRAPH_DIALOG: InjectionToken<{
@@ -293,7 +315,7 @@ export class DocxContextMenuRowComponent {
 
 // @public
 export class DocxContextMenuRowDirective {
-    readonly docxContextMenuRow: _angular_core.InputSignal<"history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.painter" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.protectDocument" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.authors" | "review.editingMode" | "contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "contentControl.remove" | "image.insert" | "image.properties" | "image.editChart" | "image.formatShape" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderColor" | "table.borderStyle" | "table.borderWidth" | "table.cellFill" | "table.mergeCells" | "table.splitCell" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark" | "toc.remove" | "toc.refresh" | "toc.refreshPageNumbers" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.selectTable" | "edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.cellVerticalAlignment">;
+    readonly docxContextMenuRow: _angular_core.InputSignal<"contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "contentControl.remove" | "toc.remove" | "toc.refresh" | "toc.refreshPageNumbers" | "alignment.center" | "alignment.justify" | "table.splitCell" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.selectTable" | "table.mergeCells" | "table.borderColor" | "table.borderWidth" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.protectDocument" | "history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.right" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.painter" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.authors" | "review.editingMode" | "image.insert" | "image.properties" | "image.editChart" | "image.formatShape" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderStyle" | "table.cellFill" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark" | "edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.cellVerticalAlignment">;
     readonly docxContextMenuRowHidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
     readonly template: TemplateRef<unknown>;
     // (undocumented)
@@ -311,6 +333,76 @@ export class DocxContextMenuStartComponent {
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxContextMenuStartComponent, "docx-context-menu-start", never, {}, {}, never, ["*"], true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxContextMenuStartComponent, never>;
+}
+
+// @public
+export class DocxDialogApplyDirective {
+    // @internal (undocumented)
+    protected enabled(): boolean;
+    // @internal (undocumented)
+    protected press(): void;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxDialogApplyDirective, "[docxDialogApply]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxDialogApplyDirective, never>;
+}
+
+// @public
+export class DocxDialogCancelDirective {
+    // @internal (undocumented)
+    protected press(): void;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxDialogCancelDirective, "[docxDialogCancel]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxDialogCancelDirective, never>;
+}
+
+// @public
+export class DocxDialogFieldDirective {
+    readonly docxDialogField: _angular_core.InputSignal<string>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxDialogFieldDirective, "[docxDialogField]", never, { "docxDialogField": { "alias": "docxDialogField"; "isSignal": true; "required": true; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxDialogFieldDirective, never>;
+}
+
+// @public
+export class DocxDialogPartDirective {
+    readonly asChild: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly attributes: _angular_core.InputSignal<Readonly<Record<string, string>> | undefined>;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    readonly docxDialogPart: _angular_core.InputSignal<string>;
+    readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly keepContent: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly styles: _angular_core.InputSignal<Readonly<Record<string, string>> | undefined>;
+    readonly template: TemplateRef<unknown>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxDialogPartDirective, "ng-template[docxDialogPart]", never, { "asChild": { "alias": "asChild"; "isSignal": true; "required": false; }; "attributes": { "alias": "attributes"; "isSignal": true; "required": false; }; "className": { "alias": "className"; "isSignal": true; "required": false; }; "docxDialogPart": { "alias": "docxDialogPart"; "isSignal": true; "required": true; }; "hidden": { "alias": "hidden"; "isSignal": true; "required": false; }; "keepContent": { "alias": "keepContent"; "isSignal": true; "required": false; }; "styles": { "alias": "styles"; "isSignal": true; "required": false; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxDialogPartDirective, never>;
+}
+
+// @public
+export class DocxDialogResetDirective {
+    // @internal (undocumented)
+    protected enabled(): boolean;
+    // @internal (undocumented)
+    protected press(): void;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxDialogResetDirective, "[docxDialogReset]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxDialogResetDirective, never>;
+}
+
+// @public
+export interface DocxDialogState<T extends object> {
+    apply(): void;
+    cancel(): void;
+    readonly errors: Signal<Readonly<Partial<Record<keyof T | 'form', string>>>>;
+    readonly isEnabled: Signal<boolean>;
+    reset?(): void;
+    setValue<K extends keyof T>(name: K, value: T[K]): void;
+    readonly values: Signal<T>;
 }
 
 // @public
@@ -565,6 +657,35 @@ export interface DocxEditorMenuOptions {
 export type DocxEditorMode = DocxEditorRootMode;
 
 // @public
+export type DocxEditorPopup<Inputs extends object = Record<string, never>> = false | Type<unknown> | DocxEditorPopupEntry;
+
+// @public
+export interface DocxEditorPopupEntry {
+    readonly component: Type<unknown>;
+    readonly inputs?: Readonly<Record<string, unknown>>;
+}
+
+// @public
+export interface DocxEditorPopups {
+    contentControl?: DocxEditorPopup;
+    contentControlCheckbox?: DocxEditorPopup<{
+        session: ContentControlWidgetSession;
+    }>;
+    contentControlPicture?: DocxEditorPopup<{
+        session: ContentControlWidgetSession;
+    }>;
+    contentControlWidget?: DocxEditorPopup<{
+        session: ContentControlWidgetSession;
+    }>;
+    contextMenu?: DocxEditorPopup;
+    equation?: DocxEditorPopup;
+    hyperlink?: DocxEditorPopup;
+    invalidTextFormField?: DocxEditorPopup<{
+        session: InvalidTextFormFieldSession;
+    }>;
+}
+
+// @public
 export class DocxEditorRootDirective implements OnInit {
     constructor();
     readonly author: _angular_core.InputSignal<string | undefined>;
@@ -586,13 +707,14 @@ export class DocxEditorRootDirective implements OnInit {
     // (undocumented)
     ngOnInit(): void;
     readonly openFailure: _angular_core.OutputEmitterRef<DocumentOpenFailure>;
+    readonly popups: _angular_core.InputSignal<DocxEditorPopups | undefined>;
     readonly ready: _angular_core.OutputEmitterRef<Editor>;
     readonly selectionChange: _angular_core.OutputEmitterRef<EditorSnapshot>;
     readonly translate: _angular_core.InputSignal<DocxEditorTranslate | undefined>;
     readonly zoom: _angular_core.InputSignal<number | undefined>;
     readonly zoomMode: _angular_core.InputSignal<ZoomMode | "auto" | undefined>;
     // (undocumented)
-    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxEditorRootDirective, "[docxEditorRoot]", ["docxEditorRoot"], { "author": { "alias": "author"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; }, never, never, true, never>;
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxEditorRootDirective, "[docxEditorRoot]", ["docxEditorRoot"], { "author": { "alias": "author"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "popups": { "alias": "popups"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; }, never, never, true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorRootDirective, never>;
 }
@@ -937,6 +1059,35 @@ export class DocxMenuSubmenuComponent implements OnInit {
 export type DocxMenuTranslate = (key: string) => string | undefined;
 
 // @public
+export class DocxNativeDialogComponent {
+    constructor();
+    readonly busy: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    // @internal (undocumented)
+    protected readonly classes: Signal<string>;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    readonly describedBy: _angular_core.InputSignal<string | undefined>;
+    readonly dialogKeydown: _angular_core.OutputEmitterRef<KeyboardEvent>;
+    readonly dismiss: _angular_core.OutputEmitterRef<void>;
+    readonly dismissOutside: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly kind: _angular_core.InputSignal<string>;
+    readonly label: _angular_core.InputSignal<string>;
+    // @internal (undocumented)
+    protected onCancel(event: Event): void;
+    // @internal (undocumented)
+    protected onClick(event: MouseEvent): void;
+    // @internal (undocumented)
+    protected onKeydown(event: KeyboardEvent): void;
+    readonly restoreFocus: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly role: _angular_core.InputSignal<string | undefined>;
+    readonly sessionSignal: _angular_core.InputSignal<AbortSignal | undefined>;
+    readonly styles: _angular_core.InputSignal<Readonly<Record<string, string>> | undefined>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxNativeDialogComponent, "docx-native-dialog", never, { "busy": { "alias": "busy"; "isSignal": true; "required": false; }; "className": { "alias": "className"; "isSignal": true; "required": false; }; "describedBy": { "alias": "describedBy"; "isSignal": true; "required": false; }; "dismissOutside": { "alias": "dismissOutside"; "isSignal": true; "required": false; }; "kind": { "alias": "kind"; "isSignal": true; "required": true; }; "label": { "alias": "label"; "isSignal": true; "required": true; }; "restoreFocus": { "alias": "restoreFocus"; "isSignal": true; "required": false; }; "role": { "alias": "role"; "isSignal": true; "required": false; }; "sessionSignal": { "alias": "sessionSignal"; "isSignal": true; "required": false; }; "styles": { "alias": "styles"; "isSignal": true; "required": false; }; }, { "dialogKeydown": "dialogKeydown"; "dismiss": "dismiss"; }, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxNativeDialogComponent, never>;
+}
+
+// @public
 export class DocxSlotDirective {
     readonly docxSlot: _angular_core.InputSignal<ChromeSlotId>;
     readonly docxSlotHidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
@@ -1008,7 +1159,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly current: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
+        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
         state: EditorCommandState;
         text: string;
     }>;
@@ -1021,7 +1172,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly options: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
+        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
         state: EditorCommandState;
         text: string;
     }[]>;
@@ -1582,7 +1733,13 @@ export function injectContextMenuHighlights<R extends HighlightRange = Highlight
 export function injectContextMenuTarget(): Signal<HTMLElement | null>;
 
 // @public
+export function injectDialog<T extends object>(): DocxDialogState<T>;
+
+// @public
 export function injectDocxEditor(): Signal<DocxEditorInstance | null>;
+
+// @public
+export function injectDocxEditorPopups(): Signal<DocxEditorPopups>;
 
 // @public
 export function injectDocxSource(source: DocxSource | null | undefined | (() => DocxSource | null | undefined), options?: DocxSourceOptions | (() => DocxSourceOptions)): DocxSourceState;
@@ -1736,6 +1893,9 @@ export interface ParagraphStyleState {
 
 // @public
 export function provideDocxEditorI18n(i18n?: Translations, options?: DocxEditorI18nOptions): Provider[];
+
+// @public
+export function provideDocxEditorPopups(popups: DocxEditorPopups): Provider;
 
 // @public
 export type ResolvedColorMode = 'light' | 'dark';

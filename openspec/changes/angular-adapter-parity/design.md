@@ -38,9 +38,10 @@ See `proposal.md` for the motivation. The current state that shapes the approach
 | `ref` / `computed` / `watch` | `signal` / `computed` / `effect` |
 | `onScopeDispose` | `DestroyRef.onDestroy` |
 | Named slots and compound namespaces (`DocxEditor.Toolbar.Bold`) | Standalone components plus `ng-template` override directives keyed by slot id |
-| `definePopup` and popup config | A `DOCX_EDITOR_POPUPS` injection token that maps popup ids to component types, rendered with `NgComponentOutlet` |
+| `definePopup` and popup config | A `DOCX_EDITOR_POPUPS` injection token that maps popup ids to component types, rendered with `ViewContainerRef.createComponent` (see D9) |
 | `LocaleProvider` + `useTranslation` | `provideDocxEditorI18n()` + `injectTranslation()`; the packaged component's `i18n` input feeds the same token |
 | Packaged `DocxEditor` | Packaged `<docx-editor>` that composes the root, chrome, viewport, and content |
+| `createDialogComposition` dialog parts | `ng-template docxDialogPart` override templates, plus the `docxDialogApply`, `docxDialogCancel`, `docxDialogReset`, and `docxDialogField` wiring directives (see D9) |
 
 Why: a one-to-one map lets each Vue file and test map to one Angular file and test, which makes the parity ledger (D6) mechanical. Alternative considered: RxJS observables for state. Rejected, because signals match the engine's synchronous snapshot model, need no subscription management in templates, and work without zone.js.
 
@@ -101,6 +102,16 @@ Why: each phase depends only on earlier phases. The packaged component appears i
 ### D8. Line caps and file layout
 
 Angular files follow the repository line caps (1000 lines). Each component keeps its template inline when the template is short, and in a sibling `.html` file when it is long. Directory layout mirrors the Vue `editor/` subdirectories (`toolbar/`, `menu/`, `navigation/`, …) so that the ledger rows map by path.
+
+### D9. Popup outlet and dialog parts
+
+The popup outlet creates each registry component with `ViewContainerRef.createComponent` and sets its inputs with `setInput`. The same component type keeps its instance, so a new registry object keeps the popup's state. A new session destroys the instance and creates a new one, so no draft of the earlier session stays.
+
+Why not `NgComponentOutlet`: it keeps the instance for a new session. A keyed `@for` around it re-creates the instance, but a development build then warns (`NG0956`) each time a dialog opens.
+
+A packaged dialog renders each part through an internal structural directive. A host changes a part with an `ng-template docxDialogPart="<name>"` inside the dialog. The template replaces the content of the part's element, and the element keeps its wiring. With `asChild`, the template replaces the element, and the host wires its own element with `docxDialogApply`, `docxDialogCancel`, `docxDialogReset`, or `docxDialogField`. The presentation inputs (`className`, `styles`, `attributes`, `hidden`, `keepContent`) apply to the packaged element. The part's own wiring wins a collision.
+
+Why: this keeps the Vue part semantics (replace content, own the element, keep the wiring) with the D3 template override model. Alternative: a configuration object for each part. Rejected, because it cannot carry host markup.
 
 ## Risks / Trade-offs
 

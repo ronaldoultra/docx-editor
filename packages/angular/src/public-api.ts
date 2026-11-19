@@ -198,3 +198,23 @@ export type {
   ToolbarValueMap,
 } from '@docx-editor.dev/core/editor';
 export type { LocaleStrings, TFunction, Translations } from '@docx-editor.dev/core/i18n';
+export {
+  DOCX_EDITOR_POPUPS,
+  injectDocxEditorPopups,
+  provideDocxEditorPopups,
+  type DocxEditorPopup,
+  type DocxEditorPopupEntry,
+  type DocxEditorPopups,
+} from './lib/popups/popup-config';
+export {
+  DocxDialogApplyDirective,
+  DocxDialogCancelDirective,
+  DocxDialogFieldDirective,
+  DocxDialogPartDirective,
+  DocxDialogResetDirective,
+  injectDialog,
+  type DialogCustomizationProps,
+  type DialogPartProps,
+  type DocxDialogState,
+} from './lib/dialog/dialog-parts';
+export { DocxNativeDialogComponent } from './lib/dialog/native-dialog.component';

@@ -121,9 +121,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DEFAULT_WATERMARK_PRESETS` | const | | todo | |
 | `deferFonts` | re-export from core | | todo | |
 | `defineFontResolver` | re-export from core | | todo | |
-| `definePopup` | function | | todo | |
-| `DialogCustomizationProps` | interface | | todo | |
-| `DialogPartProps` | interface | | todo | |
+| `definePopup` | function | | dropped | Vue-only mechanism: an Angular registry entry is a component class, which needs no adapter. `DocxEditorPopup` takes the class. |
+| `DialogCustomizationProps` | interface | `DialogCustomizationProps` | ported | `style` is `styles`. Vue `children` is the dialog's content. The dialogs that declare these inputs land with tasks 6.3 to 6.6. |
+| `DialogPartProps` | interface | `DialogPartProps`, `DocxDialogPartDirective` | ported | The props are the inputs of an `ng-template docxDialogPart` inside the dialog. `style` is `styles`, and `id`, `title`, `aria-*`, and `data-*` go in `attributes`. The template replaces the part's content; with `asChild` it replaces the element, and `docxDialogApply`, `docxDialogCancel`, `docxDialogReset`, and `docxDialogField` wire the host's element. Added: `keepContent`. |
 | `DocumentOpenFailure` | re-export from core | `DocumentOpenFailure` | ported |  |
 | `DocumentOpenFailureReason` | re-export from core | | todo | |
 | `DocumentOutline` | const | | todo | |
@@ -223,8 +223,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorPaneSectionsProps` | interface | | todo | |
 | `DocxEditorParagraphDialog` | const | | todo | |
 | `DocxEditorParagraphDialogProps` | interface | | todo | |
-| `DocxEditorPopup` | type | | todo | |
-| `DocxEditorPopups` | interface | | todo | |
+| `DocxEditorPopup` | type | `DocxEditorPopup` | ported | A component class, a `DocxEditorPopupEntry` (`{ component, inputs }`), or `false`, in the place of a render function. The editor renders the class and sets its inputs, such as `session`. |
+| `DocxEditorPopups` | interface | `DocxEditorPopups` | todo | Has `contentControlWidget`, `contentControlCheckbox`, `contentControlPicture`, `invalidTextFormField`, `hyperlink`, `contentControl`, `equation`, `contextMenu`; `DOCX_EDITOR_POPUPS` and `provideDocxEditorPopups()` provide it, and the root's `popups` input replaces single entries. Missing: `pageSetup`, `paragraph`, `watermark` (6.3), `bookmark`, `splitCell`, `textFormField` (6.4), `export`, `print` (6.5), `imageInsertError`, `imageProperties`, `imageAltText` (8.1), `noteProperties`, `notesContextMenu`, `notePreview` (9.2), `revisionMarkup` (10.2), `compareDocuments` (10.3). |
 | `DocxEditorPrintDialog` | const | | todo | |
 | `DocxEditorPrintDialogProps` | interface | | todo | |
 | `DocxEditorProps` | interface | `DocxEditorComponent` | todo | Has `document`, `chrome`, `title` (a `model`, so `[(title)]`; Vue `onTitleChange` is the `titleChange` output, and the title is always editable), `menu`, `contextMenu`, `mode`, `colorMode`, `i18n`, `translate` (Vue `t`), `locale`, `author`, `zoom`, `zoomMode`, `fieldResults`, `contentLockPolicy`, `lockedControlNavigation`, `fonts`, `fontShaping`, `modules`, `imageDecodePort`, and the outputs `ready`, `change`, `selectionChange`, `error`, `openFailure`, `fontError`. Vue `onSave` and `onOpen` are `saveHandler` and `openHandler` in `[menu]`. Missing: `popups`, `hyperlinkPopup` (6.7), `navigation` (7.3), `rulers`, `openFailure` dialog (9.6), `revisionMarkup`, `reviewDisplayMode` (10.4), the `titleBarLeft` and `titleBarRight` slots, `class` (hosts set it on the element). |
@@ -236,7 +236,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorRevisionMarkupProps` | interface | | todo | |
 | `DocxEditorRoot` | const | `DocxEditorRootDirective` | ported | Directive `docxEditorRoot`. The props and listeners rows track the inputs and outputs that are still missing. |
 | `DocxEditorRootListeners` | interface | `DocxEditorRootDirective` | todo | Has the `ready`, `change`, `fontError`, `selectionChange`, `error`, and `openFailure` outputs. Missing: `revisionMarkupChange` (10.4). |
-| `DocxEditorRootProps` | interface | `DocxEditorRootDirective` | todo | Has `document`, `mode`, `colorMode`, `locale`, `translate`, `author`, `fonts`, `fontShaping`, `imageDecodePort`, `modules`, `zoom`, `zoomMode`, `fieldResults`, `contentLockPolicy`, `lockedControlNavigation`. Missing: `popups` (6.1), `revisionMarkup`, `reviewDisplayMode` (10.4), `tableInteractionLabel` (4.4). |
+| `DocxEditorRootProps` | interface | `DocxEditorRootDirective` | todo | Has `document`, `mode`, `colorMode`, `locale`, `translate`, `author`, `fonts`, `fontShaping`, `imageDecodePort`, `modules`, `zoom`, `zoomMode`, `fieldResults`, `contentLockPolicy`, `lockedControlNavigation`, `popups`. Missing: `revisionMarkup`, `reviewDisplayMode` (10.4), `tableInteractionLabel` (4.4). |
 | `DocxEditorRulerProps` | interface | | todo | |
 | `DocxEditorShapeFill` | const | | todo | |
 | `DocxEditorShapeFillTransparency` | const | | todo | |
@@ -550,7 +550,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useContextMenuAnchor` | function | `injectContextMenuAnchor` | ported |  |
 | `useContextMenuHighlights` | function | `injectContextMenuHighlights` | ported |  |
 | `useContextMenuTarget` | function | `injectContextMenuTarget` | ported |  |
-| `UseDialogReturn` | interface | | todo | |
+| `UseDialogReturn` | interface | `DocxDialogState` | ported | Signals in the place of refs. `injectDialog()` reads it inside a dialog. |
 | `useDocumentOutline` | function | | todo | |
 | `UseDocumentOutlineResult` | interface | | todo | |
 | `useDocumentSearch` | function | | todo | |
@@ -666,12 +666,12 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/context-menu-target.test.ts` | `packages/angular/src/lib/context-menu/context-menu-target.spec.ts` | todo | Ported (task 5.2): the pages, the canvas, painted text, a painted drop-down field, and the content mount open the menu; a form control beside the pages keeps the browser menu, its focus, and its selection; a right-click on the open menu keeps it in place. The link popup and dialog claims port with tasks 6.2 and 6.4. |
 | `packages/vue/test/context-menu.test.ts` | `packages/angular/src/lib/context-menu/context-menu.spec.ts` | todo | Ported (task 5.2): a right-click opens the panel at the pointer; engine changes keep the one listener; the default rows; Paste closes before the clipboard read settles; a refused read disables Paste with the reason; the form field row opens the field dialog; the table of contents rows and Remove. Added: the table rows, Insert row below, and Split cells. The claim that the dialog saves the field ports with task 6.4. |
 | `packages/vue/test/deferred-notifier.test.ts` | | todo | Task 10.5 |
-| `packages/vue/test/dialog-customization.test.ts` | | todo | Task 6.1 |
+| `packages/vue/test/dialog-customization.test.ts` | `packages/angular/src/lib/dialog/dialog-parts.spec.ts` | ported | Keeps, on a spec dialog with the Field Options session contract: a custom Apply keeps the field wiring and closes only after an accepted write; a refused write stays open with an alert, and an abort closes the dialog; host classes merge with the packaged classes, and `asChild` keeps the packaged classes off the host element; a part forwards host attributes but keeps its own wiring; replacement content keeps its markup, a live label, the element, and the wiring. Changed: a host's own `(click)` on its element runs beside the part's handler, because Angular adds listeners and cannot drop them; the attribute `onclick` does not apply. Dropped: the SFC `children` forwarding claim (Vue-only mechanism). Added: a hidden part, `keepContent`, a component in a part template that reads `injectDialog()`, `preset` false, and the native dialog's focus, Escape, and scope class. |
 | `packages/vue/test/document-refresh-edit.test.ts` | | todo | Task 10.3 |
 | `packages/vue/test/editing-mode-author.test.ts` | `packages/angular/src/lib/construction-inputs.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts` | ported | Keeps: `<docx-editor mode='suggesting'>` with the review module waits for an author, then records typing as tracked changes by that author; the open editing mode menu tracks author arrival and removal without a mode change; keyboard travel skips Suggesting without an author. |
 | `packages/vue/test/editor-accessibility.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/editor-composition.test.ts` | | todo | Task 10.5 |
-| `packages/vue/test/engine-popup-renderers.test.ts` | | todo | Task 6.1 |
+| `packages/vue/test/engine-popup-renderers.test.ts` | `packages/angular/src/lib/popups/engine-popups.spec.ts` | todo | Ported (task 6.1), with a spec widget renderer: value widget ownership for the native, custom, and manual cases; checkbox presses reach a renderer only through `contentControlCheckbox`; picture presses reach a renderer only through `contentControlPicture`. Added: a live `false` entry cancels the next session, and a removed entry gives the presses back to the engine. The claims about the packaged widget's own UI (date normalization, focus cleanup, the dropdown list, the gallery) port with task 9.3, and the invalid-field acknowledgement with task 6.4. |
 | `packages/vue/test/equation-popup.test.ts` | | todo | Task 6.6 |
 | `packages/vue/test/export-popup.test.ts` | | todo | Task 6.5 |
 | `packages/vue/test/field-results-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass `fieldResults`; `'editable'` types inside the saved result, the default types after it. A later change is ignored and warns once. |
@@ -713,7 +713,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/paragraph-dialog.test.ts` | | todo | Task 6.3 |
 | `packages/vue/test/paragraph-hooks-lock-state.test.ts` | | todo | Task 6.3 |
 | `packages/vue/test/paragraph-style-labels.test.ts` | `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts` | ported | Keeps: built-in styles take the catalog label (also a localized style id such as `Ttulo1`), and the document's own styles keep their name. |
-| `packages/vue/test/popup-config.test.ts` | | todo | Task 6.1 |
+| `packages/vue/test/popup-config.test.ts` | `packages/angular/src/lib/popups/popup-config.spec.ts` | todo | Ported (task 6.1): the root hosts only configured popups, inside the content, and honors live `false` entries; components keep their state across new registry objects and stay with their editor; a new session resets a draft, and a new entry object with the same component keeps it. Added: static inputs of an entry, and `DOCX_EDITOR_POPUPS` under the root's entries. The legacy flag, packaged hyperlink, and context menu translation claims port with task 6.7, and the note popup claim with task 9.2. |
 | `packages/vue/test/print-popup.test.ts` | | todo | Task 6.5 |
 | `packages/vue/test/props-primitives.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/review-gutter.test.ts` | | todo | Task 10.1 |
