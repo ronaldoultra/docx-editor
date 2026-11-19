@@ -10,6 +10,6 @@ docx-editor {
   min-height: 0;
 }
 
-docx-editor > .docx-editor__scroll-container {
+docx-editor>.docx-editor__scroll-container {
   height: 100%;
 }

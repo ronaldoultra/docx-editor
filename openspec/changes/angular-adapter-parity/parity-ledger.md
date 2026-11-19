@@ -157,14 +157,14 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorColorByChangeType` | const | | todo | |
 | `DocxEditorCompareDocumentsDialog` | const | | todo | |
 | `DocxEditorCompareDocumentsDialogProps` | interface | | todo | |
-| `DocxEditorContent` | const | | todo | |
+| `DocxEditorContent` | const | `DocxEditorContentComponent` | ported |  |
 | `DocxEditorContentControl` | const | | todo | |
 | `DocxEditorContentControlNamespace` | interface | | todo | |
 | `DocxEditorContentControlWidget` | const | | todo | |
 | `DocxEditorContentControlWidgetNamespace` | interface | | todo | |
 | `DocxEditorContentControlWidgetPartProps` | interface | | todo | |
 | `DocxEditorContentControlWidgetProps` | interface | | todo | |
-| `DocxEditorContentProps` | interface | | todo | |
+| `DocxEditorContentProps` | interface | `DocxEditorContentComponent` | ported | Angular hosts set `class` on the host element. |
 | `DocxEditorContextMenu` | const | | todo | |
 | `DocxEditorContextMenuNamespace` | interface | | todo | |
 | `DocxEditorContextMenuProps` | interface | | todo | |
@@ -234,9 +234,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorRevisionMarkupDialog` | const | | todo | |
 | `DocxEditorRevisionMarkupDialogProps` | interface | | todo | |
 | `DocxEditorRevisionMarkupProps` | interface | | todo | |
-| `DocxEditorRoot` | const | | todo | |
-| `DocxEditorRootListeners` | interface | | todo | |
-| `DocxEditorRootProps` | interface | | todo | |
+| `DocxEditorRoot` | const | `DocxEditorRootDirective` | ported | Directive `docxEditorRoot`. The props and listeners rows track the inputs and outputs that are still missing. |
+| `DocxEditorRootListeners` | interface | `DocxEditorRootDirective` | todo | Has the `ready` and `change` outputs. Missing: `fontError` (3.2), `revisionMarkupChange` (10.4). |
+| `DocxEditorRootProps` | interface | `DocxEditorRootDirective` | todo | Has `document`, `mode`, `colorMode`, `locale`, `translate`, `author`. Missing: `fonts`, `fontShaping`, `imageDecodePort`, `modules`, `zoom`, `zoomMode`, `fieldResults`, `contentLockPolicy`, `lockedControlNavigation` (tasks 3.1, 3.2), `popups` (6.1), `revisionMarkup`, `reviewDisplayMode` (10.4), `tableInteractionLabel` (4.4). |
 | `DocxEditorRulerProps` | interface | | todo | |
 | `DocxEditorShapeFill` | const | | todo | |
 | `DocxEditorShapeFillTransparency` | const | | todo | |
@@ -259,12 +259,12 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorUnsupportedElement` | const | | todo | |
 | `DocxEditorUnsupportedElementProps` | interface | | todo | |
 | `DocxEditorVerticalRuler` | const | | todo | |
-| `DocxEditorViewport` | const | | todo | |
-| `DocxEditorViewportProps` | interface | | todo | |
+| `DocxEditorViewport` | const | `DocxEditorViewportComponent` | ported |  |
+| `DocxEditorViewportProps` | interface | `DocxEditorViewportComponent` | ported | Angular hosts set `class` and `style` on the host element. Children are content projection. |
 | `DocxEditorWatermarkDialog` | const | | todo | |
 | `DocxEditorWatermarkDialogProps` | interface | | todo | |
-| `DocxEditorWindow` | const | | todo | |
-| `DocxEditorWindowProps` | interface | | todo | |
+| `DocxEditorWindow` | const | `DocxEditorWindowComponent` | ported |  |
+| `DocxEditorWindowProps` | interface | `DocxEditorWindowComponent`, `DocxEditorWindowStyles` | ported | `onClose` is the `close` output. `open` has two-way binding through `openChange`. |
 | `DocxFontOrigin` | type | | todo | |
 | `DocxFontsInput` | type | | todo | |
 | `DocxFontsSource` | type | | todo | |
@@ -275,14 +275,14 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `Editor` | re-export from core | | todo | |
 | `EditorCaret` | interface | | todo | |
 | `EditorCommand` | re-export from core | | todo | |
-| `EditorCommandState` | interface | | todo | |
+| `EditorCommandState` | interface | `EditorCommandState` | ported |  |
 | `EditorFontError` | re-export from core | | todo | |
 | `EditorFontErrorCode` | re-export from core | | todo | |
 | `EditorMode` | type | | todo | |
 | `EditorQuery` | re-export from core | | todo | |
 | `EditorScope` | re-export from core | | todo | |
 | `EditorSnapshot` | re-export from core | | todo | |
-| `EditorValueCommandState` | interface | | todo | |
+| `EditorValueCommandState` | interface | `EditorValueCommandState` | ported |  |
 | `FontConfiguration` | re-export from core | | todo | |
 | `FontConfigurationBase` | re-export from core | | todo | |
 | `FontConfigurationFragment` | re-export from core | | todo | |
@@ -337,8 +337,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `LoadFontsRequest` | re-export from core | | todo | |
 | `LoadFontsResult` | re-export from core | | todo | |
 | `LOADING_SNAPSHOT` | re-export from core | | todo | |
-| `LocaleProvider` | const | | todo | |
-| `LocaleProviderProps` | interface | | todo | |
+| `LocaleProvider` | const | `DocxEditorI18nDirective`, `provideDocxEditorI18n` | ported |  |
+| `LocaleProviderProps` | interface | `DocxEditorI18nDirective`, `DocxEditorI18nOptions` | ported | `i18n` is the `docxEditorI18n` input, `dir` is the `docxEditorDir` input. |
 | `MarkedFontResolver` | re-export from core | | todo | |
 | `MAX_RESOLVER_FAMILIES` | re-export from core | | todo | |
 | `MaybeRefOrGetter` | type | | todo | |
@@ -452,7 +452,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `ReplaceDocumentRefusal` | re-export from core | | todo | |
 | `ReplaceDocumentRefusalReason` | re-export from core | | todo | |
 | `ReplaceDocumentRequest` | re-export from core | | todo | |
-| `ResolvedColorMode` | type | | todo | |
+| `ResolvedColorMode` | type | `ResolvedColorMode` | ported |  |
 | `ResolvedRevisionMarkup` | re-export from core | | todo | |
 | `REVIEW_MARKERS_GUTTER` | const | | todo | |
 | `REVIEW_PANE_GUTTER` | const | | todo | |
@@ -537,7 +537,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `UseBookmarkDialogReturn` | interface | | todo | |
 | `useBookmarks` | function | | todo | |
 | `UseBookmarksReturn` | interface | | todo | |
-| `useChromeDir` | function | | todo | |
+| `useChromeDir` | function | `injectChromeDir` | ported |  |
 | `useChromeTranslate` | function | | todo | |
 | `useCommentDraftRequest` | function | | todo | |
 | `useCompareDocumentsDialog` | function | | todo | |
@@ -556,20 +556,20 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useDocumentSearch` | function | | todo | |
 | `UseDocumentSearchOptions` | interface | | todo | |
 | `UseDocumentSearchResult` | interface | | todo | |
-| `useDocxEditor` | function | | todo | |
+| `useDocxEditor` | function | `injectDocxEditor` | ported |  |
 | `useDocxSource` | function | | todo | |
 | `UseDocxSourceOptions` | interface | | todo | |
 | `UseDocxSourceResult` | interface | | todo | |
 | `useEditorCaret` | function | | todo | |
-| `useEditorColorMode` | function | | todo | |
-| `UseEditorColorModeReturn` | interface | | todo | |
-| `useEditorCommand` | function | | todo | |
-| `useEditorEvent` | function | | todo | |
-| `useEditorHostDocument` | function | | todo | |
-| `UseEditorHostDocumentReturn` | type | | todo | |
+| `useEditorColorMode` | function | `injectEditorColorMode` | ported |  |
+| `UseEditorColorModeReturn` | interface | `EditorColorModeState` | ported |  |
+| `useEditorCommand` | function | `injectEditorCommand` | ported |  |
+| `useEditorEvent` | function | `injectEditorEvent` | ported |  |
+| `useEditorHostDocument` | function | `injectEditorHostDocument` | ported |  |
+| `UseEditorHostDocumentReturn` | type | `injectEditorHostDocument` | ported | The function returns `Signal<Document | null>`. |
 | `useEditorSnapshot` | function | | todo | |
-| `useEditorState` | function | | todo | |
-| `useEditorValueCommand` | function | | todo | |
+| `useEditorState` | function | `injectEditorState` | ported |  |
+| `useEditorValueCommand` | function | `injectEditorValueCommand` | ported |  |
 | `useFontFamily` | function | | todo | |
 | `UseFontFamilyResult` | interface | | todo | |
 | `useFonts` | function | | todo | |
@@ -580,8 +580,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useHighlightAt` | function | | todo | |
 | `useHighlights` | function | | todo | |
 | `UseHighlightsReturn` | interface | | todo | |
-| `useHistoryGroup` | function | | todo | |
-| `UseHistoryGroupReturn` | interface | | todo | |
+| `useHistoryGroup` | function | `injectHistoryGroup` | ported |  |
+| `UseHistoryGroupReturn` | interface | `HistoryGroupState` | ported |  |
 | `useHyperlinkPopup` | function | | todo | |
 | `useHyperlinkPopupInstance` | function | | todo | |
 | `UseHyperlinkPopupResult` | interface | | todo | |
@@ -613,7 +613,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useReviewGutter` | function | | todo | |
 | `useRevisionMarkupDialog` | function | | todo | |
 | `UseRevisionMarkupDialogReturn` | interface | | todo | |
-| `useScopeClassName` | function | | todo | |
+| `useScopeClassName` | function | `injectScopeClassName` | ported |  |
 | `useScopedChromeAnchor` | function | | todo | |
 | `useSelectedChart` | function | | todo | |
 | `UseSelectedChartReturn` | interface | | todo | |
@@ -627,7 +627,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useToolbarContext` | function | | todo | |
 | `useToolbarLabel` | function | | todo | |
 | `useToolbarLabelFor` | function | | todo | |
-| `useTranslation` | function | | todo | |
+| `useTranslation` | function | `injectTranslation` | ported | Returns `DocxEditorTranslation`. |
 | `useWatermark` | function | | todo | |
 | `useWatermarkDialog` | function | | todo | |
 | `UseWatermarkDialogReturn` | interface | | todo | |
@@ -678,10 +678,10 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/font-origins.test.ts` | | todo | Task 3.2 |
 | `packages/vue/test/font-shaping-lifecycle.test.ts` | | todo | Task 3.2 |
 | `packages/vue/test/fonts-prop.test.ts` | | todo | Task 3.2 |
-| `packages/vue/test/form-field-i18n.test.ts` | | todo | Task 2.5 |
+| `packages/vue/test/form-field-i18n.test.ts` | `packages/angular/src/lib/i18n.spec.ts` | todo | Root claims ported: engine form labels follow the catalog and an explicit `translate` without new controls. The packaged-editor claims port with task 3.1. |
 | `packages/vue/test/header-footer-chrome.test.ts` | | todo | Task 9.1 |
 | `packages/vue/test/highlights-background-layout.test.ts` | | todo | Task 7.2 |
-| `packages/vue/test/host-window-chrome.test.ts` | | todo | Task 2.8 |
+| `packages/vue/test/host-window-chrome.test.ts` | `packages/angular/src/lib/host-window.spec.ts` | todo | Ported: the window panel renders in the pop-out while open and comes back on close; turning `open` off moves the panel back before the window closes. The picker-dismissal claim needs the font family control and ports with task 4.2. |
 | `packages/vue/test/hydration-renderer-slots.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/hyperlink-as-child.test.ts` | | todo | Task 6.2 |
 | `packages/vue/test/image-authoring.test.ts` | | todo | Task 8.1 |
@@ -712,16 +712,16 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/paginated-form-save.test.ts` | | todo | Task 3.3 |
 | `packages/vue/test/paragraph-dialog.test.ts` | | todo | Task 6.3 |
 | `packages/vue/test/paragraph-hooks-lock-state.test.ts` | | todo | Task 6.3 |
-| `packages/vue/test/paragraph-style-labels.test.ts` | | todo | Task 2.5 |
+| `packages/vue/test/paragraph-style-labels.test.ts` |  | todo | Needs the paragraph style picker. Ports with task 4.2. |
 | `packages/vue/test/popup-config.test.ts` | | todo | Task 6.1 |
 | `packages/vue/test/print-popup.test.ts` | | todo | Task 6.5 |
 | `packages/vue/test/props-primitives.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/review-gutter.test.ts` | | todo | Task 10.1 |
 | `packages/vue/test/review-overflow-navigation.test.ts` | | todo | Task 10.2 |
 | `packages/vue/test/revision-markup.test.ts` | | todo | Task 10.2 |
-| `packages/vue/test/root-color-mode.test.ts` | | todo | Task 2.6 |
+| `packages/vue/test/root-color-mode.test.ts` | `packages/angular/src/lib/color-mode.spec.ts`, `packages/angular/src/lib/host-window.spec.ts` | ported | Keeps: 'dark' puts `.dark` beside `.docx-editor`; omitted and 'light' stay light; a change applies without new elements; 'system' follows the OS setting and stops when it leaves 'system'; the pop-out follows the root; `injectEditorColorMode` and `injectScopeClassName` report the theme. The toolbar and menu bar check their own scope classes in tasks 4.1 and 5.1. |
 | `packages/vue/test/runtime-audit.test.ts` | | todo | Task 10.5 |
-| `packages/vue/test/scope-dispose.test.ts` | | todo | Task 2.6 |
+| `packages/vue/test/scope-dispose.test.ts` | `packages/angular/src/lib/color-mode.spec.ts` | ported | Keeps: mounting the composed editor logs no warning and no error. |
 | `packages/vue/test/scoped-chrome-anchor.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/security.test.ts` | | todo | Task 6.2 |
 | `packages/vue/test/selection-range-state.test.ts` | | todo | Task 10.5 |
@@ -729,12 +729,12 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/sugar-host.test.ts` | | todo | Task 3.3 |
 | `packages/vue/test/text-highlights.test.ts` | | todo | Task 7.2 |
 | `packages/vue/test/toolbar-dev-warnings.test.ts` | | todo | Task 4.2 |
-| `packages/vue/test/toolbar-direction.test.ts` | | todo | Task 2.5 |
+| `packages/vue/test/toolbar-direction.test.ts` | `packages/angular/src/lib/i18n.spec.ts` | todo | Ported: the provider `dir` wins over the catalog; a right-to-left catalog mirrors the composed parts; a left-to-right catalog leaves the host direction. The direction button claims port with task 4.5, the packaged-editor claim with task 3.1. |
 | `packages/vue/test/toolbar-host-groups.test.ts` | | todo | Task 4.1 |
 | `packages/vue/test/toolbar-link-platform.test.ts` | | todo | Task 4.5 |
 | `packages/vue/test/toolbar-picker-accessibility.test.ts` | | todo | Task 4.2 |
 | `packages/vue/test/unsupported-elements.test.ts` | | todo | Task 9.5 |
 | `packages/vue/test/use-comment-draft-request.test.ts` | | todo | Task 10.1 |
-| `packages/vue/test/use-editor-command.test.ts` | | todo | Task 2.4 |
+| `packages/vue/test/use-editor-command.test.ts` | `packages/angular/src/lib/editor-command.spec.ts` | ported | Keeps: state follows a payload change with the same type; `execute` returns false on a refusal; many commands share the root listeners; custom equality stops slice updates; a burst collapses through the deferred notifier; outside a root the command is disabled; range binding groups keyboard repeats and cleans up; a held stepper starts before its own keydown handler. |
 | `packages/vue/test/viewport-rail.test.ts` | | todo | Task 10.1 |
 | `packages/vue/test/watermark-dialog.test.ts` | | todo | Task 6.3 |

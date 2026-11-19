@@ -12,19 +12,19 @@
 
 ## 2. Base layer
 
-- [ ] 2.1 Add `DocxEditorContext` and the `docxEditorRoot` directive that create one engine, provide it, and destroy it; verify specs for two independent roots and for release on destroy
-- [ ] 2.2 Add the viewport and content components with attach and detach; verify a spec that detach keeps undo history and selection, and a spec that the scroller has `docx-editor__scroll-container` and `role="region"`
-- [ ] 2.3 Add the single engine subscription and `injectEditorState(selector, isEqual)` (D2); verify specs that an unrelated change does not notify, that a page-count read sees the post-layout count, and that one listener serves many consumers
-- [ ] 2.4 Add `injectEditorCommand`, `injectEditorValueCommand`, and `injectEditorEvent` over `toolbarCommandState` and `runToolbarCommand`; port the claims of `use-editor-command.test.ts` and verify the specs pass
-- [ ] 2.5 Add `provideDocxEditorI18n`, `injectTranslation`, chrome direction, and the `locale` setter; port the claims of `toolbar-direction.test.ts`, `form-field-i18n.test.ts`, and `paragraph-style-labels.test.ts`, and verify the specs pass
-- [ ] 2.6 Add color mode and scope class handling; port the claims of `root-color-mode.test.ts` and `scope-dispose.test.ts`, and verify the specs pass
-- [ ] 2.7 Add zone handling for zone.js and zoneless apps; verify one spec with zone.js and one zoneless spec that controls update after a committed change
-- [ ] 2.8 Add host-window resolution through `editor/host-realm.ts` helpers; port the claims of `host-window-chrome.test.ts` and verify the spec passes
-- [ ] 2.9 Document the composition API in `packages/angular/README.md` with a root-viewport-content example, update the ledger rows, and verify `bun run check:angular-parity` and `bun run api:check` pass
+- [x] 2.1 Add `DocxEditorContext` and the `docxEditorRoot` directive that create one engine, provide it, and destroy it; verify specs for two independent roots and for release on destroy
+- [x] 2.2 Add the viewport and content components with attach and detach; verify a spec that detach keeps undo history and selection, and a spec that the scroller has `docx-editor__scroll-container` and `role="region"`
+- [x] 2.3 Add the single engine subscription and `injectEditorState(selector, isEqual)` (D2); verify specs that an unrelated change does not notify, that a page-count read sees the post-layout count, and that one listener serves many consumers
+- [x] 2.4 Add `injectEditorCommand`, `injectEditorValueCommand`, and `injectEditorEvent` over `toolbarCommandState` and `runToolbarCommand`; port the claims of `use-editor-command.test.ts` and verify the specs pass
+- [x] 2.5 Add `provideDocxEditorI18n`, `injectTranslation`, chrome direction, and the `locale` setter; port the claims of `toolbar-direction.test.ts`, `form-field-i18n.test.ts`, and `paragraph-style-labels.test.ts`, and verify the specs pass (the toolbar and packaged-editor claims of these files move to tasks 3.1, 4.2, and 4.5)
+- [x] 2.6 Add color mode and scope class handling; port the claims of `root-color-mode.test.ts` and `scope-dispose.test.ts`, and verify the specs pass
+- [x] 2.7 Add zone handling for zone.js and zoneless apps; verify one spec with zone.js and one zoneless spec that controls update after a committed change
+- [x] 2.8 Add host-window resolution through `editor/host-realm.ts` helpers; port the `DocxEditorWindow` claims of `host-window-chrome.test.ts` and verify the spec passes (the picker claim moves to task 4.2)
+- [x] 2.9 Document the composition API in `packages/angular/README.md` with a root-viewport-content example, update the ledger rows, and verify `bun run check:angular-parity` and `bun run api:check` pass
 
 ## 3. Packaged component
 
-- [ ] 3.1 Rebuild `<docx-editor>` on the base layer (D4) with `document`, `mode` including `suggesting`, `locale`, `i18n`, `colorMode`, `zoom`, `zoomMode`, `author`, `fieldResults`, `contentLockPolicy`, and `lockedControlNavigation`; port the claims of `live-props.test.ts`, `field-results-prop.test.ts`, `content-lock-policy-prop.test.ts`, `locked-control-navigation-prop.test.ts`, and `editing-mode-author.test.ts`
+- [ ] 3.1 Rebuild `<docx-editor>` on the base layer (D4) with `document`, `mode` including `suggesting`, `locale`, `i18n`, `colorMode`, `zoom`, `zoomMode`, `author`, `fieldResults`, `contentLockPolicy`, and `lockedControlNavigation`; port the claims of `live-props.test.ts`, `field-results-prop.test.ts`, `content-lock-policy-prop.test.ts`, `locked-control-navigation-prop.test.ts`, and `editing-mode-author.test.ts`, and the packaged-editor claims of `form-field-i18n.test.ts` and `toolbar-direction.test.ts`
 - [ ] 3.2 Add construction-time inputs `modules`, `fonts`, `fontShaping`, and `imageDecodePort` that recreate the engine; port the claims of `fonts-prop.test.ts`, `font-origins.test.ts`, `font-shaping-lifecycle.test.ts`, and `image-decode-port-prop.test.ts`
 - [ ] 3.3 Add outputs `change`, `selectionChange`, `openFailure`, `error`, and methods `load`, `save`, `focus`, `exec`, `snapshot`, `getEditor`; port the claims of `lifecycle-regression.test.ts`, `sugar-host.test.ts`, and `paginated-form-save.test.ts`
 - [ ] 3.4 Update `examples/angular` to use the new inputs, extend `examples/angular/e2e/editor.e2e.ts` for live zoom and save, and verify `bun run test:e2e:angular` passes
@@ -33,10 +33,10 @@
 ## 4. Toolbar
 
 - [ ] 4.1 Add the toolbar compound with registry-driven groups and `docxSlot` overrides (D3); port the claims of `chrome-composition.test.ts` and `toolbar-host-groups.test.ts`
-- [ ] 4.2 Add history, text formatting, font family and size, and paragraph style controls; port the claims of `toolbar-picker-accessibility.test.ts` and `toolbar-dev-warnings.test.ts`
+- [ ] 4.2 Add history, text formatting, font family and size, and paragraph style controls; port the claims of `toolbar-picker-accessibility.test.ts` and `toolbar-dev-warnings.test.ts`, the claim of `paragraph-style-labels.test.ts`, and the picker claim of `host-window-chrome.test.ts`
 - [ ] 4.3 Add the color picker, highlight, alignment, lists, indent, and line spacing controls, and verify specs for each control's enabled state and value
 - [ ] 4.4 Add table, table border, and table cell fill controls; verify specs that cover border target labels and disabled reasons outside a table
-- [ ] 4.5 Add link and direction controls; port the claims of `toolbar-link-platform.test.ts`
+- [ ] 4.5 Add link and direction controls; port the claims of `toolbar-link-platform.test.ts`, and the direction button claims of `toolbar-direction.test.ts`
 - [ ] 4.6 Show the toolbar in `<docx-editor>` with the `chrome` input (`false` hides it), extend the browser test to bold a word from the toolbar, and verify `bun run test:e2e:angular` passes
 - [ ] 4.7 Document toolbar composition and overrides in the README, update the ledger and API snapshot, and verify `bun run api:check` and `bun run check:angular-parity` pass
 

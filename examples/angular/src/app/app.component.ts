@@ -4,12 +4,16 @@ import {
   type DocumentChange,
   type DocxEditorMode,
 } from '@docx-editor.dev/angular';
+import { ComposedEditorComponent } from './composed/composed-editor.component';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
+/** `packaged` shows `<docx-editor>`. `composed` shows the composition API. */
+type Variant = 'packaged' | 'composed';
+
 @Component({
   selector: 'app-root',
-  imports: [DocxEditorComponent],
+  imports: [DocxEditorComponent, ComposedEditorComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="toolbar">
@@ -20,15 +24,34 @@ const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingm
         (change)="open($event)"
       />
       <label>
-        <input type="checkbox" [checked]="mode() === 'view'" (change)="toggleView($event)" />
-        Somente leitura
+        Variante
+        <select data-testid="variant" (change)="setVariant($event)">
+          <option value="packaged" [selected]="variant() === 'packaged'">
+            Componente &lt;docx-editor&gt;
+          </option>
+          <option value="composed" [selected]="variant() === 'composed'">API de composição</option>
+        </select>
       </label>
+      @if (variant() === 'packaged') {
+        <label>
+          <input type="checkbox" [checked]="mode() === 'view'" (change)="toggleView($event)" />
+          Somente leitura
+        </label>
+      }
       <button type="button" [disabled]="!bytes() || saving()" (click)="save()">Salvar</button>
       <button type="button" [disabled]="!bytes()" (click)="close()">Fechar</button>
       <span class="status" data-testid="status">{{ status() }}</span>
     </div>
     @if (bytes(); as document) {
-      <docx-editor [document]="document" [mode]="mode()" (change)="onChange($event)" />
+      @if (variant() === 'packaged') {
+        <docx-editor [document]="document" [mode]="mode()" (change)="onChange($event)" />
+      } @else {
+        <app-composed-editor
+          [document]="document"
+          (ready)="ready.set(true)"
+          (change)="onChange($event)"
+        />
+      }
     } @else {
       <div class="empty">Escolha um arquivo .docx.</div>
     }
@@ -37,17 +60,23 @@ const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingm
 export class AppComponent {
   protected readonly bytes = signal<ArrayBuffer | null>(null);
   protected readonly fileName = signal('documento.docx');
+  protected readonly variant = signal<Variant>(
+    new URLSearchParams(location.search).has('composed') ? 'composed' : 'packaged'
+  );
   protected readonly mode = signal<DocxEditorMode>('edit');
   protected readonly saving = signal(false);
   protected readonly changes = signal(0);
   protected readonly lastSource = signal('');
+  protected readonly ready = signal(false);
 
-  private readonly editor = viewChild(DocxEditorComponent);
-  private readonly zone = 'Zone' in globalThis ? 'com zone.js' : 'TESTE';
+  private readonly packaged = viewChild(DocxEditorComponent);
+  private readonly composed = viewChild(ComposedEditorComponent);
+  private readonly zone = 'Zone' in globalThis ? 'com zone.js' : 'sem zone.js';
 
   protected readonly status = computed(() => {
     const parts = [this.zone, `${this.changes()} alterações`];
     if (this.lastSource()) parts.push(`última: ${this.lastSource()}`);
+    if (this.variant() === 'composed' && this.ready()) parts.push('pronto');
     return parts.join(' · ');
   });
 
@@ -64,8 +93,13 @@ export class AppComponent {
   /** Removes the editor from the page, which destroys the component and its engine. */
   protected close() {
     this.bytes.set(null);
-    this.changes.set(0);
-    this.lastSource.set('');
+    this.reset();
+  }
+
+  /** The other variant creates a new engine for the same file. */
+  protected setVariant(event: Event) {
+    this.variant.set((event.target as HTMLSelectElement).value as Variant);
+    this.reset();
   }
 
   protected toggleView(event: Event) {
@@ -78,7 +112,7 @@ export class AppComponent {
   }
 
   protected async save() {
-    const editor = this.editor();
+    const editor = this.variant() === 'packaged' ? this.packaged() : this.composed();
     if (!editor) return;
     this.saving.set(true);
     try {
@@ -94,5 +128,11 @@ export class AppComponent {
     } finally {
       this.saving.set(false);
     }
+  }
+
+  private reset() {
+    this.changes.set(0);
+    this.lastSource.set('');
+    this.ready.set(false);
   }
 }

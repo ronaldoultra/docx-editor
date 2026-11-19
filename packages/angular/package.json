@@ -43,7 +43,8 @@
     "ng-packagr": "~20.3.0",
     "rxjs": "~7.8.2",
     "typescript": "~5.9.3",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "zone.js": "~0.15.1"
   },
   "publishConfig": {
     "access": "public"

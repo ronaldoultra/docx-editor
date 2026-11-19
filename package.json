@@ -22,7 +22,7 @@
     "check:lockfile-workspaces": "node scripts/check-lockfile-workspaces.mjs",
     "check:shipped-shaper": "node scripts/check-shipped-shaper.mjs",
     "check:tsconfig-lib-floor": "node scripts/check-tsconfig-lib-floor.mjs",
-    "dev": "bun run --filter './examples/angular' dev",
+    "dev": "bun run --filter ./examples/angular dev",
     "dev:angular": "bun run --filter './examples/angular' dev",
     "format": "prettier --write \"packages/*/src/**/*.{ts,tsx,js,jsx,json,css}\" \"examples/*/src/**/*.{ts,css,html}\"",
     "format:check": "prettier --check \"packages/*/src/**/*.{ts,tsx,js,jsx,json,css}\" \"examples/*/src/**/*.{ts,css,html}\"",

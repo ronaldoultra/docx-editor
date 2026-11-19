@@ -283,7 +283,9 @@
       "files": [
         "packages/*/src/**/__tests__/**",
         "packages/*/src/**/*.test.{ts,tsx}",
-        "packages/vue/src/**/*.spec.{ts,tsx}"
+        "packages/vue/src/**/*.spec.{ts,tsx}",
+        "packages/angular/src/**/*.spec.ts",
+        "packages/angular/src/testing/**"
       ],
       "rules": { "no-restricted-globals": "off", "docx/no-cross-realm-instanceof": "off" }
     },

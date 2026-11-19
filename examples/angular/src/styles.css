@@ -17,6 +17,7 @@ app-root {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   padding: 8px 16px;
   border-bottom: 1px solid #d0d0d0;
@@ -37,4 +38,123 @@ docx-editor {
   display: grid;
   place-items: center;
   color: #555;
+}
+
+/* The composition API variant. */
+
+app-composed-editor {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 16px;
+  border-bottom: 1px solid #d0d0d0;
+  font-size: 11px;
+}
+
+.options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.composed {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.composed docx-editor-viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* The format bar and status bar carry the editor scope class, so they read the --doc-* tokens
+   and follow the dark color mode. */
+.format-bar,
+.editor-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 4px 16px;
+  background: var(--doc-bg-subtle);
+  color: var(--doc-text);
+}
+
+.format-bar {
+  border-bottom: 1px solid var(--doc-border);
+}
+
+.editor-status {
+  border-top: 1px solid var(--doc-border);
+  font-size: 12px;
+  color: var(--doc-text-muted);
+}
+
+.format-bar .group,
+.editor-status .zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.format-bar select,
+.format-bar input[type='color'] {
+  height: 28px;
+  background: var(--doc-bg-input);
+  color: var(--doc-text);
+  border: 1px solid var(--doc-border-input);
+  border-radius: 4px;
+}
+
+.format-bar select.narrow {
+  width: 64px;
+}
+
+.format-bar input[type='color'] {
+  width: 36px;
+  padding: 2px;
+}
+
+.format-bar .command,
+.editor-status button {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 4px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.format-bar .command svg {
+  fill: currentColor;
+}
+
+.format-bar .command:hover:not(:disabled),
+.editor-status button:hover:not(:disabled) {
+  background: var(--doc-bg-hover);
+}
+
+.format-bar .command[aria-pressed='true'] {
+  background: var(--doc-toggle-active-bg);
+  color: var(--doc-toggle-active-fg);
+}
+
+.format-bar .command:disabled,
+.editor-status button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }

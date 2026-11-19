@@ -2,7 +2,12 @@
 
 An Angular component for the `@docx-editor.dev/core` DOCX engine. The engine reads the file, lays out and paints the pages, handles text input, and writes the file again. The component owns only the DOM element and the engine lifetime.
 
-This package is a minimal adapter. It has no toolbar, menus, context menu, or dialogs.
+The package has two levels:
+
+- `<docx-editor>` is a packaged component for a page that needs only the pages.
+- The composition API is a set of parts that you put together in your own layout. Use it to add your own controls.
+
+The package has no toolbar, menus, context menu, or dialogs yet.
 
 ## Requirements
 
@@ -79,7 +84,152 @@ export class AppComponent {
 }
 ```
 
-## API
+## Compose your own editor
+
+The composition API has three parts:
+
+- `docxEditorRoot` is a directive. It creates one engine and provides it to the elements inside it. It renders no element, so you can put it on an `ng-container`.
+- `<docx-editor-viewport>` is the scroll container of the pages. It is a named `region`.
+- `<docx-editor-content>` is the element that the engine paints the pages into.
+
+The following component puts a custom control above the pages:
+
+```ts
+import { Component, signal } from '@angular/core';
+import {
+  DocxEditorContentComponent,
+  DocxEditorRootDirective,
+  DocxEditorViewportComponent,
+} from '@docx-editor.dev/angular';
+import { BoldButtonComponent } from './bold-button.component';
+
+@Component({
+  selector: 'app-editor',
+  imports: [
+    DocxEditorRootDirective,
+    DocxEditorViewportComponent,
+    DocxEditorContentComponent,
+    BoldButtonComponent,
+  ],
+  template: `
+    <ng-container docxEditorRoot [document]="bytes()" mode="edit" (change)="dirty.set(true)">
+      <app-bold-button />
+      <docx-editor-viewport style="height: 80vh">
+        <docx-editor-content />
+      </docx-editor-viewport>
+    </ng-container>
+  `,
+})
+export class EditorComponent {
+  protected readonly bytes = signal<ArrayBuffer | null>(null);
+  protected readonly dirty = signal(false);
+}
+```
+
+Two roots on one page have two independent engines. When Angular destroys the root, the root destroys its engine. When only `<docx-editor-content>` leaves the view, the engine keeps its document, undo history, and selection. A new content element attaches the engine again.
+
+The root has these inputs and outputs:
+
+| Member | Kind | Description |
+| --- | --- | --- |
+| `document` | input | The DOCX bytes. A new value opens the new document in the same engine. |
+| `mode` | input | `'edit'`, `'view'`, or `'suggesting'`. Omit it to let the document's tracking setting select the mode. |
+| `colorMode` | input | `'light'`, `'dark'`, or `'system'` for the chrome. The pages keep the look that Word gives them. |
+| `locale` | input | The BCP-47 locale for dates and labels that the engine makes. |
+| `translate` | input | A translation function for labels that the engine paints. Defaults to the active translations. |
+| `author` | input | The author of later comments, replies, and tracked changes. |
+| `ready` | output | Emits once, when the first document is open. |
+| `change` | output | Emits for each change that the engine commits. |
+
+### Write a control
+
+Controls read engine state through `inject…` functions. Call them in an injection context, such as a field initializer. Each function returns signals, so a template reads the state directly.
+
+The following control toggles bold. Its enabled state comes from the engine, so it follows the editing mode and the selection:
+
+```ts
+import { Component } from '@angular/core';
+import { injectEditorCommand } from '@docx-editor.dev/angular';
+
+@Component({
+  selector: 'app-bold-button',
+  template: `
+    <button
+      type="button"
+      [disabled]="!bold.isEnabled()"
+      [attr.aria-pressed]="bold.isActive()"
+      [title]="bold.disabledReason() ?? ''"
+      (mousedown)="$event.preventDefault()"
+      (click)="bold.execute()"
+    >
+      Bold
+    </button>
+  `,
+})
+export class BoldButtonComponent {
+  protected readonly bold = injectEditorCommand('text.bold');
+}
+```
+
+The control prevents the default `mousedown` action, so the press does not move the caret out of the pages.
+
+The state functions are:
+
+| Function | Returns |
+| --- | --- |
+| `injectEditorState(selector, isEqual?)` | A signal of one value from the engine snapshot. It notifies only when `isEqual` says that the value changed. |
+| `injectEditorCommand(target)` | The enabled, active, and disabled-reason signals of a chrome slot or an engine command, and `execute`. |
+| `injectEditorValueCommand(slotId)` | The current value and options of a value slot, such as `font.size`, and `execute(value)`. |
+| `injectEditorEvent(event, handler)` | Nothing. It listens to an engine event until Angular destroys the caller. |
+| `injectHistoryGroup(options)` | A binding that makes a run of changes from one control one undo step. |
+| `injectDocxEditor()` | A signal of the engine instance, or `null`. |
+| `injectEditorHostDocument()` | A signal of the document that the pages are in. Use it in place of the global `document`. |
+
+All signals under one root share one set of engine listeners. They read the snapshot after the engine publishes its layout. Outside a root, they read the engine's empty values, and commands are disabled.
+
+### Translate the chrome
+
+The chrome uses the English strings from `@docx-editor.dev/i18n` by default. To use another catalog, add `provideDocxEditorI18n()` to the providers of a component:
+
+```ts
+import { ptBR } from '@docx-editor.dev/i18n';
+import { provideDocxEditorI18n } from '@docx-editor.dev/angular';
+
+@Component({ providers: [provideDocxEditorI18n(ptBR)], … })
+```
+
+To change the catalog at run time, use the `docxEditorI18n` directive on an element around the root. Missing keys fall back to the outer provider, then to English. A right-to-left catalog mirrors the chrome. The `docxEditorDir` input sets the direction explicitly:
+
+```html
+<section [docxEditorI18n]="catalog()" docxEditorDir="rtl">
+  <ng-container docxEditorRoot [document]="bytes()">…</ng-container>
+</section>
+```
+
+In your own controls, `injectTranslation()` returns the `t`, `lang`, and `dir` signals of the active catalog.
+
+### Match the color mode
+
+The viewport carries the `docx-editor` scope class, and the `dark` class under a dark root. A part that you build outside the viewport reads the same classes from `injectScopeClassName()`. `injectEditorColorMode()` returns the resolved `'light'` or `'dark'` theme.
+
+### Move the editor to another window
+
+`<docx-editor-window>` shows its panel in a pop-out window while `open` is `true`, and in place otherwise. Give the panel as an `ng-template`. The root stays in your window, so the editor keeps its document, undo history, and selection when it moves. When the user closes the window, the panel comes back, and the component emits `openChange` with `false`.
+
+The following template adds a button that moves the pages to a pop-out window:
+
+```html
+<ng-container docxEditorRoot [document]="bytes()">
+  <button type="button" (click)="popped.set(!popped())">Pop out</button>
+  <docx-editor-window [(open)]="popped">
+    <ng-template>
+      <docx-editor-viewport><docx-editor-content /></docx-editor-viewport>
+    </ng-template>
+  </docx-editor-window>
+</ng-container>
+```
+
+## Packaged component API
 
 | Member | Kind | Description |
 | --- | --- | --- |
@@ -93,7 +243,7 @@ The engine has no `ready` event, so the component has no `ready` output.
 
 ## Zone.js
 
-The engine runs outside the Angular zone. Only the `change` output enters the zone again, so typing starts change detection only when your app listens to `change`. Without zone.js, the component uses signals and needs no zone.
+The engine runs outside the Angular zone. Only the outputs and the state signals that templates read enter the zone again, so a DOM event on the pages does not start change detection. Without zone.js, the parts use signals and need no zone.
 
 ## Build
 
