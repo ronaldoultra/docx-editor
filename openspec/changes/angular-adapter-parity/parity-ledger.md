@@ -118,11 +118,11 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `createDocumentRefresh` | re-export from core | | todo | |
 | `createFontSource` | re-export from core | | todo | |
 | `DEFAULT_FONT` | re-export from core | | todo | |
-| `DEFAULT_WATERMARK_PRESETS` | const | | todo | |
+| `DEFAULT_WATERMARK_PRESETS` | const | `DEFAULT_WATERMARK_PRESETS` | ported |  |
 | `deferFonts` | re-export from core | | todo | |
 | `defineFontResolver` | re-export from core | | todo | |
 | `definePopup` | function | | dropped | Vue-only mechanism: an Angular registry entry is a component class, which needs no adapter. `DocxEditorPopup` takes the class. |
-| `DialogCustomizationProps` | interface | `DialogCustomizationProps` | ported | `style` is `styles`. Vue `children` is the dialog's content. The dialogs that declare these inputs land with tasks 6.3 to 6.6. |
+| `DialogCustomizationProps` | interface | `DialogCustomizationProps`, `DocxEditorDialogBase` | ported | `style` is `styles`. Vue `children` is the dialog's content. The open-and-close dialogs (page setup, paragraph, watermark) take these inputs from `DocxEditorDialogBase`. Added: `docxDialogOutlet` renders a packaged part, such as `field:spaceBefore` or `preview`, in a host's layout. |
 | `DialogPartProps` | interface | `DialogPartProps`, `DocxDialogPartDirective` | ported | The props are the inputs of an `ng-template docxDialogPart` inside the dialog. `style` is `styles`, and `id`, `title`, `aria-*`, and `data-*` go in `attributes`. The template replaces the part's content; with `asChild` it replaces the element, and `docxDialogApply`, `docxDialogCancel`, `docxDialogReset`, and `docxDialogField` wire the host's element. Added: `keepContent`. |
 | `DocumentOpenFailure` | re-export from core | `DocumentOpenFailure` | ported |  |
 | `DocumentOpenFailureReason` | re-export from core | | todo | |
@@ -195,7 +195,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorLoadingSpinnerProps` | interface | | todo | |
 | `DocxEditorMenu` | const | `DocxEditorMenuComponent` | ported | `div[docxEditorMenu]`. The compound members are standalone parts (`docx-menu`, `docx-menu-item`, `docx-menu-submenu`, `docxMenuRow`, `docxMenuSeparator`, `docxMenuGroup`, `docx-menu-reviewers`) and `docxSlot` row overrides, see D3. A host `docx-menu` with a registry id in a plain `menu` attribute replaces that menu in place. |
 | `DocxEditorMenuNamespace` | interface |  | dropped | Dropped: Angular has no compound namespace object. Each menu part is a standalone component with its own selector, and the pinned parts (`Menu.File`, `Menu.Save`, `Menu.PageSetup`, and the rest) are `<docx-menu menu="file">` and `<docx-menu-item slotId="file.save">`. |
-| `DocxEditorMenuProps` | interface | `DocxEditorMenuComponent` | ported | Inputs `preset`, `overflow`, `t`, `fileName`, `openHandler`, `saveHandler`, `pageSetupHandler`, `paragraphDialogHandler`, `watermarkDialogHandler`, `reportIssueHandler`, `reportIssue`, and the `openFile` output. `className` is the host `class`. `exporters` and `printSettings` port with task 6.5. Until phase 6, page setup and watermark rows need their handler. The `menu` input of `<docx-editor>` takes the same options as `DocxEditorMenuOptions`, with `onOpenFile` for the output. |
+| `DocxEditorMenuProps` | interface | `DocxEditorMenuComponent` | ported | Inputs `preset`, `overflow`, `t`, `fileName`, `openHandler`, `saveHandler`, `pageSetupHandler`, `paragraphDialogHandler`, `watermarkDialogHandler`, `reportIssueHandler`, `reportIssue`, and the `openFile` output. `className` is the host `class`. `exporters` and `printSettings` port with task 6.5. Without a handler, the page setup, paragraph, and watermark rows open the root's dialogs (task 6.3). The `menu` input of `<docx-editor>` takes the same options as `DocxEditorMenuOptions`, with `onOpenFile` for the output. |
 | `DocxEditorNamespace` | interface | | todo | |
 | `DocxEditorNavigation` | const | | todo | |
 | `DocxEditorNavigationNamespace` | interface | | todo | |
@@ -217,14 +217,14 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorOpenFailureProps` | interface | | todo | |
 | `DocxEditorPageNumber` | const | | todo | |
 | `DocxEditorPageNumberProps` | interface | | todo | |
-| `DocxEditorPageSetupDialog` | const | | todo | |
-| `DocxEditorPageSetupDialogProps` | interface | | todo | |
+| `DocxEditorPageSetupDialog` | const | `DocxEditorPageSetupDialogComponent` | ported | `<docx-editor-page-setup-dialog>`. The Vue compound parts are `docxDialogPart` templates and `docxDialogOutlet`. |
+| `DocxEditorPageSetupDialogProps` | interface | `DocxEditorDialogBase` | ported | Inputs `open` (default `true`), `closeHandler`, `className`, `styles`, and `preset`, and the `closed` output in the place of `onClose`. |
 | `DocxEditorPaneSections` | const | | todo | |
 | `DocxEditorPaneSectionsProps` | interface | | todo | |
-| `DocxEditorParagraphDialog` | const | | todo | |
-| `DocxEditorParagraphDialogProps` | interface | | todo | |
+| `DocxEditorParagraphDialog` | const | `DocxEditorParagraphDialogComponent` | ported | `<docx-editor-paragraph-dialog>`. The Vue compound parts are `docxDialogPart` templates and `docxDialogOutlet`. Changed: Clear all sets `clearedAllTabStops`, so a cleared list that equals the seed is still a decision. |
+| `DocxEditorParagraphDialogProps` | interface | `DocxEditorDialogBase` | ported | Inputs `open` (default `true`), `closeHandler`, `className`, `styles`, and `preset`, and the `closed` output in the place of `onClose`. |
 | `DocxEditorPopup` | type | `DocxEditorPopup` | ported | A component class, a `DocxEditorPopupEntry` (`{ component, inputs }`), or `false`, in the place of a render function. The editor renders the class and sets its inputs, such as `session`. |
-| `DocxEditorPopups` | interface | `DocxEditorPopups` | todo | Has `contentControlWidget`, `contentControlCheckbox`, `contentControlPicture`, `invalidTextFormField`, `hyperlink`, `contentControl`, `equation`, `contextMenu`; `DOCX_EDITOR_POPUPS` and `provideDocxEditorPopups()` provide it, and the root's `popups` input replaces single entries. Missing: `pageSetup`, `paragraph`, `watermark` (6.3), `bookmark`, `splitCell`, `textFormField` (6.4), `export`, `print` (6.5), `imageInsertError`, `imageProperties`, `imageAltText` (8.1), `noteProperties`, `notesContextMenu`, `notePreview` (9.2), `revisionMarkup` (10.2), `compareDocuments` (10.3). |
+| `DocxEditorPopups` | interface | `DocxEditorPopups` | todo | Has `contentControlWidget`, `contentControlCheckbox`, `contentControlPicture`, `invalidTextFormField`, `hyperlink`, `contentControl`, `equation`, `contextMenu`; `DOCX_EDITOR_POPUPS` and `provideDocxEditorPopups()` provide it, and the root's `popups` input replaces single entries. Since task 6.3: `pageSetup`, `paragraph`, and `watermark`, with the input `closeHandler`. Missing: `bookmark`, `splitCell`, `textFormField` (6.4), `export`, `print` (6.5), `imageInsertError`, `imageProperties`, `imageAltText` (8.1), `noteProperties`, `notesContextMenu`, `notePreview` (9.2), `revisionMarkup` (10.2), `compareDocuments` (10.3). |
 | `DocxEditorPrintDialog` | const | | todo | |
 | `DocxEditorPrintDialogProps` | interface | | todo | |
 | `DocxEditorProps` | interface | `DocxEditorComponent` | todo | Has `document`, `chrome`, `title` (a `model`, so `[(title)]`; Vue `onTitleChange` is the `titleChange` output, and the title is always editable), `menu`, `contextMenu`, `mode`, `colorMode`, `i18n`, `translate` (Vue `t`), `locale`, `author`, `zoom`, `zoomMode`, `fieldResults`, `contentLockPolicy`, `lockedControlNavigation`, `fonts`, `fontShaping`, `modules`, `imageDecodePort`, and the outputs `ready`, `change`, `selectionChange`, `error`, `openFailure`, `fontError`. Vue `onSave` and `onOpen` are `saveHandler` and `openHandler` in `[menu]`. Missing: `popups`, `hyperlinkPopup` (6.7), `navigation` (7.3), `rulers`, `openFailure` dialog (9.6), `revisionMarkup`, `reviewDisplayMode` (10.4), the `titleBarLeft` and `titleBarRight` slots, `class` (hosts set it on the element). |
@@ -261,8 +261,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorVerticalRuler` | const | | todo | |
 | `DocxEditorViewport` | const | `DocxEditorViewportComponent` | ported |  |
 | `DocxEditorViewportProps` | interface | `DocxEditorViewportComponent` | ported | Angular hosts set `class` and `style` on the host element. Children are content projection. |
-| `DocxEditorWatermarkDialog` | const | | todo | |
-| `DocxEditorWatermarkDialogProps` | interface | | todo | |
+| `DocxEditorWatermarkDialog` | const | `DocxEditorWatermarkDialogComponent`, `DocxEditorWatermarkPreviewComponent` | ported | `<docx-editor-watermark-dialog>`. `Preview` is the `preview` part and the `<docx-editor-watermark-preview>` component. The other compound parts are `docxDialogPart` templates and `docxDialogOutlet`. |
+| `DocxEditorWatermarkDialogProps` | interface | `DocxEditorWatermarkDialogComponent` | ported | Input `presets`. Inputs `open` (default `true`), `closeHandler`, `className`, `styles`, and `preset`, and the `closed` output in the place of `onClose`. |
 | `DocxEditorWindow` | const | `DocxEditorWindowComponent` | ported |  |
 | `DocxEditorWindowProps` | interface | `DocxEditorWindowComponent`, `DocxEditorWindowStyles` | ported | `onClose` is the `close` output. `open` has two-way binding through `openChange`. |
 | `DocxFontOrigin` | type | `DocxFontOrigin` | ported |  |
@@ -401,9 +401,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `PageIndicator` | const | | todo | |
 | `PageIndicatorProps` | interface | | todo | |
 | `PageNumberTranslationContext` | const | | todo | |
-| `PageSetup` | re-export from core | | todo | |
-| `PageSetupDialogFields` | interface | | todo | |
-| `PageSetupUpdate` | interface | | todo | |
+| `PageSetup` | re-export from core | `PageSetup` | ported |  |
+| `PageSetupDialogFields` | interface | `PageSetupDialogFields` | ported |  |
+| `PageSetupUpdate` | interface | `PageSetupUpdate` | ported |  |
 | `PaginatedDocxEditor` | const | | todo | The proposal lists it with the deprecated shell, but the snapshot has no `@deprecated` tag. |
 | `PaginatedDocxEditorExpose` | type | | todo | |
 | `PaginatedDocxEditorHandle` | interface | | dropped | Deprecated shell: the proposal does not port `PaginatedDocxEditor`. `DocxEditorComponent` has the same save, load, and command methods. |
@@ -415,16 +415,16 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `PaneSectionIds` | re-export from core | | todo | |
 | `paneSections` | re-export from core | | todo | |
 | `ParagraphAlignment` | type | | todo | |
-| `ParagraphFlagState` | re-export from core | | todo | |
-| `ParagraphFormatRead` | re-export from core | | todo | |
-| `ParagraphFormatUpdate` | re-export from core | | todo | |
+| `ParagraphFlagState` | re-export from core | `ParagraphFlagState` | ported |  |
+| `ParagraphFormatRead` | re-export from core | `ParagraphFormatRead` | ported |  |
+| `ParagraphFormatUpdate` | re-export from core | `ParagraphFormatUpdate` | ported |  |
 | `ParagraphsChangeEvent` | re-export from core | | todo | |
 | `ParagraphStyleItemProps` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectParagraphStyle`. |
 | `ParagraphStyleNamespace` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectParagraphStyle`. |
 | `ParagraphStyleOption` | interface | `ParagraphStyleOption` | ported |  |
 | `ParagraphStylePartProps` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectParagraphStyle`. |
 | `ParagraphStyleProps` | interface | `DocxToolbarParagraphStyleComponent` | ported | `div[docxToolbarParagraphStyle]`. |
-| `ParagraphTabStop` | re-export from core | | todo | |
+| `ParagraphTabStop` | re-export from core | `ParagraphTabStop` | ported |  |
 | `ParagraphText` | re-export from core | | todo | |
 | `ParagraphTextProofing` | re-export from core | | todo | |
 | `ParagraphTextReadOptions` | re-export from core | | todo | |
@@ -596,15 +596,15 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useOpenFailure` | function | | todo | |
 | `UseOpenFailureOptions` | interface | | todo | |
 | `UseOpenFailureReturn` | interface | | todo | |
-| `usePageSetup` | function | | todo | |
-| `usePageSetupDialog` | function | | todo | |
-| `UsePageSetupDialogReturn` | interface | | todo | |
-| `UsePageSetupReturn` | interface | | todo | |
+| `usePageSetup` | function | `injectPageSetup` | ported |  |
+| `usePageSetupDialog` | function | `injectPageSetupDialog` | ported |  |
+| `UsePageSetupDialogReturn` | interface | `DocxDialogState` | ported | `DocxDialogState<PageSetupDialogFields>`. |
+| `UsePageSetupReturn` | interface | `PageSetupState` | ported | Signals in the place of computed refs. |
 | `usePaneRequest` | function | | todo | |
-| `useParagraphDialog` | function | | todo | |
-| `UseParagraphDialogReturn` | interface | | todo | |
-| `useParagraphFormat` | function | | todo | |
-| `UseParagraphFormatReturn` | interface | | todo | |
+| `useParagraphDialog` | function | `injectParagraphDialog` | ported |  |
+| `UseParagraphDialogReturn` | interface | `ParagraphDialogState` | ported | `mixed` is a signal. |
+| `useParagraphFormat` | function | `injectParagraphFormat` | ported |  |
+| `UseParagraphFormatReturn` | interface | `ParagraphFormatState` | ported | Signals in the place of computed refs. |
 | `useParagraphIndent` | function | | todo | |
 | `UseParagraphIndentReturn` | interface | | todo | |
 | `useParagraphStyle` | function | `injectParagraphStyle` | ported |  |
@@ -628,21 +628,21 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useToolbarLabel` | function | `injectToolbarLabel` | ported |  |
 | `useToolbarLabelFor` | function | `injectToolbarLabel` | ported | A host that needs its own translation passes the toolbar `t` input. |
 | `useTranslation` | function | `injectTranslation` | ported | Returns `DocxEditorTranslation`. |
-| `useWatermark` | function | | todo | |
-| `useWatermarkDialog` | function | | todo | |
-| `UseWatermarkDialogReturn` | interface | | todo | |
-| `UseWatermarkReturn` | interface | | todo | |
+| `useWatermark` | function | `injectWatermark` | ported |  |
+| `useWatermarkDialog` | function | `injectWatermarkDialog` | ported |  |
+| `UseWatermarkDialogReturn` | interface | `DocxDialogState` | ported | `DocxDialogState<WatermarkDialogFields>`. |
+| `UseWatermarkReturn` | interface | `WatermarkCommandState` | ported | The name avoids the core type `WatermarkState`. |
 | `useZoom` | function | `injectZoom` | ported |  |
 | `UseZoomResult` | interface | `ZoomState` | ported |  |
 | `VERSION` | const | | todo | |
 | `VerticalRuler` | const | | todo | |
 | `VerticalRulerProps` | interface | | todo | |
-| `Watermark` | re-export from core | | todo | |
-| `WatermarkDialogFieldName` | type | | todo | |
-| `WatermarkDialogFields` | interface | | todo | |
-| `WatermarkDialogKind` | type | | todo | |
-| `WatermarkDialogLayout` | type | | todo | |
-| `WatermarkState` | re-export from core | | todo | |
+| `Watermark` | re-export from core | `Watermark` | ported |  |
+| `WatermarkDialogFieldName` | type | `WatermarkDialogFieldName` | ported |  |
+| `WatermarkDialogFields` | interface | `WatermarkDialogFields` | ported |  |
+| `WatermarkDialogKind` | type | `WatermarkDialogKind` | ported |  |
+| `WatermarkDialogLayout` | type | `WatermarkDialogLayout` | ported |  |
+| `WatermarkState` | re-export from core | `WatermarkState` | ported |  |
 | `WORD_DEFAULT_FONT` | re-export from core | | todo | |
 
 ## Tests
@@ -653,7 +653,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | --- | --- | --- | --- |
 | `packages/vue/test/bookmark-dialog.test.ts` | | todo | Task 6.4 |
 | `packages/vue/test/build-external.test.ts` | | todo | |
-| `packages/vue/test/chrome-composition.test.ts` | `packages/angular/src/lib/toolbar/toolbar.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-paragraph.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-table.spec.ts` | todo | Ported (task 4.1): the default bar follows the registry with slot ids; a hidden slot leaves the bar; a slot override keeps registry order and its class; `preset=false` renders only the composed content; Bold reflects live engine state; Escape closes the More panel before the header scope and the format painter; More closes when focus leaves. Ported (tasks 4.2 to 4.4): the contextual table chrome shows in a table only, collapses before the ordinary groups, leads the More panel, and its menu takes its own Escape; the line-spacing menu ticks the spacing in force, also one that no preset matches; a dropdown inside More takes the first Escape and the panel the second; Escape from a host input closes the editing-mode menu and keeps its default. Dropped: the deprecated `slot` prop of `Toolbar.Button`, which Angular never had. The reviewer-icon claim ports with task 10.1, and the More-behind-the-paragraph-dialog claim with task 6.3. The menu, context menu, navigation, hyperlink, loading, image, content control, header and footer, and font notice claims port with phases 5 to 9. |
+| `packages/vue/test/chrome-composition.test.ts` | `packages/angular/src/lib/toolbar/toolbar.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-paragraph.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-table.spec.ts` | todo | Ported (task 4.1): the default bar follows the registry with slot ids; a hidden slot leaves the bar; a slot override keeps registry order and its class; `preset=false` renders only the composed content; Bold reflects live engine state; Escape closes the More panel before the header scope and the format painter; More closes when focus leaves. Ported (tasks 4.2 to 4.4): the contextual table chrome shows in a table only, collapses before the ordinary groups, leads the More panel, and its menu takes its own Escape; the line-spacing menu ticks the spacing in force, also one that no preset matches; a dropdown inside More takes the first Escape and the panel the second; Escape from a host input closes the editing-mode menu and keeps its default. Dropped: the deprecated `slot` prop of `Toolbar.Button`, which Angular never had. Ported (task 6.3): More stays open behind the paragraph dialog that it opened, and the focus comes back to the line spacing trigger. The reviewer-icon claim ports with task 10.1. The menu, context menu, navigation, hyperlink, loading, image, content control, header and footer, and font notice claims port with phases 5 to 9. |
 | `packages/vue/test/chrome-popup-dismissal.test.ts` | `packages/angular/src/lib/chrome-popup-dismissal.spec.ts` | ported | Keeps: for the menu bar and the reviewers menu, an Escape from the pages closes the popup and stops there, and an Escape from a host input closes it and keeps its default; focus that moves to another control closes the menu bar and a picker, and the Escape then reaches that control; focus that moves into a host's modal dialog closes a picker. Added: the reviewers menu lists the authors, and the arrow keys and Home move between its rows. |
 | `packages/vue/test/content-control-widget-parts.test.ts` | | todo | Task 9.3 |
 | `packages/vue/test/content-lock-policy-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass the policy, so bold over a locked control succeeds only with it and the text stays; an equal new object does not warn; a changed value is ignored and warns once. |
@@ -695,7 +695,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/loading-continued.test.ts` | | todo | Task 9.5 |
 | `packages/vue/test/loading-indicator.test.ts` | | todo | Task 9.5 |
 | `packages/vue/test/locked-control-navigation-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass the mode; `'atomic'` steps over the control, the default steps into it. A later change is ignored and warns once, only for a real change. |
-| `packages/vue/test/menu-composition.test.ts` | `packages/angular/src/lib/menu/menu-bar.spec.ts` | ported | Keeps: the default bar renders every registry menu in order; a cancelled press on the pages closes the open menu; a host save handler runs from File › Save; a row override reaches the export submenu without a duplicate row; direct bar actions stay tabbable and follow command state; right-to-left bar arrows follow the visual order and the direction change. Changed: the Page Setup popup claims use `pageSetupHandler` until the `popups` input lands (tasks 6.1 and 6.3). Moved: the export dialog claims (missing converters, Markdown export dialog) port with task 6.5. Added: keyboard open and Escape, engine state on rows, Insert › Table, Review › Markup options, host menus, and the "⋯" menu. |
+| `packages/vue/test/menu-composition.test.ts` | `packages/angular/src/lib/menu/menu-bar.spec.ts` | ported | Keeps: the default bar renders every registry menu in order; a cancelled press on the pages closes the open menu; a host save handler runs from File › Save; a row override reaches the export submenu without a duplicate row; direct bar actions stay tabbable and follow command state; right-to-left bar arrows follow the visual order and the direction change. Changed: the Page Setup popup claims are in `packages/angular/src/lib/page-setup/page-setup-dialog.spec.ts` (task 6.3): File › Page setup opens the packaged dialog, a `pageSetup` registry component replaces it, and `false` opens nothing. Moved: the export dialog claims (missing converters, Markdown export dialog) port with task 6.5. Added: keyboard open and Escape, engine state on rows, Insert › Table, Review › Markup options, host menus, and the "⋯" menu. |
 | `packages/vue/test/menu-download-name.test.ts` | `packages/angular/src/lib/menu/download.spec.ts` | ported | Keeps: a long run of dots and spaces stays linear; device names with an extension and a padded suffix; truncation leaves no trailing dot or space. |
 | `packages/vue/test/menu-opening.test.ts` | `packages/angular/src/lib/menu/menu-bar.spec.ts` | ported | Keeps: the bar closes and its triggers are disabled while the next document opens, and they come back after the open. |
 | `packages/vue/test/merge-arrangement.test.ts` | | todo | Task 10.5 |
@@ -710,8 +710,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/page-number-opening.test.ts` | | todo | Task 9.4 |
 | `packages/vue/test/page-number.test.ts` | | todo | Task 9.4 |
 | `packages/vue/test/paginated-form-save.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts` | ported | Keeps: `save()` refuses (`invalidArgs`) a form field value that its format does not accept, and saves the value again after undo. The Angular spec uses `<docx-editor>`, because `PaginatedDocxEditor` is not ported. |
-| `packages/vue/test/paragraph-dialog.test.ts` | | todo | Task 6.3 |
-| `packages/vue/test/paragraph-hooks-lock-state.test.ts` | | todo | Task 6.3 |
+| `packages/vue/test/paragraph-dialog.test.ts` | `packages/angular/src/lib/paragraph/paragraph-dialog.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-paragraph.spec.ts` | ported | Keeps: the line spacing menu opens the dialog (a click test in the place of the source read); the dialog seeds every field from the selection; a mixed flag is indeterminate and survives OK; it opens focused, and Escape closes it; every mixed field can be resolved, and a mixed line spacing locks At until a rule is picked; only a changed field is written; an asChild Apply keeps the command and the packaged fields; a custom layout keeps Apply, places a packaged field (`docxDialogOutlet` for `Field`), and sets a value through `injectParagraphDialog`; a custom layout reads and sets the direction; a draft cannot apply to a replacement document; the direction field seeds and writes, opens blank when mixed, and stays mixed if untouched. |
+| `packages/vue/test/paragraph-hooks-lock-state.test.ts` | `packages/angular/src/lib/paragraph/paragraph-format.spec.ts` | todo | Ported (task 6.3): `injectParagraphFormat().isEnabled` follows the caret out of and back into a content lock, a data binding, and both, and viewing mode takes it away. The `useParagraphIndent` half ports with the rulers in task 9.4. |
 | `packages/vue/test/paragraph-style-labels.test.ts` | `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts` | ported | Keeps: built-in styles take the catalog label (also a localized style id such as `Ttulo1`), and the document's own styles keep their name. |
 | `packages/vue/test/popup-config.test.ts` | `packages/angular/src/lib/popups/popup-config.spec.ts` | todo | Ported (task 6.1): the root hosts only configured popups, inside the content, and honors live `false` entries; components keep their state across new registry objects and stay with their editor; a new session resets a draft, and a new entry object with the same component keeps it. Added: static inputs of an entry, and `DOCX_EDITOR_POPUPS` under the root's entries. The legacy flag, packaged hyperlink, and context menu translation claims port with task 6.7, and the note popup claim with task 9.2. |
 | `packages/vue/test/print-popup.test.ts` | | todo | Task 6.5 |
@@ -737,4 +737,4 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/use-comment-draft-request.test.ts` | | todo | Task 10.1 |
 | `packages/vue/test/use-editor-command.test.ts` | `packages/angular/src/lib/editor-command.spec.ts` | ported | Keeps: state follows a payload change with the same type; `execute` returns false on a refusal; many commands share the root listeners; custom equality stops slice updates; a burst collapses through the deferred notifier; outside a root the command is disabled; range binding groups keyboard repeats and cleans up; a held stepper starts before its own keydown handler. |
 | `packages/vue/test/viewport-rail.test.ts` | | todo | Task 10.1 |
-| `packages/vue/test/watermark-dialog.test.ts` | | todo | Task 6.3 |
+| `packages/vue/test/watermark-dialog.test.ts` | `packages/angular/src/lib/watermark/watermark-dialog.spec.ts` | ported | Keeps: Insert › Watermark opens the dialog, and Apply sets a text watermark in one undo step; it seeds from the existing watermark, and No watermark removes it; Cancel writes nothing; a chosen picture applies as a picture watermark, and the preview follows Auto and a scale; custom presets fill the preset select, and typed text shows Custom; the preview draws the draft and follows every field; Select picture works for any kind and switches to Picture; the first focus lands on the checked kind; an unchanged Apply writes nothing; No watermark on a document without one is no change; a custom layout places the preview part, which follows the draft. Changed: the spec stubs object URLs and `File.arrayBuffer`, which jsdom lacks. Dropped: the `Body` part with children, because an Angular host writes its own layout element. |

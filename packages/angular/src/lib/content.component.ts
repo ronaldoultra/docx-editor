@@ -20,6 +20,7 @@ import {
 } from '@docx-editor.dev/core/editor';
 import { injectDocxEditorContext } from './context';
 import { injectChromeDir, type DocxEditorDirection } from './i18n';
+import { DocxConfiguredDialogsComponent } from './dialog/configured-dialogs.component';
 import { DocxConfiguredPopupsComponent } from './popups/configured-popups.component';
 
 /**
@@ -33,7 +34,7 @@ import { DocxConfiguredPopupsComponent } from './popups/configured-popups.compon
  */
 @Component({
   selector: 'docx-editor-content',
-  imports: [DocxConfiguredPopupsComponent],
+  imports: [DocxConfiguredPopupsComponent, DocxConfiguredDialogsComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: { class: 'docx-content-mount' },
@@ -46,6 +47,7 @@ import { DocxConfiguredPopupsComponent } from './popups/configured-popups.compon
     ></div>
     <div class="docx-dialog-mount" [attr.dir]="chromeDir()"></div>
     <docx-configured-popups />
+    <docx-configured-dialogs />
   `,
 })
 export class DocxEditorContentComponent {

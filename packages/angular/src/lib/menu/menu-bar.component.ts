@@ -33,6 +33,7 @@ import { injectOwnScopeClassName } from '../color-mode';
 import { DOCX_EDITOR_SCOPED, injectDocxEditor } from '../context';
 import { injectEditorHostDocument, injectEditorState } from '../editor-state';
 import { injectChromeDir, type DocxEditorDirection } from '../i18n';
+import { injectDialogHost, type DocxEditorDialogKind } from '../dialog/dialog-host';
 import { DOCX_PARAGRAPH_DIALOG } from '../toolbar/toolbar-paragraph.component';
 import { injectToolbarOverflow } from '../toolbar/toolbar-overflow';
 import { injectPopupDismiss } from '../toolbar/toolbar-popup';
@@ -178,16 +179,16 @@ export class DocxEditorMenuComponent {
   readonly openHandler = input<(() => void) | undefined>(undefined);
   /** Replaces File › Save and Ctrl+S. */
   readonly saveHandler = input<(() => void) | undefined>(undefined);
-  /** Opens page setup from File › Page setup. Without it, the row is disabled. */
+  /** Opens page setup from File › Page setup. Defaults to the root's page setup dialog. */
   readonly pageSetupHandler = input<((trigger: HTMLElement | null) => void) | undefined>(undefined);
   /**
    * Opens the paragraph dialog from Format › Paragraph. Defaults to the dialog that the
-   * `DOCX_PARAGRAPH_DIALOG` token gives. Without either, the row is disabled.
+   * `DOCX_PARAGRAPH_DIALOG` token gives, then to the root's paragraph dialog.
    */
   readonly paragraphDialogHandler = input<((trigger: HTMLElement | null) => void) | undefined>(
     undefined
   );
-  /** Opens the watermark dialog from Insert › Watermark. Without it, the row is disabled. */
+  /** Opens the watermark dialog from Insert › Watermark. Defaults to the root's dialog. */
   readonly watermarkDialogHandler = input<((trigger: HTMLElement | null) => void) | undefined>(
     undefined
   );
@@ -202,6 +203,7 @@ export class DocxEditorMenuComponent {
   private readonly editor = injectDocxEditor();
   private readonly zone = inject(NgZone);
   private readonly paragraphDialog = inject(DOCX_PARAGRAPH_DIALOG, { optional: true });
+  private readonly dialogs = injectDialogHost();
   private readonly host: HTMLElement = inject(ElementRef).nativeElement;
   private readonly hostDocument = injectEditorHostDocument();
   private readonly ownMenus = contentChildren(DocxMenuComponent);
@@ -300,15 +302,25 @@ export class DocxEditorMenuComponent {
     return {
       open: ready ? (this.openHandler() ?? (() => this.packagedOpen())) : undefined,
       save: ready ? (this.saveHandler() ?? (() => this.packagedSave())) : undefined,
-      pageSetup: ready ? this.pageSetupHandler() : undefined,
+      pageSetup: ready ? (this.pageSetupHandler() ?? this.rootDialog('pageSetup')) : undefined,
       paragraphDialog: ready
-        ? (paragraph ?? (dialog ? (trigger) => dialog.open(trigger) : undefined))
+        ? (paragraph ?? (dialog ? (trigger) => dialog.open(trigger) : this.rootDialog('paragraph')))
         : undefined,
-      watermarkDialog: ready ? this.watermarkDialogHandler() : undefined,
+      watermarkDialog: ready
+        ? (this.watermarkDialogHandler() ?? this.rootDialog('watermark'))
+        : undefined,
       reportIssue: this.reportIssueHandler(),
       reportIssueRow: this.reportIssue(),
     };
   });
+
+  /** The opener of the root's dialog `kind`, or `undefined` outside a root. */
+  private rootDialog(
+    kind: DocxEditorDialogKind
+  ): ((trigger: HTMLElement | null) => void) | undefined {
+    const dialogs = this.dialogs;
+    return dialogs ? (trigger) => dialogs.open(kind, trigger) : undefined;
+  }
 
   /** @internal */
   protected onKey(event: KeyboardEvent): void {

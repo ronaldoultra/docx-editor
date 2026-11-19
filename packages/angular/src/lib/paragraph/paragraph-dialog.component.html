@@ -1,0 +1,508 @@
+<ng-template docxDialogDefault="header" #header>
+  <div *docxPartSlot="'header'; let content" data-docx-part="header" class="docx-dialog__header">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <span *docxPartSlot="'title'; let title" data-docx-part="title" class="docx-dialog__title">
+        @if (title) {
+          <ng-container [ngTemplateOutlet]="title" />
+        } @else {
+          {{ label('dialogs.paragraph.title') }}
+        }
+      </span>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:alignment">
+  <div
+    *docxPartSlot="'field:alignment'; let content"
+    docxDialogField="alignment"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-alignment'">
+        {{ label('dialogs.paragraph.alignment') }}
+      </label>
+      <select
+        class="docx-dialog__input"
+        [id]="id + '-alignment'"
+        [attr.aria-label]="label('dialogs.paragraph.alignment')"
+        (change)="setChoice('alignment', $event)"
+      >
+        @if (mixed().alignment) {
+          <option value="" selected>{{ label('dialogs.paragraph.mixed') }}</option>
+        }
+        @for (choice of ['left', 'center', 'right', 'justify']; track choice) {
+          <option [value]="choice" [selected]="!mixed().alignment && values().alignment === choice">
+            {{
+              label('dialogs.paragraph.align' + choice.charAt(0).toUpperCase() + choice.slice(1))
+            }}
+          </option>
+        }
+      </select>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:direction">
+  <div
+    *docxPartSlot="'field:direction'; let content"
+    docxDialogField="direction"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-direction'">
+        {{ label('dialogs.paragraph.direction') }}
+      </label>
+      <select
+        class="docx-dialog__input"
+        [id]="id + '-direction'"
+        [attr.aria-label]="label('dialogs.paragraph.direction')"
+        (change)="setDirection($event)"
+      >
+        @if (mixed().direction) {
+          <option value="" selected>{{ label('dialogs.paragraph.mixed') }}</option>
+        }
+        <option value="rtl" [selected]="!mixed().direction && values().direction === 'rtl'">
+          {{ label('dialogs.paragraph.directionRtl') }}
+        </option>
+        <option value="ltr" [selected]="!mixed().direction && values().direction === 'ltr'">
+          {{ label('dialogs.paragraph.directionLtr') }}
+        </option>
+      </select>
+    }
+  </div>
+</ng-template>
+
+@for (row of inchFields; track row.field) {
+  <ng-template [docxDialogDefault]="'field:' + row.field">
+    <div
+      *docxPartSlot="'field:' + row.field; let content"
+      [docxDialogField]="row.field"
+      class="docx-dialog__row"
+    >
+      @if (content) {
+        <ng-container [ngTemplateOutlet]="content" />
+      } @else {
+        <label class="docx-dialog__label" [attr.for]="id + '-' + row.key">
+          {{ label('dialogs.paragraph.' + row.key) }}
+        </label>
+        <input
+          type="number"
+          class="docx-dialog__input"
+          min="0"
+          step="0.1"
+          [id]="id + '-' + row.key"
+          [attr.aria-label]="label('dialogs.paragraph.' + row.key)"
+          [value]="mixed()[row.field] ? '' : inches(values()[row.field])"
+          [attr.placeholder]="mixed()[row.field] ? blankLabel(row.field) : null"
+          (input)="setInches(row.field, row.field, $event)"
+        />
+        <span class="docx-dialog__unit">{{ label('dialogs.paragraph.unitInches') }}</span>
+      }
+    </div>
+  </ng-template>
+}
+
+<ng-template docxDialogDefault="field:special">
+  <div
+    *docxPartSlot="'field:special'; let content"
+    docxDialogField="special"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-special'">
+        {{ label('dialogs.paragraph.special') }}
+      </label>
+      <select
+        class="docx-dialog__input"
+        [id]="id + '-special'"
+        [attr.aria-label]="label('dialogs.paragraph.special')"
+        (change)="setChoice('special', $event)"
+      >
+        @if (mixed().special) {
+          <option value="" selected>{{ blankLabel('special') }}</option>
+        }
+        <option value="none" [selected]="!mixed().special && values().special === 'none'">
+          {{ label('dialogs.paragraph.specialNone') }}
+        </option>
+        <option value="firstLine" [selected]="!mixed().special && values().special === 'firstLine'">
+          {{ label('dialogs.paragraph.specialFirstLine') }}
+        </option>
+        <option value="hanging" [selected]="!mixed().special && values().special === 'hanging'">
+          {{ label('dialogs.paragraph.specialHanging') }}
+        </option>
+      </select>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:specialBy" #specialBy>
+  @if (values().special !== 'none') {
+    <div
+      *docxPartSlot="'field:specialBy'; let content"
+      docxDialogField="specialBy"
+      class="docx-dialog__row"
+    >
+      @if (content) {
+        <ng-container [ngTemplateOutlet]="content" />
+      } @else {
+        <label class="docx-dialog__label" [attr.for]="id + '-by'">
+          {{ label('dialogs.paragraph.by') }}
+        </label>
+        <input
+          type="number"
+          class="docx-dialog__input"
+          min="0"
+          step="0.1"
+          [id]="id + '-by'"
+          [attr.aria-label]="label('dialogs.paragraph.by')"
+          [value]="mixed().special ? '' : inches(values().specialBy)"
+          [attr.placeholder]="mixed().special ? blankLabel('special') : null"
+          (input)="setInches('specialBy', 'special', $event)"
+        />
+        <span class="docx-dialog__unit">{{ label('dialogs.paragraph.unitInches') }}</span>
+      }
+    </div>
+  }
+</ng-template>
+
+<ng-template docxDialogDefault="field:tabStops">
+  <div *docxPartSlot="'field:tabStops'; let content" docxDialogField="tabStops">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <div class="docx-dialog__section-label">{{ label('dialogs.paragraph.tabStops') }}</div>
+      @for (stop of values().tabStops; track stop.positionTwips) {
+        <div class="docx-dialog__row">
+          <span class="docx-dialog__label docx-dialog__tab-position">
+            {{ label('dialogs.paragraph.tabPositionLabel', { position: tabPositionLabel(stop) }) }}
+          </span>
+          <span class="docx-dialog__tab-description">{{ label(tabLabels[stop.alignment]) }}</span>
+          <button
+            type="button"
+            class="docx-dialog__button"
+            [attr.aria-label]="
+              label('dialogs.paragraph.tabRemoveAt', { position: tabPositionLabel(stop) })
+            "
+            (click)="removeTabStop(stop)"
+          >
+            {{ label('dialogs.paragraph.tabRemove') }}
+          </button>
+        </div>
+      } @empty {
+        <!-- An empty list over a mixed selection is no "none of these has a tab stop". -->
+        <div class="docx-dialog__note">
+          {{
+            label(mixed().tabStops ? 'dialogs.paragraph.tabMixed' : 'dialogs.paragraph.tabEmpty')
+          }}
+        </div>
+      }
+      <div class="docx-dialog__row">
+        <label class="docx-dialog__label" [attr.for]="id + '-tabPosition'">
+          {{ label('dialogs.paragraph.tabPosition') }}
+        </label>
+        <input
+          type="number"
+          class="docx-dialog__input"
+          min="0"
+          step="0.1"
+          data-docx-tab-entry=""
+          [id]="id + '-tabPosition'"
+          [attr.aria-label]="label('dialogs.paragraph.tabPosition')"
+          [value]="inches(tabEntry().position)"
+          (input)="setTabPosition($event)"
+        />
+        <span class="docx-dialog__unit">{{ label('dialogs.paragraph.unitInches') }}</span>
+      </div>
+      <div class="docx-dialog__row">
+        <label class="docx-dialog__label" [attr.for]="id + '-tabAlignment'">
+          {{ label('dialogs.paragraph.tabAlignment') }}
+        </label>
+        <!-- No bar tab: the engine neither paints nor reports it, so the row would vanish. -->
+        <select
+          class="docx-dialog__input"
+          data-docx-tab-entry=""
+          [id]="id + '-tabAlignment'"
+          [attr.aria-label]="label('dialogs.paragraph.tabAlignment')"
+          (change)="setTabEntry({ alignment: $any(target($event).value) })"
+        >
+          @for (choice of ['left', 'center', 'right', 'decimal']; track choice) {
+            <option [value]="choice" [selected]="tabEntry().alignment === choice">
+              {{
+                label(
+                  'dialogs.paragraph.tabAlign' + choice.charAt(0).toUpperCase() + choice.slice(1)
+                )
+              }}
+            </option>
+          }
+        </select>
+      </div>
+      <div class="docx-dialog__row">
+        <label class="docx-dialog__label" [attr.for]="id + '-tabLeader'">
+          {{ label('dialogs.paragraph.tabLeader') }}
+        </label>
+        <select
+          class="docx-dialog__input"
+          data-docx-tab-entry=""
+          [id]="id + '-tabLeader'"
+          [attr.aria-label]="label('dialogs.paragraph.tabLeader')"
+          (change)="setTabEntry({ leader: $any(target($event).value) })"
+        >
+          <option value="none" [selected]="tabEntry().leader === 'none'">
+            {{ label('dialogs.paragraph.tabNone') }}
+          </option>
+          <option value="dot" [selected]="tabEntry().leader === 'dot'">
+            {{ label('dialogs.paragraph.tabLeaderDot') }}
+          </option>
+          <option value="hyphen" [selected]="tabEntry().leader === 'hyphen'">
+            {{ label('dialogs.paragraph.tabLeaderHyphen') }}
+          </option>
+          <option value="underscore" [selected]="tabEntry().leader === 'underscore'">
+            {{ label('dialogs.paragraph.tabLeaderUnderscore') }}
+          </option>
+        </select>
+      </div>
+      <div class="docx-dialog__row docx-dialog__row--actions">
+        <button type="button" class="docx-dialog__button" (click)="setTabStop()">
+          {{ label('dialogs.paragraph.tabAdd') }}
+        </button>
+        <button type="button" class="docx-dialog__button" (click)="clearTabStops()">
+          {{ label('dialogs.paragraph.tabClearAll') }}
+        </button>
+      </div>
+    }
+  </div>
+</ng-template>
+
+@for (field of pointFields; track field) {
+  <ng-template [docxDialogDefault]="'field:' + field">
+    <div
+      *docxPartSlot="'field:' + field; let content"
+      [docxDialogField]="field"
+      class="docx-dialog__row"
+    >
+      @if (content) {
+        <ng-container [ngTemplateOutlet]="content" />
+      } @else {
+        <label class="docx-dialog__label" [attr.for]="id + '-' + field">
+          {{ label('dialogs.paragraph.' + field) }}
+        </label>
+        <input
+          type="number"
+          class="docx-dialog__input"
+          min="0"
+          step="1"
+          [id]="id + '-' + field"
+          [attr.aria-label]="label('dialogs.paragraph.' + field)"
+          [value]="mixed()[field] ? '' : values()[field]"
+          [attr.placeholder]="mixed()[field] ? blankLabel(field) : null"
+          (input)="setPoints(field, $event)"
+        />
+        <span class="docx-dialog__unit">{{ label('dialogs.paragraph.unitPoints') }}</span>
+      }
+    </div>
+  </ng-template>
+}
+
+<ng-template docxDialogDefault="field:lineRule">
+  <div
+    *docxPartSlot="'field:lineRule'; let content"
+    docxDialogField="lineRule"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-lineSpacing'">
+        {{ label('dialogs.paragraph.lineSpacing') }}
+      </label>
+      <select
+        class="docx-dialog__input"
+        [id]="id + '-lineSpacing'"
+        [attr.aria-label]="label('dialogs.paragraph.lineSpacing')"
+        (change)="setLineRule($event)"
+      >
+        @if (mixed().lineSpacing) {
+          <option value="" selected>{{ label('dialogs.paragraph.mixed') }}</option>
+        }
+        <option
+          value="multiple"
+          [selected]="!mixed().lineSpacing && values().lineRule === 'multiple'"
+        >
+          {{ label('dialogs.paragraph.ruleMultiple') }}
+        </option>
+        <option
+          value="atLeast"
+          [selected]="!mixed().lineSpacing && values().lineRule === 'atLeast'"
+        >
+          {{ label('dialogs.paragraph.ruleAtLeast') }}
+        </option>
+        <option value="exact" [selected]="!mixed().lineSpacing && values().lineRule === 'exact'">
+          {{ label('dialogs.paragraph.ruleExactly') }}
+        </option>
+      </select>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:lineValue">
+  <div
+    *docxPartSlot="'field:lineValue'; let content"
+    docxDialogField="lineValue"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-at'">
+        {{ label('dialogs.paragraph.at') }}
+      </label>
+      <!-- Locked until a rule says what a number in it means: lines or points. -->
+      <input
+        type="number"
+        class="docx-dialog__input"
+        min="0.01"
+        [id]="id + '-at'"
+        [attr.aria-label]="label('dialogs.paragraph.at')"
+        [disabled]="mixed().lineSpacing"
+        [attr.step]="values().lineRule === 'multiple' ? '0.01' : '1'"
+        [value]="mixed().lineSpacing ? '' : values().lineValue"
+        (input)="setLineValue($event)"
+      />
+      <span class="docx-dialog__unit">
+        {{ values().lineRule === 'multiple' ? '' : label('dialogs.paragraph.unitPoints') }}
+      </span>
+    }
+  </div>
+</ng-template>
+
+@for (flag of flags; track flag) {
+  <ng-template [docxDialogDefault]="'field:' + flag">
+    <label
+      *docxPartSlot="'field:' + flag; let content"
+      [docxDialogField]="flag"
+      class="docx-dialog__checkbox-row"
+    >
+      @if (content) {
+        <ng-container [ngTemplateOutlet]="content" />
+      } @else {
+        <!-- A setting that the selection disagrees about is indeterminate, not unchecked. -->
+        <input
+          type="checkbox"
+          [checked]="values()[flag]"
+          [indeterminate]="mixed()[flag]"
+          (change)="setFlag(flag, $event)"
+        />
+        {{ label('dialogs.paragraph.' + flag) }}
+      }
+    </label>
+  </ng-template>
+}
+
+<ng-template docxDialogDefault="body" #body>
+  <div *docxPartSlot="'body'; let content" data-docx-part="body" class="docx-dialog__body">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <div class="docx-dialog__columns">
+        <div class="docx-dialog__column">
+          <div class="docx-dialog__section-label">{{ label('dialogs.paragraph.general') }}</div>
+          <ng-container docxDialogOutlet="field:alignment" />
+          <ng-container docxDialogOutlet="field:direction" />
+          <div class="docx-dialog__section-label">
+            {{ label('dialogs.paragraph.indentation') }}
+          </div>
+          <ng-container docxDialogOutlet="field:indentLeft" />
+          <ng-container docxDialogOutlet="field:indentRight" />
+          <ng-container docxDialogOutlet="field:special" />
+          <ng-container [ngTemplateOutlet]="specialBy" />
+          <ng-container docxDialogOutlet="field:tabStops" />
+        </div>
+        <div class="docx-dialog__column">
+          <div class="docx-dialog__section-label">{{ label('dialogs.paragraph.spacing') }}</div>
+          <ng-container docxDialogOutlet="field:spaceBefore" />
+          <ng-container docxDialogOutlet="field:spaceAfter" />
+          <ng-container docxDialogOutlet="field:lineRule" />
+          <ng-container docxDialogOutlet="field:lineValue" />
+          <ng-container docxDialogOutlet="field:contextualSpacing" />
+          <div class="docx-dialog__section-label">
+            {{ label('dialogs.paragraph.pagination') }}
+          </div>
+          <ng-container docxDialogOutlet="field:keepNext" />
+          <ng-container docxDialogOutlet="field:widowControl" />
+          <ng-container docxDialogOutlet="field:keepLines" />
+          <ng-container docxDialogOutlet="field:pageBreakBefore" />
+        </div>
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="footer" #footer>
+  <div *docxPartSlot="'footer'; let content" data-docx-part="footer" class="docx-dialog__footer">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <span
+        *docxPartSlot="'error'; let error"
+        data-docx-part="error"
+        class="docx-dialog__error"
+        role="alert"
+      >
+        @if (error) {
+          <ng-container [ngTemplateOutlet]="error" />
+        } @else {
+          {{ state.errors().form ?? '' }}
+        }
+      </span>
+      <button
+        *docxPartSlot="'cancel'; let cancel"
+        docxDialogCancel
+        class="docx-dialog__button docx-dialog__cancel"
+      >
+        @if (cancel) {
+          <ng-container [ngTemplateOutlet]="cancel" />
+        } @else {
+          {{ label('dialogs.paragraph.cancel') }}
+        }
+      </button>
+      <button
+        *docxPartSlot="'apply'; let apply"
+        docxDialogApply
+        class="docx-dialog__button docx-dialog__apply"
+      >
+        @if (apply) {
+          <ng-container [ngTemplateOutlet]="apply" />
+        } @else {
+          {{ label('dialogs.paragraph.ok') }}
+        }
+      </button>
+    }
+  </div>
+</ng-template>
+
+@if (open()) {
+  <docx-native-dialog
+    kind="paragraph"
+    [label]="label('dialogs.paragraph.title')"
+    [className]="className()"
+    [styles]="styles()"
+    (dismiss)="close()"
+    (dialogKeydown)="onKeydown($event)"
+  >
+    @if (preset()) {
+      <ng-container [ngTemplateOutlet]="header" />
+      <ng-container [ngTemplateOutlet]="body" />
+      <ng-container [ngTemplateOutlet]="footer" />
+    }
+    <ng-content />
+  </docx-native-dialog>
+}

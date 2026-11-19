@@ -52,7 +52,7 @@
 
 - [x] 6.1 Add the `DOCX_EDITOR_POPUPS` token, the popup renderer, and dialog parts; port the claims of `popup-config.test.ts`, `engine-popup-renderers.test.ts`, and `dialog-customization.test.ts`
 - [x] 6.2 Add the hyperlink popup; port the claims of `hyperlink-as-child.test.ts` and `link-row-chrome.test.ts`, and the `javascript:` URL claim of `security.test.ts`
-- [ ] 6.3 Add the page setup, paragraph, and watermark dialogs; port the claims of `paragraph-dialog.test.ts`, `paragraph-hooks-lock-state.test.ts`, and `watermark-dialog.test.ts`
+- [x] 6.3 Add the page setup, paragraph, and watermark dialogs; port the claims of `paragraph-dialog.test.ts`, `paragraph-hooks-lock-state.test.ts`, and `watermark-dialog.test.ts`
 - [ ] 6.4 Add the bookmark, split cell, text form field, and invalid text form field dialogs; port the claims of `bookmark-dialog.test.ts`
 - [ ] 6.5 Add the export and print dialogs; port the claims of `export-popup.test.ts` and `print-popup.test.ts`
 - [ ] 6.6 Add the equation popup; port the claims of `equation-popup.test.ts`

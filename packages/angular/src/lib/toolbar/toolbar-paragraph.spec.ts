@@ -137,9 +137,13 @@ describe('line spacing', () => {
     )!;
     await update(() => removeBefore.click());
     expect(editor().snapshot().formatting?.spaceBeforePt ?? 0).toBe(0);
-    // Without a paragraph dialog provider, the menu has no options row.
+    // Inside a root, the options row opens the root's paragraph dialog (task 6.3).
     await open();
-    expect(root.querySelector('[data-slot="paragraph.dialog"]')).toBeNull();
+    await update(() =>
+      root.querySelector<HTMLButtonElement>('[data-slot="paragraph.dialog"]')!.click()
+    );
+    expect(element.querySelector('[data-docx-dialog="paragraph"]')).not.toBeNull();
+    expect(root.querySelector('[role="menu"]')).toBeNull();
   });
 });
 
@@ -178,6 +182,34 @@ describe('alignment', () => {
     expect(panelOf(element)).not.toBeNull();
     await update(() => keydown(pages(), 'Escape'));
     expect(panelOf(element)).toBeNull();
+  });
+
+  test('the "⋯" panel stays open behind the paragraph dialog it opened, and the focus comes back', async () => {
+    useMockResizeObserver();
+    const { element, update } = await mount(headerDocx());
+    const toolbar = toolbarOf(element);
+    await measure(toolbar, 280);
+    await update(() =>
+      toolbar.querySelector<HTMLButtonElement>('[data-slot="toolbar.more"]')!.click()
+    );
+    const trigger = panelOf(element)!.querySelector<HTMLButtonElement>(
+      '[data-slot="list.lineSpacing"] [aria-haspopup]'
+    )!;
+    expect(trigger).not.toBeNull();
+    await update(() => {
+      trigger.focus();
+      trigger.click();
+    });
+    await update(() =>
+      panelOf(element)!.querySelector<HTMLButtonElement>('[data-slot="paragraph.dialog"]')!.click()
+    );
+    const dialog = element.querySelector<HTMLElement>('[role="dialog"][aria-modal="true"]');
+    expect(dialog).not.toBeNull();
+    expect(panelOf(element)).not.toBeNull();
+    await update(() => keydown(dialog!, 'Escape'));
+    expect(element.querySelector('[role="dialog"][aria-modal="true"]')).toBeNull();
+    expect(trigger.isConnected).toBe(true);
+    expect(document.activeElement).toBe(trigger);
   });
 });
 

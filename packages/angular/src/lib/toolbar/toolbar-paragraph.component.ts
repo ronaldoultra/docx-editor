@@ -18,6 +18,7 @@ import {
   type LineSpacingMenuRow,
 } from '@docx-editor.dev/core/editor';
 import { injectDocxEditor } from '../context';
+import { injectDialogHost } from '../dialog/dialog-host';
 import { injectEditorCommand, type EditorCommandState } from '../editor-command';
 import { injectEditorState } from '../editor-state';
 import { injectTranslation } from '../i18n';
@@ -142,13 +143,20 @@ export class DocxToolbarAlignmentComponent {
 
 /**
  * Opens the paragraph dialog from a toolbar control. The trigger receives the focus back when
- * the dialog closes. Provide it to show "Line spacing options…" in the line spacing menu.
+ * the dialog closes. Inside an editor root, the root's paragraph dialog is the default. Provide
+ * it to open your own dialog, or to show "Line spacing options…" outside a root.
  *
  * @public
  */
 export const DOCX_PARAGRAPH_DIALOG = new InjectionToken<{
   readonly open: (trigger: HTMLElement | null) => void;
 }>('DOCX_PARAGRAPH_DIALOG');
+
+/** The paragraph dialog of the enclosing root, or `null` outside a root. */
+function rootDialog(): { readonly open: (trigger: HTMLElement | null) => void } | null {
+  const host = injectDialogHost();
+  return host ? { open: (trigger) => host.open('paragraph', trigger) } : null;
+}
 
 const DEFAULT_PARAGRAPH_SPACE_PT = 10;
 // Remove writes an explicit zero, not nothing: without the attribute, the style's own space
@@ -283,7 +291,7 @@ export class DocxToolbarLineSpacingComponent {
    */
   protected readonly dialogCommand: EditorCommandState = injectEditorCommand('paragraph.dialog');
   /** @internal */
-  protected readonly dialog = inject(DOCX_PARAGRAPH_DIALOG, { optional: true });
+  protected readonly dialog = inject(DOCX_PARAGRAPH_DIALOG, { optional: true }) ?? rootDialog();
   /** @internal */
   protected readonly label = injectToolbarLabel();
   /** @internal */

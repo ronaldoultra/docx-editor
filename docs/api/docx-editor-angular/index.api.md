@@ -51,10 +51,21 @@ import { MarkedFontResolver } from '@docx-editor.dev/core/editor';
 import { ModelSignal } from '@angular/core';
 import { ObjectSlotValueMap } from '@docx-editor.dev/core/editor';
 import { OnInit } from '@angular/core';
+import { PageSetup } from '@docx-editor.dev/core/contracts/editor';
+import { ParagraphDialogFields } from '@docx-editor.dev/core/editor';
+import { ParagraphDialogMixed } from '@docx-editor.dev/core/editor';
+import { ParagraphFlagKey } from '@docx-editor.dev/core/editor';
+import { ParagraphFlagState } from '@docx-editor.dev/core/editor';
+import { ParagraphFormatRead } from '@docx-editor.dev/core/editor';
+import { ParagraphFormatUpdate } from '@docx-editor.dev/core/editor';
+import { ParagraphTabStop } from '@docx-editor.dev/core/editor';
 import { Provider } from '@angular/core';
 import { ReviewAuthorInfo } from '@docx-editor.dev/core/editor';
 import { Signal } from '@angular/core';
 import { SurfaceHyperlink } from '@docx-editor.dev/core/editor';
+import { TAB_ALIGNMENT_LABELS } from '@docx-editor.dev/core/editor';
+import { TabAlignment } from '@docx-editor.dev/core/editor';
+import { TabLeaderName } from '@docx-editor.dev/core/editor';
 import { TableChromeDraft } from '@docx-editor.dev/core/editor';
 import { TableChromeSlotId } from '@docx-editor.dev/core/editor';
 import { TemplateRef } from '@angular/core';
@@ -62,6 +73,8 @@ import { TFunction } from '@docx-editor.dev/core/i18n';
 import { ToolbarValueMap } from '@docx-editor.dev/core/editor';
 import { Translations } from '@docx-editor.dev/core/i18n';
 import { Type } from '@angular/core';
+import { Watermark } from '@docx-editor.dev/core/contracts/editor';
+import { WatermarkState } from '@docx-editor.dev/core/contracts/editor';
 import { WritableSignal } from '@angular/core';
 import { ZoomMode } from '@docx-editor.dev/core/contracts/editor';
 
@@ -170,6 +183,9 @@ export interface ContextMenuRowOverride {
     // (undocumented)
     readonly template: TemplateRef<unknown>;
 }
+
+// @public
+export const DEFAULT_WATERMARK_PRESETS: readonly string[];
 
 // @internal
 export interface DefaultEntry {
@@ -316,7 +332,7 @@ export class DocxContextMenuRowComponent {
 
 // @public
 export class DocxContextMenuRowDirective {
-    readonly docxContextMenuRow: _angular_core.InputSignal<"toc.refresh" | "toc.refreshPageNumbers" | "toc.remove" | "alignment.center" | "alignment.justify" | "table.splitCell" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.selectTable" | "table.mergeCells" | "table.borderColor" | "table.borderWidth" | "contentControl.remove" | "contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.protectDocument" | "history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.right" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.painter" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.authors" | "review.editingMode" | "image.insert" | "image.properties" | "image.editChart" | "image.formatShape" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderStyle" | "table.cellFill" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark" | "edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.cellVerticalAlignment">;
+    readonly docxContextMenuRow: _angular_core.InputSignal<"alignment.center" | "alignment.justify" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.selectTable" | "table.mergeCells" | "table.splitCell" | "table.borderColor" | "table.borderWidth" | "toc.refresh" | "toc.refreshPageNumbers" | "toc.remove" | "contentControl.remove" | "contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.protectDocument" | "history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.right" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.painter" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.authors" | "review.editingMode" | "image.insert" | "image.properties" | "image.editChart" | "image.formatShape" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderStyle" | "table.cellFill" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark" | "edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.cellVerticalAlignment">;
     readonly docxContextMenuRowHidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
     readonly template: TemplateRef<unknown>;
     // (undocumented)
@@ -365,6 +381,16 @@ export class DocxDialogFieldDirective {
     static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxDialogFieldDirective, "[docxDialogField]", never, { "docxDialogField": { "alias": "docxDialogField"; "isSignal": true; "required": true; }; }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxDialogFieldDirective, never>;
+}
+
+// @public
+export class DocxDialogOutletDirective {
+    constructor();
+    readonly docxDialogOutlet: _angular_core.InputSignal<string>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxDialogOutletDirective, "[docxDialogOutlet]", never, { "docxDialogOutlet": { "alias": "docxDialogOutlet"; "isSignal": true; "required": true; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxDialogOutletDirective, never>;
 }
 
 // @public
@@ -551,6 +577,26 @@ export interface DocxEditorContextMenuOptions {
 }
 
 // @public
+export abstract class DocxEditorDialogBase {
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    protected close(): void;
+    readonly closed: _angular_core.OutputEmitterRef<void>;
+    readonly closeHandler: _angular_core.InputSignal<(() => void) | undefined>;
+    // @internal (undocumented)
+    protected label(key: string, params?: Record<string, string | number>): string;
+    readonly open: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly preset: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly styles: _angular_core.InputSignal<Readonly<Record<string, string>> | undefined>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxEditorDialogBase, never, never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "closeHandler": { "alias": "closeHandler"; "isSignal": true; "required": false; }; "open": { "alias": "open"; "isSignal": true; "required": false; }; "preset": { "alias": "preset"; "isSignal": true; "required": false; }; "styles": { "alias": "styles"; "isSignal": true; "required": false; }; }, { "closed": "closed"; }, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorDialogBase, never>;
+}
+
+// @public
+export type DocxEditorDialogKind = 'pageSetup' | 'paragraph' | 'watermark';
+
+// @public
 export type DocxEditorDirection = 'ltr' | 'rtl';
 
 // @public
@@ -696,6 +742,120 @@ export interface DocxEditorMenuOptions {
 export type DocxEditorMode = DocxEditorRootMode;
 
 // @public
+export class DocxEditorPageSetupDialogComponent extends DocxEditorDialogBase {
+    constructor();
+    // @internal (undocumented)
+    protected inches(field: PageSetupMarginField): number;
+    // @internal (undocumented)
+    protected readonly margins: readonly {
+        field: PageSetupMarginField;
+        side: string;
+    }[];
+    // @internal (undocumented)
+    protected onKeydown(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected readonly refused: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected selectValue(event: Event): string;
+    // @internal (undocumented)
+    protected setMargin(field: PageSetupMarginField, event: Event): void;
+    // @internal (undocumented)
+    protected setOrientation(next: 'portrait' | 'landscape'): void;
+    // @internal (undocumented)
+    protected setScope(event: Event): void;
+    // @internal (undocumented)
+    protected setSize(event: Event): void;
+    // @internal (undocumented)
+    protected readonly setup: PageSetupState;
+    // @internal (undocumented)
+    protected readonly sizeIndex: Signal<number>;
+    // @internal (undocumented)
+    protected readonly sizes: readonly {
+        readonly height: number;
+        readonly labelKey: string;
+        readonly width: number;
+    }[];
+    // @internal (undocumented)
+    protected readonly state: DocxDialogState<PageSetupDialogFields>;
+    // @internal (undocumented)
+    protected readonly values: _angular_core.WritableSignal<PageSetupDialogFields>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorPageSetupDialogComponent, "docx-editor-page-setup-dialog", never, {}, {}, ["parts"], ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorPageSetupDialogComponent, never>;
+}
+
+// @public
+export class DocxEditorParagraphDialogComponent extends DocxEditorDialogBase {
+    constructor();
+    // @internal (undocumented)
+    protected blankLabel(key: ParagraphMixedKey): string;
+    // @internal (undocumented)
+    protected clearTabStops(): void;
+    // @internal (undocumented)
+    protected readonly flags: readonly ParagraphFlagKey[];
+    // @internal (undocumented)
+    protected readonly format: ParagraphFormatState;
+    // @internal (undocumented)
+    protected readonly id: string;
+    // @internal (undocumented)
+    protected inches(twips: number): number;
+    // @internal (undocumented)
+    protected readonly inchFields: readonly {
+        field: ParagraphInchField;
+        key: string;
+    }[];
+    // @internal (undocumented)
+    protected readonly indentUnknown: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly mixed: _angular_core.WritableSignal<ParagraphDialogMixed>;
+    // @internal (undocumented)
+    protected onKeydown(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected readonly pointFields: readonly ParagraphPointField[];
+    // @internal (undocumented)
+    protected readonly refused: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected removeTabStop(stop: ParagraphTabStop): void;
+    // @internal (undocumented)
+    protected setChoice(field: 'alignment' | 'special', event: Event): void;
+    // @internal (undocumented)
+    protected setDirection(event: Event): void;
+    // @internal (undocumented)
+    protected setFlag(field: ParagraphFlagKey, event: Event): void;
+    // @internal (undocumented)
+    protected setInches(field: ParagraphInchField | 'specialBy', mixedKey: ParagraphMixedKey, event: Event): void;
+    // @internal (undocumented)
+    protected setLineRule(event: Event): void;
+    // @internal (undocumented)
+    protected setLineValue(event: Event): void;
+    // @internal (undocumented)
+    protected setPoints(field: ParagraphPointField, event: Event): void;
+    // @internal (undocumented)
+    protected setTabEntry(change: Partial<ParagraphTabEntry>): void;
+    // @internal (undocumented)
+    protected setTabPosition(event: Event): void;
+    // @internal
+    protected setTabStop(): boolean;
+    // @internal (undocumented)
+    protected readonly state: ParagraphDialogState;
+    // @internal (undocumented)
+    protected readonly tabEntry: _angular_core.WritableSignal<ParagraphTabEntry>;
+    // @internal (undocumented)
+    protected readonly tabLabels: typeof TAB_ALIGNMENT_LABELS;
+    // @internal (undocumented)
+    protected tabPositionLabel(stop: ParagraphTabStop): string;
+    // @internal (undocumented)
+    protected target(event: Event): HTMLInputElement;
+    // @internal (undocumented)
+    protected readonly values: _angular_core.WritableSignal<ParagraphDialogFields>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorParagraphDialogComponent, "docx-editor-paragraph-dialog", never, {}, {}, ["parts"], ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorParagraphDialogComponent, never>;
+}
+
+// @public
 export type DocxEditorPopup<Inputs extends object = Record<string, never>> = false | Type<unknown> | DocxEditorPopupEntry;
 
 // @public
@@ -721,6 +881,15 @@ export interface DocxEditorPopups {
     hyperlink?: DocxEditorPopup;
     invalidTextFormField?: DocxEditorPopup<{
         session: InvalidTextFormFieldSession;
+    }>;
+    pageSetup?: DocxEditorPopup<{
+        closeHandler: () => void;
+    }>;
+    paragraph?: DocxEditorPopup<{
+        closeHandler: () => void;
+    }>;
+    watermark?: DocxEditorPopup<{
+        closeHandler: () => void;
     }>;
 }
 
@@ -844,6 +1013,110 @@ export class DocxEditorViewportComponent {
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorViewportComponent, "docx-editor-viewport", never, {}, {}, never, ["*"], true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorViewportComponent, never>;
+}
+
+// @public
+export class DocxEditorWatermarkDialogComponent extends DocxEditorDialogBase {
+    constructor();
+    // @internal (undocumented)
+    protected readonly accept: string;
+    // @internal (undocumented)
+    protected readonly boxes: readonly {
+        field: 'washout' | 'bold' | 'italic';
+        kind: WatermarkDialogFields['kind'];
+    }[];
+    // @internal (undocumented)
+    protected readonly canApply: Signal<boolean>;
+    // @internal (undocumented)
+    protected colorValue(): string;
+    // @internal (undocumented)
+    protected readonly errorText: Signal<string | null>;
+    // @internal (undocumented)
+    protected readonly fontChoices: Signal<readonly string[]>;
+    // @internal (undocumented)
+    protected readonly fonts: _angular_core.WritableSignal<readonly string[]>;
+    // @internal (undocumented)
+    protected readonly id: string;
+    // @internal (undocumented)
+    protected readonly kinds: readonly {
+        field: WatermarkDialogFieldName;
+        key: string;
+        kind: WatermarkDialogFields['kind'];
+    }[];
+    // @internal (undocumented)
+    protected readonly layouts: readonly ('diagonal' | 'horizontal')[];
+    // @internal (undocumented)
+    protected onFile(event: Event): void;
+    // @internal (undocumented)
+    protected onKeydown(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected percent(transparency: number): number;
+    // @internal (undocumented)
+    protected percentLabel(factor: number): string;
+    // @internal (undocumented)
+    protected readonly pictureFailed: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly presetChoices: Signal<readonly string[]>;
+    readonly presets: _angular_core.InputSignal<readonly string[] | undefined>;
+    // @internal (undocumented)
+    protected presetValue(): string;
+    // @internal (undocumented)
+    protected readonly refusal: _angular_core.WritableSignal<string | null>;
+    // @internal (undocumented)
+    protected readonly scales: readonly (number | null)[];
+    // @internal (undocumented)
+    protected selectPicture(input: HTMLInputElement): void;
+    // @internal (undocumented)
+    protected setChoice(name: 'scale' | 'fontSizePt', event: Event): void;
+    // @internal (undocumented)
+    protected setColor(event: Event): void;
+    // @internal (undocumented)
+    protected setPreset(event: Event): void;
+    // @internal (undocumented)
+    protected setTransparency(event: Event): void;
+    // @internal (undocumented)
+    protected setValue<K extends keyof WatermarkDialogFields>(name: K, value: WatermarkDialogFields[K]): void;
+    // @internal (undocumented)
+    protected readonly sizes: readonly (number | null)[];
+    // @internal (undocumented)
+    protected readonly state: DocxDialogState<WatermarkDialogFields>;
+    // @internal (undocumented)
+    protected target(event: Event): HTMLInputElement;
+    // @internal (undocumented)
+    protected readonly values: _angular_core.WritableSignal<WatermarkDialogFields>;
+    // @internal (undocumented)
+    protected readonly watermark: WatermarkCommandState;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorWatermarkDialogComponent, "docx-editor-watermark-dialog", never, { "presets": { "alias": "presets"; "isSignal": true; "required": false; }; }, {}, ["parts"], ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorWatermarkDialogComponent, never>;
+}
+
+// @public
+export class DocxEditorWatermarkPreviewComponent {
+    constructor();
+    // @internal (undocumented)
+    protected readonly fontSize: number;
+    // @internal (undocumented)
+    protected readonly lines: Signal<readonly WatermarkPreviewRect[]>;
+    // @internal (undocumented)
+    protected readonly page: Signal<WatermarkPreviewPage>;
+    // @internal (undocumented)
+    protected readonly picture: Signal<WatermarkPreviewRect | null>;
+    // @internal (undocumented)
+    protected readonly pictureUrl: _angular_core.WritableSignal<string | null>;
+    // @internal (undocumented)
+    protected readonly text: Signal<WatermarkPreviewText | null>;
+    // @internal (undocumented)
+    protected transform(text: WatermarkPreviewText): string;
+    // @internal (undocumented)
+    protected readonly values: Signal<WatermarkDialogFields>;
+    // @internal (undocumented)
+    protected readonly washout: string;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorWatermarkPreviewComponent, "docx-editor-watermark-preview", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorWatermarkPreviewComponent, never>;
 }
 
 // @public
@@ -1968,6 +2241,18 @@ export function injectHyperlinkPopup(): HyperlinkPopup;
 export function injectHyperlinkPopupInstance(active?: boolean): HyperlinkPopup;
 
 // @public
+export function injectPageSetup(): PageSetupState;
+
+// @public
+export function injectPageSetupDialog(): DocxDialogState<PageSetupDialogFields>;
+
+// @public
+export function injectParagraphDialog(): ParagraphDialogState;
+
+// @public
+export function injectParagraphFormat(): ParagraphFormatState;
+
+// @public
 export function injectParagraphStyle(): ParagraphStyleState;
 
 // @public
@@ -1981,6 +2266,12 @@ export function injectToolbarLabel(): Signal<(key: string) => string>;
 
 // @public
 export function injectTranslation(): DocxEditorTranslation;
+
+// @public
+export function injectWatermark(): WatermarkCommandState;
+
+// @public
+export function injectWatermarkDialog(): DocxDialogState<WatermarkDialogFields>;
 
 // @public
 export function injectZoom(): ZoomState;
@@ -2035,6 +2326,57 @@ export interface ModeOption {
 
 export { ObjectSlotValueMap }
 
+export { PageSetup }
+
+// @public
+export interface PageSetupDialogFields {
+    // (undocumented)
+    marginBottom: number;
+    // (undocumented)
+    marginLeft: number;
+    // (undocumented)
+    marginRight: number;
+    // (undocumented)
+    marginTop: number;
+    // (undocumented)
+    orientation: 'portrait' | 'landscape';
+    // (undocumented)
+    pageHeight: number;
+    // (undocumented)
+    pageWidth: number;
+    // (undocumented)
+    scope: 'document' | 'section';
+}
+
+// @internal
+export type PageSetupMarginField = 'marginTop' | 'marginBottom' | 'marginLeft' | 'marginRight';
+
+// @public
+export interface PageSetupState {
+    apply(update: PageSetupUpdate): boolean;
+    readonly isEnabled: Signal<boolean>;
+    readonly pageSetup: Signal<PageSetup | null>;
+}
+
+// @public
+export interface PageSetupUpdate {
+    // (undocumented)
+    readonly marginBottomTwips?: number;
+    // (undocumented)
+    readonly marginLeftTwips?: number;
+    // (undocumented)
+    readonly marginRightTwips?: number;
+    // (undocumented)
+    readonly marginTopTwips?: number;
+    // (undocumented)
+    readonly orientation?: 'portrait' | 'landscape';
+    // (undocumented)
+    readonly pageHeightTwips?: number;
+    // (undocumented)
+    readonly pageWidthTwips?: number;
+    readonly scope?: 'document' | 'section';
+}
+
 // @internal
 export type PanelRow = {
     readonly key: string;
@@ -2067,6 +2409,37 @@ export interface PanelSection {
     readonly rows: readonly PanelRow[];
 }
 
+export { ParagraphDialogFields }
+
+export { ParagraphDialogMixed }
+
+// @public
+export interface ParagraphDialogState extends DocxDialogState<ParagraphDialogFields> {
+    readonly mixed: Signal<ParagraphDialogMixed>;
+}
+
+export { ParagraphFlagState }
+
+export { ParagraphFormatRead }
+
+// @public
+export interface ParagraphFormatState {
+    apply(update: ParagraphFormatUpdate): boolean;
+    readonly format: Signal<ParagraphFormatRead | null>;
+    readonly isEnabled: Signal<boolean>;
+}
+
+export { ParagraphFormatUpdate }
+
+// @internal
+export type ParagraphInchField = 'indentLeft' | 'indentRight';
+
+// @internal
+export type ParagraphMixedKey = keyof ParagraphDialogMixed;
+
+// @internal
+export type ParagraphPointField = 'spaceBefore' | 'spaceAfter';
+
 // @public
 export interface ParagraphStyleOption {
     readonly name: string;
@@ -2089,6 +2462,18 @@ export interface ParagraphStyleState {
     readonly setValue: (styleId: string) => void;
     readonly value: Signal<string | null>;
 }
+
+// @internal
+export interface ParagraphTabEntry {
+    // (undocumented)
+    readonly alignment: TabAlignment;
+    // (undocumented)
+    readonly leader: TabLeaderName;
+    // (undocumented)
+    readonly position: number;
+}
+
+export { ParagraphTabStop }
 
 // @public
 export function provideDocxEditorI18n(i18n?: Translations, options?: DocxEditorI18nOptions): Provider[];
@@ -2177,6 +2562,91 @@ export type ToolbarArrangementKey = ChromeSlotId | 'alignment';
 export { ToolbarValueMap }
 
 export { Translations }
+
+export { Watermark }
+
+// @public
+export interface WatermarkCommandState {
+    apply(watermark: Watermark | null): ExecResult;
+    readonly isEnabled: Signal<boolean>;
+    read(): Watermark | null;
+    readonly watermark: Signal<WatermarkState | null>;
+}
+
+// @public
+export type WatermarkDialogFieldName = 'noWatermark' | 'pictureWatermark' | 'picture' | 'scale' | 'washout' | 'textWatermark' | 'preset' | 'text' | 'fontFamily' | 'fontSizePt' | 'bold' | 'italic' | 'transparency' | 'color' | 'layout';
+
+// @public
+export interface WatermarkDialogFields {
+    // (undocumented)
+    bold: boolean;
+    // (undocumented)
+    color: string;
+    // (undocumented)
+    fontFamily: string;
+    fontSizePt: number | null;
+    imageData: Uint8Array | null;
+    imageName: string | null;
+    // (undocumented)
+    italic: boolean;
+    // (undocumented)
+    kind: WatermarkDialogKind;
+    // (undocumented)
+    layout: WatermarkDialogLayout;
+    scale: number | null;
+    // (undocumented)
+    text: string;
+    // (undocumented)
+    transparency: number;
+    // (undocumented)
+    washout: boolean;
+}
+
+// @public
+export type WatermarkDialogKind = 'none' | 'picture' | 'text';
+
+// @public
+export type WatermarkDialogLayout = NonNullable<WatermarkState['layout']>;
+
+// @internal
+export interface WatermarkPreviewPage {
+    // (undocumented)
+    readonly area: WatermarkPreviewRect;
+    // (undocumented)
+    readonly height: number;
+    // (undocumented)
+    readonly width: number;
+}
+
+// @internal
+export interface WatermarkPreviewRect {
+    // (undocumented)
+    readonly height: number;
+    // (undocumented)
+    readonly width: number;
+    // (undocumented)
+    readonly x: number;
+    // (undocumented)
+    readonly y: number;
+}
+
+// @internal
+export interface WatermarkPreviewText {
+    readonly box: WatermarkPreviewRect;
+    readonly fill: string;
+    readonly fontFamily: string;
+    // (undocumented)
+    readonly fontStyle: 'italic' | 'normal';
+    // (undocumented)
+    readonly fontWeight: 'bold' | 'normal';
+    // (undocumented)
+    readonly opacity: number;
+    readonly rotation: number;
+    // (undocumented)
+    readonly text: string;
+}
+
+export { WatermarkState }
 
 export { ZoomMode }
 

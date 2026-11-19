@@ -74,6 +74,22 @@ export interface DocxEditorPopups {
   equation?: DocxEditorPopup;
   /** A context menu that the editor hosts beside the pages. */
   contextMenu?: DocxEditorPopup;
+  /**
+   * The page setup dialog that File › Page setup opens. Inputs: `closeHandler`. Omitted, the
+   * editor renders `<docx-editor-page-setup-dialog>`. `false` opens nothing.
+   */
+  pageSetup?: DocxEditorPopup<{ closeHandler: () => void }>;
+  /**
+   * The paragraph dialog that Format › Paragraph and the line spacing menu open. Inputs:
+   * `closeHandler`. Omitted, the editor renders `<docx-editor-paragraph-dialog>`. `false` opens
+   * nothing.
+   */
+  paragraph?: DocxEditorPopup<{ closeHandler: () => void }>;
+  /**
+   * The watermark dialog that Insert › Watermark opens. Inputs: `closeHandler`. Omitted, the
+   * editor renders `<docx-editor-watermark-dialog>`. `false` opens nothing.
+   */
+  watermark?: DocxEditorPopup<{ closeHandler: () => void }>;
 }
 
 /**

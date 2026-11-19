@@ -1,0 +1,439 @@
+<ng-template docxDialogDefault="header" #header>
+  <div *docxPartSlot="'header'; let content" data-docx-part="header" class="docx-dialog__header">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <span *docxPartSlot="'title'; let title" data-docx-part="title" class="docx-dialog__title">
+        @if (title) {
+          <ng-container [ngTemplateOutlet]="title" />
+        } @else {
+          {{ label('dialogs.watermark.title') }}
+        }
+      </span>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="preview">
+  <div
+    *docxPartSlot="'preview'; let content"
+    data-docx-part="preview"
+    aria-hidden="true"
+    class="docx-dialog__preview"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <docx-editor-watermark-preview />
+    }
+  </div>
+</ng-template>
+
+<!-- The three kinds. -->
+@for (kind of kinds; track kind.field) {
+  <ng-template [docxDialogDefault]="'field:' + kind.field">
+    <label
+      *docxPartSlot="'field:' + kind.field; let content"
+      [docxDialogField]="kind.field"
+      class="docx-dialog__checkbox-row"
+    >
+      @if (content) {
+        <ng-container [ngTemplateOutlet]="content" />
+      } @else {
+        <input
+          type="radio"
+          [name]="id + '-kind'"
+          [checked]="values().kind === kind.kind"
+          (change)="setValue('kind', kind.kind)"
+        />
+        <span [id]="id + '-' + kind.field + '-label'">{{
+          label('dialogs.watermark.' + kind.key)
+        }}</span>
+      }
+    </label>
+  </ng-template>
+}
+
+<ng-template docxDialogDefault="field:picture">
+  <div
+    *docxPartSlot="'field:picture'; let content"
+    docxDialogField="picture"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <button type="button" class="docx-dialog__button" (click)="selectPicture(file)">
+        {{ label('dialogs.watermark.selectPicture') }}
+      </button>
+      <span class="docx-dialog__hint" data-docx-watermark-picture="">
+        @if (pictureFailed()) {
+          {{ label('dialogs.watermark.pictureFailed') }}
+        } @else if (values().imageData) {
+          {{ values().imageName ?? label('dialogs.watermark.currentPicture') }}
+        } @else {
+          {{ label('dialogs.watermark.noPictureSelected') }}
+        }
+      </span>
+      <input
+        #file
+        type="file"
+        hidden
+        [accept]="accept"
+        [attr.aria-label]="label('dialogs.watermark.selectPicture')"
+        (change)="onFile($event)"
+      />
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:scale">
+  <div *docxPartSlot="'field:scale'; let content" docxDialogField="scale" class="docx-dialog__row">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-scale'">
+        {{ label('dialogs.watermark.scale') }}
+      </label>
+      <select
+        class="docx-dialog__select"
+        [id]="id + '-scale'"
+        [disabled]="values().kind !== 'picture'"
+        (change)="setChoice('scale', $event)"
+      >
+        @for (scale of scales; track $index) {
+          <option [value]="scale === null ? 'auto' : scale" [selected]="values().scale === scale">
+            {{ scale === null ? label('dialogs.watermark.auto') : percentLabel(scale) }}
+          </option>
+        }
+        @if (values().scale !== null && !scales.includes(values().scale)) {
+          <option [value]="values().scale" selected>{{ percentLabel(values().scale!) }}</option>
+        }
+      </select>
+    }
+  </div>
+</ng-template>
+
+@for (box of boxes; track box.field) {
+  <ng-template [docxDialogDefault]="'field:' + box.field">
+    <label
+      *docxPartSlot="'field:' + box.field; let content"
+      [docxDialogField]="box.field"
+      class="docx-dialog__checkbox-row"
+    >
+      @if (content) {
+        <ng-container [ngTemplateOutlet]="content" />
+      } @else {
+        <input
+          type="checkbox"
+          [disabled]="values().kind !== box.kind"
+          [checked]="values()[box.field]"
+          (change)="setValue(box.field, target($event).checked)"
+        />
+        <span>{{ label('dialogs.watermark.' + box.field) }}</span>
+      }
+    </label>
+  </ng-template>
+}
+
+<ng-template docxDialogDefault="field:preset">
+  <div
+    *docxPartSlot="'field:preset'; let content"
+    docxDialogField="preset"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-preset'">
+        {{ label('dialogs.watermark.preset') }}
+      </label>
+      <select
+        class="docx-dialog__select"
+        [id]="id + '-preset'"
+        [disabled]="values().kind !== 'text'"
+        (change)="setPreset($event)"
+      >
+        <option value="" [selected]="presetValue() === ''">
+          {{ label('dialogs.watermark.custom') }}
+        </option>
+        @for (choice of presetChoices(); track choice) {
+          <option [value]="choice" [selected]="presetValue() === choice">{{ choice }}</option>
+        }
+      </select>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:text">
+  <div *docxPartSlot="'field:text'; let content" docxDialogField="text" class="docx-dialog__row">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-text'">
+        {{ label('dialogs.watermark.textLabel') }}
+      </label>
+      <input
+        type="text"
+        class="docx-dialog__input"
+        maxlength="256"
+        [id]="id + '-text'"
+        [disabled]="values().kind !== 'text'"
+        [value]="values().text"
+        (input)="setValue('text', target($event).value)"
+      />
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:fontFamily">
+  <div
+    *docxPartSlot="'field:fontFamily'; let content"
+    docxDialogField="fontFamily"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-fontFamily'">
+        {{ label('dialogs.watermark.font') }}
+      </label>
+      <select
+        class="docx-dialog__select"
+        [id]="id + '-fontFamily'"
+        [disabled]="values().kind !== 'text'"
+        (change)="setValue('fontFamily', target($event).value)"
+      >
+        @for (family of fontChoices(); track family) {
+          <option [value]="family" [selected]="values().fontFamily === family">
+            {{ family }}
+          </option>
+        }
+      </select>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:fontSizePt">
+  <div
+    *docxPartSlot="'field:fontSizePt'; let content"
+    docxDialogField="fontSizePt"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-fontSizePt'">
+        {{ label('dialogs.watermark.size') }}
+      </label>
+      <select
+        class="docx-dialog__select"
+        [id]="id + '-fontSizePt'"
+        [disabled]="values().kind !== 'text'"
+        (change)="setChoice('fontSizePt', $event)"
+      >
+        @for (size of sizes; track $index) {
+          <option [value]="size === null ? 'auto' : size" [selected]="values().fontSizePt === size">
+            {{ size === null ? label('dialogs.watermark.auto') : size }}
+          </option>
+        }
+        @if (values().fontSizePt !== null && !sizes.includes(values().fontSizePt)) {
+          <option [value]="values().fontSizePt" selected>{{ values().fontSizePt }}</option>
+        }
+      </select>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:transparency">
+  <div
+    *docxPartSlot="'field:transparency'; let content"
+    docxDialogField="transparency"
+    class="docx-dialog__row"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-transparency'">
+        {{ label('dialogs.watermark.transparency') }}
+      </label>
+      <input
+        type="range"
+        class="docx-dialog__range"
+        min="0"
+        max="100"
+        step="1"
+        [disabled]="values().kind !== 'text'"
+        [attr.aria-label]="label('dialogs.watermark.transparency')"
+        [value]="percent(values().transparency)"
+        (input)="setTransparency($event)"
+      />
+      <input
+        type="number"
+        class="docx-dialog__input docx-dialog__input--narrow"
+        min="0"
+        max="100"
+        step="1"
+        [id]="id + '-transparency'"
+        [disabled]="values().kind !== 'text'"
+        [value]="percent(values().transparency)"
+        (input)="setTransparency($event)"
+      />
+      <span class="docx-dialog__unit">%</span>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:color">
+  <div *docxPartSlot="'field:color'; let content" docxDialogField="color" class="docx-dialog__row">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <label class="docx-dialog__label" [attr.for]="id + '-color'">
+        {{ label('dialogs.watermark.color') }}
+      </label>
+      <input
+        type="color"
+        class="docx-dialog__color"
+        [id]="id + '-color'"
+        [disabled]="values().kind !== 'text'"
+        [value]="colorValue()"
+        (input)="setColor($event)"
+      />
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="field:layout">
+  <div
+    *docxPartSlot="'field:layout'; let content"
+    docxDialogField="layout"
+    class="docx-dialog__row"
+    role="radiogroup"
+    [attr.aria-label]="label('dialogs.watermark.layout')"
+  >
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <span class="docx-dialog__label">{{ label('dialogs.watermark.layout') }}</span>
+      @for (layout of layouts; track layout) {
+        <label class="docx-dialog__checkbox-row">
+          <input
+            type="radio"
+            [name]="id + '-layout'"
+            [disabled]="values().kind !== 'text'"
+            [checked]="values().layout === layout"
+            (change)="setValue('layout', layout)"
+          />
+          <span>{{ label('dialogs.watermark.' + layout) }}</span>
+        </label>
+      }
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="body" #body>
+  <div *docxPartSlot="'body'; let content" data-docx-part="body" class="docx-dialog__body">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <div class="docx-dialog__watermark-layout">
+        <ng-container docxDialogOutlet="preview" />
+        <fieldset class="docx-dialog__fieldset">
+          <legend class="docx-editor-sr-only">{{ label('dialogs.watermark.kind') }}</legend>
+          <ng-container docxDialogOutlet="field:noWatermark" />
+          <ng-container docxDialogOutlet="field:pictureWatermark" />
+          <div
+            class="docx-dialog__section docx-dialog__section--indented"
+            role="group"
+            [attr.aria-labelledby]="id + '-pictureWatermark-label'"
+          >
+            <ng-container docxDialogOutlet="field:picture" />
+            <ng-container docxDialogOutlet="field:scale" />
+            <ng-container docxDialogOutlet="field:washout" />
+          </div>
+          <ng-container docxDialogOutlet="field:textWatermark" />
+          <div
+            class="docx-dialog__section docx-dialog__section--indented"
+            role="group"
+            [attr.aria-labelledby]="id + '-textWatermark-label'"
+          >
+            <ng-container docxDialogOutlet="field:preset" />
+            <ng-container docxDialogOutlet="field:text" />
+            <ng-container docxDialogOutlet="field:fontFamily" />
+            <ng-container docxDialogOutlet="field:fontSizePt" />
+            <div class="docx-dialog__row">
+              <ng-container docxDialogOutlet="field:bold" />
+              <ng-container docxDialogOutlet="field:italic" />
+            </div>
+            <ng-container docxDialogOutlet="field:transparency" />
+            <ng-container docxDialogOutlet="field:color" />
+            <ng-container docxDialogOutlet="field:layout" />
+          </div>
+        </fieldset>
+      </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template docxDialogDefault="footer" #footer>
+  <div *docxPartSlot="'footer'; let content" data-docx-part="footer" class="docx-dialog__footer">
+    @if (content) {
+      <ng-container [ngTemplateOutlet]="content" />
+    } @else {
+      <span
+        *docxPartSlot="'error'; let error"
+        data-docx-part="error"
+        class="docx-dialog__error"
+        role="alert"
+        [attr.title]="refusal()"
+      >
+        @if (error) {
+          <ng-container [ngTemplateOutlet]="error" />
+        } @else {
+          {{ errorText() ?? '' }}
+        }
+      </span>
+      <button
+        *docxPartSlot="'cancel'; let cancel"
+        docxDialogCancel
+        class="docx-dialog__button docx-dialog__cancel"
+      >
+        @if (cancel) {
+          <ng-container [ngTemplateOutlet]="cancel" />
+        } @else {
+          {{ label('common.cancel') }}
+        }
+      </button>
+      <button
+        *docxPartSlot="'apply'; let apply"
+        docxDialogApply
+        class="docx-dialog__button docx-dialog__apply"
+      >
+        @if (apply) {
+          <ng-container [ngTemplateOutlet]="apply" />
+        } @else {
+          {{ label('common.apply') }}
+        }
+      </button>
+    }
+  </div>
+</ng-template>
+
+@if (open()) {
+  <docx-native-dialog
+    kind="watermark"
+    [label]="label('dialogs.watermark.title')"
+    [className]="className()"
+    [styles]="styles()"
+    (dismiss)="close()"
+    (dialogKeydown)="onKeydown($event)"
+  >
+    @if (preset()) {
+      <ng-container [ngTemplateOutlet]="header" />
+      <ng-container [ngTemplateOutlet]="body" />
+      <ng-container [ngTemplateOutlet]="footer" />
+    }
+    <ng-content />
+  </docx-native-dialog>
+}

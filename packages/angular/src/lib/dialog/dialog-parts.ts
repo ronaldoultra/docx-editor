@@ -2,9 +2,13 @@ import {
   Directive,
   Injectable,
   TemplateRef,
+  ViewContainerRef,
   booleanAttribute,
+  effect,
   inject,
   input,
+  signal,
+  untracked,
   type Provider,
   type Signal,
 } from '@angular/core';
@@ -119,6 +123,20 @@ export class DocxDialogPartDirective {
 }
 
 /**
+ * The packaged template of one part, declared in a packaged dialog's own template. The dialog
+ * renders it in its preset layout, and `docxDialogOutlet` renders it in a host's layout.
+ *
+ * @internal
+ */
+@Directive({ selector: 'ng-template[docxDialogDefault]' })
+export class DocxDialogDefaultDirective {
+  /** The name of the part. */
+  readonly docxDialogDefault = input.required<string>();
+  /** The template. */
+  readonly template: TemplateRef<unknown> = inject(TemplateRef);
+}
+
+/**
  * The state and the part templates of one packaged dialog. A packaged dialog provides it with
  * `provideDialogParts()` and connects it in its constructor.
  *
@@ -127,6 +145,7 @@ export class DocxDialogPartDirective {
 @Injectable()
 export class DocxDialogParts extends DocxPartRegistry {
   private current: DocxDialogState<object> | null = null;
+  private defaults: Signal<readonly DocxDialogDefaultDirective[]> = signal([]);
 
   /** The dialog state. */
   get state(): DocxDialogState<object> | null {
@@ -140,6 +159,16 @@ export class DocxDialogParts extends DocxPartRegistry {
   ): void {
     this.current = state;
     this.connectParts(overrides, (part) => part.docxDialogPart());
+  }
+
+  /** Connect the dialog's `viewChildren(DocxDialogDefaultDirective)` query. */
+  connectDefaults(defaults: Signal<readonly DocxDialogDefaultDirective[]>): void {
+    this.defaults = defaults;
+  }
+
+  /** The packaged template of the part `name`, or `null` when the dialog has no such part. */
+  defaultPart(name: string): TemplateRef<unknown> | null {
+    return this.defaults().find((part) => part.docxDialogDefault() === name)?.template ?? null;
   }
 }
 
@@ -234,4 +263,41 @@ export class DocxDialogResetDirective {
 export class DocxDialogFieldDirective {
   /** The field name. */
   readonly docxDialogField = input.required<string>();
+}
+
+/**
+ * Render one packaged part of the enclosing dialog in a host's own layout, such as a field in a
+ * dialog with `preset` set to `false`. The part keeps its wiring and its `docxDialogPart`
+ * template. An unknown name renders nothing.
+ *
+ * @example
+ * ```html
+ * <docx-editor-paragraph-dialog [preset]="false">
+ *   <ng-container docxDialogOutlet="field:spaceBefore" />
+ *   <button docxDialogApply>Save</button>
+ * </docx-editor-paragraph-dialog>
+ * ```
+ *
+ * @public
+ */
+@Directive({ selector: '[docxDialogOutlet]' })
+export class DocxDialogOutletDirective {
+  /** The name of the part, such as `field:spaceBefore`, `preview`, or `footer`. */
+  readonly docxDialogOutlet = input.required<string>();
+
+  private readonly parts = inject(DocxDialogParts, { optional: true });
+  private readonly container = inject(ViewContainerRef);
+  private rendered: TemplateRef<unknown> | null = null;
+
+  constructor() {
+    effect(() => {
+      const template = this.parts?.defaultPart(this.docxDialogOutlet()) ?? null;
+      untracked(() => {
+        if (template === this.rendered) return;
+        this.rendered = template;
+        this.container.clear();
+        if (template) this.container.createEmbeddedView(template);
+      });
+    });
+  }
 }

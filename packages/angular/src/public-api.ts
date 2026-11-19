@@ -130,6 +130,18 @@ export type {
 } from './lib/toolbar/toolbar-arrangement';
 export type { ToolbarArrangementKey } from './lib/toolbar/toolbar-parts';
 export type { ModeOption } from './lib/toolbar/toolbar-editing-mode.component';
+export type { PageSetupMarginField } from './lib/page-setup/page-setup-dialog.component';
+export type {
+  ParagraphInchField,
+  ParagraphMixedKey,
+  ParagraphPointField,
+  ParagraphTabEntry,
+} from './lib/paragraph/paragraph-dialog.component';
+export type {
+  WatermarkPreviewPage,
+  WatermarkPreviewRect,
+  WatermarkPreviewText,
+} from './lib/watermark/watermark-dialog-model';
 export type { DocxMenuBarState, MenuHandlers, MenuRegistration } from './lib/menu/menu-state';
 export type {
   ContextMenuEntry,
@@ -177,6 +189,9 @@ export type {
   EditorSnapshot,
   ExecResult,
   FontConfiguration,
+  PageSetup,
+  Watermark,
+  WatermarkState,
   ZoomMode,
 } from '@docx-editor.dev/core/contracts/editor';
 export type {
@@ -195,6 +210,12 @@ export type {
   LockedControlNavigation,
   MarkedFontResolver,
   ObjectSlotValueMap,
+  ParagraphDialogFields,
+  ParagraphDialogMixed,
+  ParagraphFlagState,
+  ParagraphFormatRead,
+  ParagraphFormatUpdate,
+  ParagraphTabStop,
   ToolbarValueMap,
 } from '@docx-editor.dev/core/editor';
 export type { LocaleStrings, TFunction, Translations } from '@docx-editor.dev/core/i18n';
@@ -210,6 +231,7 @@ export {
   DocxDialogApplyDirective,
   DocxDialogCancelDirective,
   DocxDialogFieldDirective,
+  DocxDialogOutletDirective,
   DocxDialogPartDirective,
   DocxDialogResetDirective,
   injectDialog,
@@ -218,6 +240,37 @@ export {
   type DocxDialogState,
 } from './lib/dialog/dialog-parts';
 export { DocxNativeDialogComponent } from './lib/dialog/native-dialog.component';
+export { DocxEditorDialogBase } from './lib/dialog/packaged-dialog';
+export type { DocxEditorDialogKind } from './lib/dialog/dialog-host';
+export {
+  injectPageSetup,
+  type PageSetupState,
+  type PageSetupUpdate,
+} from './lib/page-setup/page-setup';
+export {
+  DocxEditorPageSetupDialogComponent,
+  injectPageSetupDialog,
+  type PageSetupDialogFields,
+} from './lib/page-setup/page-setup-dialog.component';
+export { injectParagraphFormat, type ParagraphFormatState } from './lib/paragraph/paragraph-format';
+export {
+  DocxEditorParagraphDialogComponent,
+  injectParagraphDialog,
+  type ParagraphDialogState,
+} from './lib/paragraph/paragraph-dialog.component';
+export { injectWatermark, type WatermarkCommandState } from './lib/watermark/watermark';
+export {
+  DEFAULT_WATERMARK_PRESETS,
+  type WatermarkDialogFields,
+  type WatermarkDialogKind,
+  type WatermarkDialogLayout,
+} from './lib/watermark/watermark-dialog-model';
+export { DocxEditorWatermarkPreviewComponent } from './lib/watermark/watermark-preview.component';
+export {
+  DocxEditorWatermarkDialogComponent,
+  injectWatermarkDialog,
+  type WatermarkDialogFieldName,
+} from './lib/watermark/watermark-dialog.component';
 export {
   injectHyperlinkPopup,
   injectHyperlinkPopupInstance,
