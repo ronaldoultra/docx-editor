@@ -3,6 +3,7 @@ import {
   Component,
   NgZone,
   ViewEncapsulation,
+  booleanAttribute,
   computed,
   inject,
   input,
@@ -47,6 +48,7 @@ import {
   type DocxEditorRootMode,
   type DocxEditorTranslate,
 } from './root.directive';
+import { DocxEditorToolbarComponent } from './toolbar/toolbar.component';
 import { DocxEditorViewportComponent } from './viewport.component';
 
 /**
@@ -66,8 +68,8 @@ export type DocxEditorMode = DocxEditorRootMode;
 
 /**
  * A complete paginated DOCX editor. It composes the public parts — `docxEditorRoot`,
- * `<docx-editor-viewport>`, and `<docx-editor-content>` — so a host that composes its own
- * editor reaches the same behavior. The engine in `@docx-editor.dev/core` reads, lays out,
+ * `fieldset[docxEditorToolbar]`, `<docx-editor-viewport>`, and `<docx-editor-content>` — so a
+ * host that composes its own editor reaches the same behavior. The engine in `@docx-editor.dev/core` reads, lays out,
  * paints, and edits the document.
  *
  * The engine runs outside the Angular zone when zone.js is present. Only the outputs and the
@@ -84,7 +86,12 @@ export type DocxEditorMode = DocxEditorRootMode;
   selector: 'docx-editor',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [DocxEditorRootDirective, DocxEditorViewportComponent, DocxEditorContentComponent],
+  imports: [
+    DocxEditorRootDirective,
+    DocxEditorToolbarComponent,
+    DocxEditorViewportComponent,
+    DocxEditorContentComponent,
+  ],
   providers: [DocxEditorI18n],
   // The wrapper below carries the scope class, so the parts inside do not add it again.
   viewProviders: [{ provide: DOCX_EDITOR_SCOPED, useValue: true }],
@@ -126,6 +133,9 @@ export type DocxEditorMode = DocxEditorRootMode;
           (openFailure)="openFailure.emit($event)"
           (fontError)="fontError.emit($event)"
         >
+          @if (chrome()) {
+            <fieldset docxEditorToolbar></fieldset>
+          }
           <docx-editor-viewport style="flex: 1; min-height: 0; min-width: 0; overflow-anchor: none">
             <docx-editor-content />
           </docx-editor-viewport>
@@ -141,6 +151,12 @@ export class DocxEditorComponent {
    * `null` destroys the engine and its document.
    */
   readonly document = input<DocxEditorDocument | null | undefined>(undefined);
+
+  /**
+   * Show the editor chrome: the formatting toolbar above the pages. `false` shows only the
+   * pages. Compose `fieldset[docxEditorToolbar]` yourself for another arrangement.
+   */
+  readonly chrome = input(true, { transform: booleanAttribute });
 
   /** The host editing mode. A change applies to the open document without a reload. */
   readonly mode = input<DocxEditorMode>('edit');

@@ -5,12 +5,16 @@
 ```ts
 
 import * as _angular_core from '@angular/core';
+import { ChromeGroupId } from '@docx-editor.dev/core/editor';
 import { ChromeSlotId } from '@docx-editor.dev/core/editor';
 import { ContentLockPolicy } from '@docx-editor.dev/core/editor';
 import { DocumentChange } from '@docx-editor.dev/core/contracts/editor';
+import { DocumentEditingMode } from '@docx-editor.dev/core/contracts/editor';
 import { DocumentHandle } from '@docx-editor.dev/core/contracts/editor';
 import { DocumentOpenFailure } from '@docx-editor.dev/core/contracts/editor';
 import { DocumentSource } from '@docx-editor.dev/core/contracts/editor';
+import * as _docx_editor_dev_core_contracts_editor from '@docx-editor.dev/core/contracts/editor';
+import * as _docx_editor_dev_core_editor from '@docx-editor.dev/core/editor';
 import { DocxEditorConfig } from '@docx-editor.dev/core/editor';
 import { DocxEditorInstance } from '@docx-editor.dev/core/editor';
 import { Editor } from '@docx-editor.dev/core/contracts/editor';
@@ -32,7 +36,9 @@ import { FontResolver } from '@docx-editor.dev/core/editor';
 import { FontShapingOptions } from '@docx-editor.dev/core/editor';
 import { HistoryGroupBindingOptions } from '@docx-editor.dev/core/editor';
 import { ImageDecodePort } from '@docx-editor.dev/core/editor';
+import { InjectionToken } from '@angular/core';
 import { InputSignal } from '@angular/core';
+import { LineSpacingMenuRow } from '@docx-editor.dev/core/editor';
 import { LocaleStrings } from '@docx-editor.dev/i18n';
 import { LockedControlNavigation } from '@docx-editor.dev/core/editor';
 import { MarkedFontResolver } from '@docx-editor.dev/core/editor';
@@ -40,14 +46,98 @@ import { ObjectSlotValueMap } from '@docx-editor.dev/core/editor';
 import { OnInit } from '@angular/core';
 import { Provider } from '@angular/core';
 import { Signal } from '@angular/core';
+import { TableChromeDraft } from '@docx-editor.dev/core/editor';
+import { TableChromeSlotId } from '@docx-editor.dev/core/editor';
+import { TemplateRef } from '@angular/core';
 import { TFunction } from '@docx-editor.dev/i18n';
 import { ToolbarValueMap } from '@docx-editor.dev/core/editor';
 import { Translations } from '@docx-editor.dev/i18n';
+import { Type } from '@angular/core';
+import { WritableSignal } from '@angular/core';
 import { ZoomMode } from '@docx-editor.dev/core/contracts/editor';
+
+// @internal
+export interface BarGroup {
+    // (undocumented)
+    readonly className: string;
+    readonly heading: string | null;
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly items: readonly BarItem[];
+    // (undocumented)
+    readonly pinned: boolean;
+}
+
+// @internal
+export interface BarItem {
+    // (undocumented)
+    readonly entry: DefaultEntry | null;
+    // (undocumented)
+    readonly extras: TemplateRef<unknown> | null;
+    // (undocumented)
+    readonly id: string;
+}
 
 export { ChromeSlotId }
 
+// @internal
+export abstract class ColorSplitBase {
+    constructor(config: ColorSplitConfig);
+    protected applyLast(): void;
+    protected readonly applyValue: (value: string) => void;
+    // (undocumented)
+    protected readonly bar: Signal<string>;
+    // (undocumented)
+    protected readonly clearKey: string;
+    // (undocumented)
+    protected readonly clearValue: string;
+    // (undocumented)
+    protected readonly command: EditorCommandState;
+    // (undocumented)
+    protected readonly current: Signal<string | null>;
+    // (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // (undocumented)
+    protected readonly label: Signal<(key: string) => string>;
+    // (undocumented)
+    protected readonly open: WritableSignal<boolean>;
+    // (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // (undocumented)
+    protected readonly text: Signal<string>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<ColorSplitBase, never, never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<ColorSplitBase, never>;
+}
+
+// @internal
+export interface ColorSplitConfig {
+    // (undocumented)
+    readonly clear: {
+        readonly labelKey: string;
+        readonly value: string;
+    };
+    // (undocumented)
+    readonly cssOf: (value: string) => string;
+    // (undocumented)
+    readonly current: (snapshot: EditorSnapshot) => string | null;
+    // (undocumented)
+    readonly defaultValue: string;
+    // (undocumented)
+    readonly slot: ChromeSlotId;
+}
+
 export { ContentLockPolicy }
+
+// @internal
+export interface DefaultEntry {
+    readonly button: ChromeSlotId;
+    readonly part: Type<unknown> | null;
+    // (undocumented)
+    readonly slot: ToolbarArrangementKey;
+}
 
 export { DocumentChange }
 
@@ -58,6 +148,28 @@ export { DocumentOpenFailure }
 export { DocumentSource }
 
 // @public
+export const DOCX_PARAGRAPH_DIALOG: InjectionToken<{
+    readonly open: (trigger: HTMLElement | null) => void;
+}>;
+
+// @public
+export const DOCX_TOOLBAR_DIALOGS: InjectionToken<{
+    readonly open: (dialog: "splitCell", trigger: HTMLElement | null) => void;
+}>;
+
+// @public
+export const DOCX_TOOLBAR_PLACEMENT: InjectionToken<DocxToolbarPlacement>;
+
+// @public
+export class DocxChromeIconComponent {
+    readonly docxChromeIcon: _angular_core.InputSignal<readonly string[]>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxChromeIconComponent, "svg[docxChromeIcon]", never, { "docxChromeIcon": { "alias": "docxChromeIcon"; "isSignal": true; "required": true; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxChromeIconComponent, never>;
+}
+
+// @public
 export type DocxEditorColorMode = 'light' | 'dark' | 'system';
 
 // @public
@@ -65,6 +177,7 @@ export class DocxEditorComponent {
     constructor();
     readonly author: InputSignal<string | undefined>;
     readonly change: _angular_core.OutputEmitterRef<DocumentChange>;
+    readonly chrome: _angular_core.InputSignalWithTransform<boolean, unknown>;
     // @internal (undocumented)
     protected readonly chromeDir: Signal<DocxEditorDirection | undefined>;
     readonly colorMode: InputSignal<DocxEditorColorMode>;
@@ -97,9 +210,9 @@ export class DocxEditorComponent {
     }): EditorSnapshot;
     readonly translate: InputSignal<DocxEditorTranslate | undefined>;
     readonly zoom: InputSignal<number | undefined>;
-    readonly zoomMode: InputSignal<ZoomMode | "auto" | undefined>;
+    readonly zoomMode: InputSignal<"auto" | ZoomMode | undefined>;
     // (undocumented)
-    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorComponent, "docx-editor", never, { "author": { "alias": "author"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "i18n": { "alias": "i18n"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; }, never, never, true, never>;
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorComponent, "docx-editor", never, { "author": { "alias": "author"; "isSignal": true; "required": false; }; "chrome": { "alias": "chrome"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "i18n": { "alias": "i18n"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; }, never, never, true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorComponent, never>;
 }
@@ -211,7 +324,7 @@ export class DocxEditorRootDirective implements OnInit {
     readonly selectionChange: _angular_core.OutputEmitterRef<EditorSnapshot>;
     readonly translate: _angular_core.InputSignal<DocxEditorTranslate | undefined>;
     readonly zoom: _angular_core.InputSignal<number | undefined>;
-    readonly zoomMode: _angular_core.InputSignal<ZoomMode | "auto" | undefined>;
+    readonly zoomMode: _angular_core.InputSignal<"auto" | ZoomMode | undefined>;
     // (undocumented)
     static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxEditorRootDirective, "[docxEditorRoot]", ["docxEditorRoot"], { "author": { "alias": "author"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; }, never, never, true, never>;
     // (undocumented)
@@ -220,6 +333,63 @@ export class DocxEditorRootDirective implements OnInit {
 
 // @public
 export type DocxEditorRootMode = 'edit' | 'view' | 'suggesting';
+
+// @public
+export class DocxEditorToolbarComponent {
+    constructor();
+    // @internal (undocumented)
+    protected readonly bar: Signal<readonly BarGroup[]>;
+    // @internal (undocumented)
+    protected readonly chromeDir: Signal<DocxEditorDirection | undefined>;
+    // @internal (undocumented)
+    protected readonly disabled: Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly hasAppended: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly label: Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected readonly measuring: Signal<boolean>;
+    readonly overflow: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    // @internal (undocumented)
+    protected readonly overrides: Signal<SlotOverrides['overrides']>;
+    // @internal
+    protected readonly panelInjector: _angular_core.DestroyableInjector;
+    readonly preset: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    // @internal (undocumented)
+    protected readonly scope: Signal<"" | "docx-editor " | "docx-editor dark ">;
+    // @internal (undocumented)
+    protected readonly sections: Signal<readonly PanelSection[]>;
+    // @internal (undocumented)
+    protected readonly slotOverrides: Signal<SlotOverrides>;
+    // @internal (undocumented)
+    protected readonly standaloneGroups: Signal<{
+        className: string;
+        heading: string;
+        id: string;
+        template: TemplateRef<unknown>;
+    }[]>;
+    readonly t: _angular_core.InputSignal<DocxToolbarTranslate | undefined>;
+    // @internal (undocumented)
+    protected readonly tableGroupId = "contextual-table";
+    // @internal (undocumented)
+    protected readonly tableLabel: Signal<string>;
+    // @internal (undocumented)
+    protected readonly tableOverflowed: Signal<boolean>;
+    // @internal
+    protected tableRowLabel(slot: ChromeSlotId): string;
+    // @internal
+    protected readonly tableSlots: Signal<ChromeSlotId[]>;
+    // @internal
+    protected readonly tableTemplates: Signal<Map<string, TemplateRef<unknown>>>;
+    // @internal (undocumented)
+    protected readonly tableVisible: Signal<boolean>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorToolbarComponent, "fieldset[docxEditorToolbar]", never, { "overflow": { "alias": "overflow"; "isSignal": true; "required": false; }; "preset": { "alias": "preset"; "isSignal": true; "required": false; }; "t": { "alias": "t"; "isSignal": true; "required": false; }; }, {}, ["slotTemplates", "groupTemplates"], ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorToolbarComponent, never>;
+}
 
 // @public
 export type DocxEditorTranslate = (key: string, params?: Record<string, string | number>) => string;
@@ -279,6 +449,18 @@ export type DocxFontsInput = FontConfiguration | FontConfigurationFragment;
 export type DocxFontsSource = DocxFontOrigin | readonly DocxFontOrigin[];
 
 // @public
+export class DocxSlotDirective {
+    readonly docxSlot: _angular_core.InputSignal<ChromeSlotId>;
+    readonly docxSlotHidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly docxSlotOverflow: _angular_core.InputSignal<TemplateRef<unknown> | undefined>;
+    readonly template: TemplateRef<unknown>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxSlotDirective, "ng-template[docxSlot]", never, { "docxSlot": { "alias": "docxSlot"; "isSignal": true; "required": true; }; "docxSlotHidden": { "alias": "docxSlotHidden"; "isSignal": true; "required": false; }; "docxSlotOverflow": { "alias": "docxSlotOverflow"; "isSignal": true; "required": false; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxSlotDirective, never>;
+}
+
+// @public
 export type DocxSource = string | URL | Uint8Array | ArrayBuffer;
 
 // @public
@@ -293,6 +475,486 @@ export interface DocxSourceState {
     readonly error: Signal<Error | null>;
     readonly fonts: Signal<FontConfiguration | FontResolver | undefined>;
     readonly isLoading: Signal<boolean>;
+}
+
+// @internal
+export class DocxTableChromeState {
+    apply(slot: TableChromeSlotId, value: unknown): void;
+    readonly draft: Signal<TableChromeDraft>;
+    slot(slot: TableChromeSlotId): Signal<TableSlotState>;
+    readonly visible: Signal<boolean>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxTableChromeState, never>;
+    // (undocumented)
+    static ɵprov: _angular_core.ɵɵInjectableDeclaration<DocxTableChromeState>;
+}
+
+// @public
+export class DocxToolbarActionComponent {
+    readonly active: _angular_core.InputSignalWithTransform<boolean | undefined, unknown>;
+    readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly disabledReason: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    readonly label: _angular_core.InputSignal<string>;
+    // @internal (undocumented)
+    protected readonly panel: boolean;
+    // @internal (undocumented)
+    protected run(event: MouseEvent): void;
+    readonly select: _angular_core.OutputEmitterRef<void>;
+    // @internal (undocumented)
+    protected readonly title: _angular_core.Signal<string | null>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarActionComponent, "button[docxToolbarAction]", never, { "active": { "alias": "active"; "isSignal": true; "required": false; }; "disabled": { "alias": "disabled"; "isSignal": true; "required": false; }; "disabledReason": { "alias": "disabledReason"; "isSignal": true; "required": false; }; "label": { "alias": "label"; "isSignal": true; "required": true; }; }, { "select": "select"; }, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarActionComponent, never>;
+}
+
+// @public
+export class DocxToolbarAlignmentComponent {
+    constructor();
+    // @internal (undocumented)
+    protected choose(state: {
+        readonly execute: () => boolean;
+    }): void;
+    // @internal (undocumented)
+    protected readonly current: _angular_core.Signal<{
+        paths: readonly string[] | null;
+        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
+        state: EditorCommandState;
+        text: string;
+    }>;
+    // @internal (undocumented)
+    protected readonly enabled: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly options: _angular_core.Signal<{
+        paths: readonly string[] | null;
+        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
+        state: EditorCommandState;
+        text: string;
+    }[]>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarAlignmentComponent, "div[docxToolbarAlignment]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarAlignmentComponent, never>;
+}
+
+// @public
+export class DocxToolbarButtonComponent {
+    // @internal (undocumented)
+    protected readonly command: EditorCommandState;
+    readonly docxToolbarButton: _angular_core.InputSignal<ChromeSlotId>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly paths: _angular_core.Signal<readonly string[] | null>;
+    // @internal
+    protected readonly text: _angular_core.Signal<string>;
+    // @internal (undocumented)
+    protected readonly toggle: _angular_core.Signal<boolean>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarButtonComponent, "button[docxToolbarButton]", never, { "docxToolbarButton": { "alias": "docxToolbarButton"; "isSignal": true; "required": true; }; }, {}, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarButtonComponent, never>;
+}
+
+// @public
+export class DocxToolbarEditingModeComponent {
+    constructor();
+    // @internal (undocumented)
+    protected readonly checkPaths: readonly string[];
+    // @internal (undocumented)
+    protected choose(mode: DocumentEditingMode): void;
+    // @internal (undocumented)
+    protected readonly command: EditorCommandState;
+    // @internal (undocumented)
+    protected readonly current: _angular_core.Signal<ModeOption>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected readonly loading: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly mode: _angular_core.Signal<DocumentEditingMode>;
+    // @internal (undocumented)
+    protected onMenuKey(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly options: readonly ModeOption[];
+    // @internal (undocumented)
+    protected readonly reasons: _angular_core.Signal<(string | null)[]>;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarEditingModeComponent, "div[docxToolbarEditingMode]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarEditingModeComponent, never>;
+}
+
+// @public
+export class DocxToolbarFontColorComponent extends ColorSplitBase {
+    constructor();
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarFontColorComponent, "div[docxToolbarFontColor]", never, {}, {}, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarFontColorComponent, never>;
+}
+
+// @public
+export class DocxToolbarFontFamilyComponent {
+    constructor();
+    // @internal (undocumented)
+    protected choose(font: string): void;
+    // @internal (undocumented)
+    protected readonly groups: _angular_core.Signal<({
+        category: "sansSerif";
+        fonts: string[];
+        labelKey: "font.sansSerif";
+    } | {
+        category: "serif";
+        fonts: string[];
+        labelKey: "font.serif";
+    } | {
+        category: "monospace";
+        fonts: string[];
+        labelKey: "font.monospace";
+    } | {
+        category: "other";
+        fonts: string[];
+        labelKey: null;
+    })[]>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly query: _angular_core.WritableSignal<string>;
+    // @internal (undocumented)
+    protected readonly state: FontFamilyState;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarFontFamilyComponent, "div[docxToolbarFontFamily]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarFontFamilyComponent, never>;
+}
+
+// @public
+export class DocxToolbarFontSizeComponent {
+    constructor();
+    // @internal
+    protected apply(points: number): void;
+    // @internal (undocumented)
+    protected readonly canDecrease: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly canIncrease: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly command: EditorCommandState;
+    // @internal (undocumented)
+    protected commitDraft(): void;
+    // @internal (undocumented)
+    protected dismiss(input: HTMLInputElement, refocus: boolean): void;
+    // @internal (undocumented)
+    protected readonly draft: _angular_core.WritableSignal<string | null>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected readonly listId: string;
+    // @internal (undocumented)
+    protected onInput(value: string): void;
+    // @internal (undocumented)
+    protected onKey(event: KeyboardEvent, input: HTMLInputElement): void;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly presets: readonly number[];
+    // @internal (undocumented)
+    protected readonly selected: _angular_core.Signal<number | null>;
+    // @internal (undocumented)
+    protected readonly shown: _angular_core.Signal<string>;
+    // @internal (undocumented)
+    protected step(direction: 'up' | 'down'): void;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarFontSizeComponent, "span[docxToolbarFontSize]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarFontSizeComponent, never>;
+}
+
+// @public
+export class DocxToolbarGroupDirective {
+    readonly after: _angular_core.InputSignal<ChromeGroupId | (string & {}) | undefined>;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    readonly docxToolbarGroup: _angular_core.InputSignal<ChromeGroupId | (string & {})>;
+    readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly label: _angular_core.InputSignal<string | undefined>;
+    readonly labelKey: _angular_core.InputSignal<string | undefined>;
+    readonly overflowContent: _angular_core.InputSignal<TemplateRef<unknown> | undefined>;
+    readonly pinned: _angular_core.InputSignalWithTransform<boolean | undefined, unknown>;
+    readonly priority: _angular_core.InputSignalWithTransform<number | undefined, unknown>;
+    readonly template: TemplateRef<unknown>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxToolbarGroupDirective, "ng-template[docxToolbarGroup]", never, { "after": { "alias": "after"; "isSignal": true; "required": false; }; "className": { "alias": "className"; "isSignal": true; "required": false; }; "docxToolbarGroup": { "alias": "docxToolbarGroup"; "isSignal": true; "required": true; }; "hidden": { "alias": "hidden"; "isSignal": true; "required": false; }; "label": { "alias": "label"; "isSignal": true; "required": false; }; "labelKey": { "alias": "labelKey"; "isSignal": true; "required": false; }; "overflowContent": { "alias": "overflowContent"; "isSignal": true; "required": false; }; "pinned": { "alias": "pinned"; "isSignal": true; "required": false; }; "priority": { "alias": "priority"; "isSignal": true; "required": false; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarGroupDirective, never>;
+}
+
+// @public
+export class DocxToolbarHighlightComponent extends ColorSplitBase {
+    constructor();
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarHighlightComponent, "div[docxToolbarHighlight]", never, {}, {}, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarHighlightComponent, never>;
+}
+
+// @public
+export class DocxToolbarLineSpacingComponent {
+    constructor();
+    // @internal (undocumented)
+    protected applyRow(row: LineSpacingMenuRow): void;
+    // @internal (undocumented)
+    protected readonly command: EditorCommandState;
+    // @internal (undocumented)
+    protected readonly dialog: {
+        readonly open: (trigger: HTMLElement | null) => void;
+    } | null;
+    // @internal
+    protected readonly dialogCommand: EditorCommandState;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly hasAfter: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly hasBefore: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected openDialog(): void;
+    // @internal (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // @internal (undocumented)
+    protected readonly rows: _angular_core.Signal<{
+        key: string;
+        row: LineSpacingMenuRow;
+        text: string;
+    }[]>;
+    // @internal (undocumented)
+    protected toggleSpace(field: 'beforePt' | 'afterPt'): void;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarLineSpacingComponent, "span[docxToolbarLineSpacing]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarLineSpacingComponent, never>;
+}
+
+// @public
+export class DocxToolbarParagraphStyleComponent {
+    constructor();
+    // @internal (undocumented)
+    protected choose(styleId: string): void;
+    // @internal (undocumented)
+    protected readonly current: _angular_core.Signal<string>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected preview(preview: ParagraphStyleOption['preview']): Record<string, string>;
+    // @internal (undocumented)
+    protected readonly state: ParagraphStyleState;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarParagraphStyleComponent, "div[docxToolbarParagraphStyle]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarParagraphStyleComponent, never>;
+}
+
+// @public
+export type DocxToolbarPlacement = 'bar' | 'panel';
+
+// @public
+export class DocxToolbarSeparatorComponent {
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarSeparatorComponent, "div[docxToolbarSeparator]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarSeparatorComponent, never>;
+}
+
+// @public
+export class DocxToolbarTableBorderColorComponent extends TableColorBase {
+    constructor();
+    // @internal (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarTableBorderColorComponent, "div[docxToolbarTableBorderColor]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarTableBorderColorComponent, never>;
+}
+
+// @public
+export class DocxToolbarTableBorderStyleComponent extends TableControlBase {
+    constructor();
+    // @internal (undocumented)
+    protected readonly options: Signal<{
+        previewClass: string;
+        selected: boolean;
+        text: string;
+        value: _docx_editor_dev_core_contracts_editor.TableBorderStyle;
+    }[]>;
+    // @internal (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarTableBorderStyleComponent, "div[docxToolbarTableBorderStyle]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarTableBorderStyleComponent, never>;
+}
+
+// @public
+export class DocxToolbarTableBorderTargetComponent extends TableControlBase {
+    constructor();
+    // @internal (undocumented)
+    protected readonly options: Signal<{
+        paths: readonly string[];
+        selected: boolean;
+        text: string;
+        value: _docx_editor_dev_core_editor.TableBorderTargetValue;
+    }[]>;
+    // @internal (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarTableBorderTargetComponent, "div[docxToolbarTableBorderTarget]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarTableBorderTargetComponent, never>;
+}
+
+// @public
+export class DocxToolbarTableBorderWidthComponent extends TableControlBase {
+    constructor();
+    // @internal (undocumented)
+    protected readonly options: Signal<{
+        selected: boolean;
+        size: number;
+        text: string;
+        thickness: number;
+    }[]>;
+    // @internal (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarTableBorderWidthComponent, "div[docxToolbarTableBorderWidth]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarTableBorderWidthComponent, never>;
+}
+
+// @public
+export class DocxToolbarTableCellFillComponent extends TableColorBase {
+    constructor();
+    // @internal (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarTableCellFillComponent, "div[docxToolbarTableCellFill]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarTableCellFillComponent, never>;
+}
+
+// @public
+export class DocxToolbarTableInsertComponent {
+    constructor();
+    // @internal (undocumented)
+    protected close(): void;
+    // @internal (undocumented)
+    protected readonly command: EditorCommandState;
+    // @internal (undocumented)
+    protected readonly gridId: string;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected onFocusOut(event: FocusEvent): void;
+    // @internal (undocumented)
+    protected onPopupKey(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected onTrigger(): void;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // @internal (undocumented)
+    protected readonly shown: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarTableInsertComponent, "span[docxToolbarTableInsert]", never, {}, {}, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarTableInsertComponent, never>;
+}
+
+// @public
+export class DocxToolbarTableSplitCellComponent {
+    // @internal (undocumented)
+    protected readonly command: EditorCommandState;
+    // @internal (undocumented)
+    protected readonly dialogs: {
+        readonly open: (dialog: "splitCell", trigger: HTMLElement | null) => void;
+    } | null;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly paths: readonly string[] | null;
+    // @internal (undocumented)
+    protected readonly text: Signal<string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarTableSplitCellComponent, "span[docxToolbarTableSplitCell]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarTableSplitCellComponent, never>;
+}
+
+// @public
+export type DocxToolbarTranslate = (key: string) => string | undefined;
+
+// @public
+export class DocxToolbarZoomComponent {
+    constructor();
+    // @internal (undocumented)
+    protected readonly autoSelected: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly display: _angular_core.Signal<string>;
+    // @internal (undocumented)
+    protected readonly fitWidthSelected: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly hasEditor: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected isLevel(level: number): boolean;
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected percent(level: number): string;
+    // @internal (undocumented)
+    protected pick(choice: 'auto' | 'fit' | number): void;
+    // @internal (undocumented)
+    protected readonly zoom: ZoomState;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxToolbarZoomComponent, "span[docxToolbarZoom]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxToolbarZoomComponent, never>;
 }
 
 export { Editor }
@@ -350,6 +1012,14 @@ export { FontConfiguration }
 
 export { FontConfigurationFragment }
 
+// @public
+export interface FontFamilyState {
+    readonly isEnabled: Signal<boolean>;
+    readonly options: Signal<readonly string[]>;
+    readonly setValue: (family: string) => void;
+    readonly value: Signal<string | null>;
+}
+
 export { FontOrigin }
 
 // @public
@@ -402,16 +1072,31 @@ export function injectEditorState<T>(selector: (snapshot: EditorSnapshot) => T, 
 export function injectEditorValueCommand<K extends EditorValueSlot>(slotId: K): EditorValueCommandState<ToolbarValueMap[K]>;
 
 // @public
+export function injectFontFamily(): FontFamilyState;
+
+// @public
 export function injectFonts(...origins: readonly FontOriginInput[]): MarkedFontResolver;
 
 // @public
 export function injectHistoryGroup(options: HistoryGroupOptions): HistoryGroupState;
 
 // @public
+export function injectParagraphStyle(): ParagraphStyleState;
+
+// @public
 export function injectScopeClassName(): Signal<'' | 'docx-editor ' | 'docx-editor dark '>;
 
 // @public
+export function injectTableBorderTargetLabel(): Signal<string>;
+
+// @public
+export function injectToolbarLabel(): Signal<(key: string) => string>;
+
+// @public
 export function injectTranslation(): DocxEditorTranslation;
+
+// @public
+export function injectZoom(): ZoomState;
 
 export { LocaleStrings }
 
@@ -419,7 +1104,74 @@ export { LockedControlNavigation }
 
 export { MarkedFontResolver }
 
+// @internal
+export interface ModeOption {
+    // (undocumented)
+    readonly hintKey: 'editingMode.editingHint' | 'editingMode.suggestingHint' | 'editingMode.viewingHint';
+    // (undocumented)
+    readonly labelKey: 'editingMode.editing' | 'editingMode.suggesting' | 'editingMode.viewing';
+    // (undocumented)
+    readonly mode: DocumentEditingMode;
+    // (undocumented)
+    readonly paths: readonly string[];
+}
+
 export { ObjectSlotValueMap }
+
+// @internal
+export type PanelRow = {
+    readonly key: string;
+    readonly kind: 'command';
+    readonly slot: ChromeSlotId;
+} | {
+    readonly entry: DefaultEntry;
+    readonly key: string;
+    readonly kind: 'control';
+    readonly label: string;
+    readonly template: TemplateRef<unknown> | null;
+} | {
+    readonly entry: DefaultEntry;
+    readonly key: string;
+    readonly kind: 'row';
+} | {
+    readonly key: string;
+    readonly kind: 'host';
+    readonly own: boolean;
+    readonly template: TemplateRef<unknown>;
+};
+
+// @internal
+export interface PanelSection {
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly label: string;
+    // (undocumented)
+    readonly rows: readonly PanelRow[];
+}
+
+// @public
+export interface ParagraphStyleOption {
+    readonly name: string;
+    // (undocumented)
+    readonly preview: {
+        readonly bold: boolean;
+        readonly color: string | null;
+        readonly fontFamily: string | null;
+        readonly fontSizePt: number | null;
+        readonly italic: boolean;
+    };
+    // (undocumented)
+    readonly styleId: string;
+}
+
+// @public
+export interface ParagraphStyleState {
+    readonly isEnabled: Signal<boolean>;
+    readonly options: Signal<readonly ParagraphStyleOption[]>;
+    readonly setValue: (styleId: string) => void;
+    readonly value: Signal<string | null>;
+}
 
 // @public
 export function provideDocxEditorI18n(i18n?: Translations, options?: DocxEditorI18nOptions): Provider[];
@@ -427,13 +1179,111 @@ export function provideDocxEditorI18n(i18n?: Translations, options?: DocxEditorI
 // @public
 export type ResolvedColorMode = 'light' | 'dark';
 
+// @internal
+export interface SlotOverrides {
+    readonly appended: readonly DocxSlotDirective[];
+    readonly overrides: ReadonlyMap<ToolbarArrangementKey, DocxSlotDirective>;
+    readonly tableOverrides: ReadonlyMap<ToolbarArrangementKey, DocxSlotDirective>;
+}
+
+// @internal
+export abstract class TableColorBase extends TableControlBase {
+    constructor(slot: 'table.borderColor' | 'table.cellFill', labelKey: string, defaultHex: string);
+    // (undocumented)
+    protected applyHex(hex: string): void;
+    // (undocumented)
+    protected applyMain(): void;
+    // (undocumented)
+    protected readonly barHex: Signal<string>;
+    // (undocumented)
+    protected readonly caretText: Signal<string>;
+    // (undocumented)
+    protected clearFill(): void;
+    // (undocumented)
+    protected readonly lastHex: WritableSignal<string>;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<TableColorBase, never, never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<TableColorBase, never>;
+}
+
+// @internal
+export abstract class TableControlBase {
+    constructor(slot: TableChromeSlotId, labelKey: string, popup: 'menu' | 'dialog');
+    // (undocumented)
+    protected readonly chrome: DocxTableChromeState;
+    // (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // (undocumented)
+    protected readonly host: HTMLElement;
+    // (undocumented)
+    protected readonly label: Signal<(key: string) => string>;
+    protected onPanelKey(event: KeyboardEvent, popup: 'menu' | 'dialog'): void;
+    // (undocumented)
+    protected readonly open: WritableSignal<boolean>;
+    // (undocumented)
+    protected pick(value: unknown): void;
+    // (undocumented)
+    protected readonly reasonId: string;
+    // (undocumented)
+    protected readonly slot: TableChromeSlotId;
+    // (undocumented)
+    protected readonly state: Signal<{
+        disabledReason: string | null;
+        enabled: boolean;
+    }>;
+    // (undocumented)
+    protected readonly text: Signal<string>;
+    // (undocumented)
+    protected toggle(): void;
+    // (undocumented)
+    static ɵdir: _angular_core.ɵɵDirectiveDeclaration<TableControlBase, never, never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<TableControlBase, never>;
+}
+
+// @internal
+export interface TableSlotState {
+    readonly disabledReason: string | null;
+    // (undocumented)
+    readonly enabled: boolean;
+}
+
 export { TFunction }
+
+// @internal
+export type ToolbarArrangementKey = ChromeSlotId | 'alignment';
 
 export { ToolbarValueMap }
 
 export { Translations }
 
 export { ZoomMode }
+
+// @public
+export interface ZoomState {
+    // (undocumented)
+    readonly auto: () => void;
+    // (undocumented)
+    readonly canZoomIn: Signal<boolean>;
+    // (undocumented)
+    readonly canZoomOut: Signal<boolean>;
+    // (undocumented)
+    readonly fitToWidth: () => void;
+    readonly isFit: Signal<boolean>;
+    readonly levels: readonly number[];
+    readonly mode: Signal<ZoomMode>;
+    readonly reset: () => void;
+    // (undocumented)
+    readonly setMode: (mode: ZoomMode | 'auto') => void;
+    // (undocumented)
+    readonly setZoom: (zoom: number) => void;
+    readonly zoom: Signal<number>;
+    // (undocumented)
+    readonly zoomIn: () => void;
+    // (undocumented)
+    readonly zoomOut: () => void;
+}
 
 // (No @packageDocumentation comment for this package)
 

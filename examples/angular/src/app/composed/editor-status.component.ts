@@ -1,12 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
+  injectChromeDir,
   injectDocxEditor,
   injectEditorColorMode,
   injectEditorEvent,
   injectEditorHostDocument,
   injectEditorState,
-  injectChromeDir,
   injectScopeClassName,
   injectTranslation,
 } from '@docx-editor.dev/angular';

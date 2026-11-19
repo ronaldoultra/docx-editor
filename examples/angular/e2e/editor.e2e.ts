@@ -265,6 +265,31 @@ for (const mode of [
       expect(await paragraphText(page, HEADING)).toBe('Z DOCX-EDITOR.DEV');
     });
 
+    test('the toolbar bolds the selected word', async ({ page }) => {
+      await open(page, SAMPLE);
+      const loaded = await changeCount(page);
+      const weight = () =>
+        page.evaluate(
+          (paragraphId) =>
+            getComputedStyle(
+              document.querySelector(`[data-paragraph-id="${paragraphId}"][data-start="0"]`)!
+            ).fontWeight,
+          SECOND
+        );
+      const before = await weight();
+      await page.locator(`[data-paragraph-id="${SECOND}"][data-start="0"]`).first().dblclick();
+      const bold = page.locator('docx-editor [data-testid="docx-toolbar"] [data-slot="text.bold"]');
+      const pressed = await bold.getAttribute('aria-pressed');
+      await bold.click();
+      await expect(bold).toHaveAttribute('aria-pressed', pressed === 'true' ? 'false' : 'true');
+      await expect.poll(weight).not.toBe(before);
+      expect(await changeCount(page)).toBeGreaterThan(loaded);
+      // The click kept the caret in the pages, so typing still goes to the document.
+      await page.keyboard.press('End');
+      await page.keyboard.type('!');
+      await expect.poll(() => paragraphText(page, SECOND)).toMatch(/!$/);
+    });
+
     test('suggesting mode saves typing as a tracked insertion by the author', async ({ page }) => {
       await open(page, SAMPLE);
       await page.getByLabel('Autor').fill('Ada');

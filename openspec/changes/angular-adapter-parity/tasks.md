@@ -32,13 +32,13 @@
 
 ## 4. Toolbar
 
-- [ ] 4.1 Add the toolbar compound with registry-driven groups and `docxSlot` overrides (D3); port the claims of `chrome-composition.test.ts` and `toolbar-host-groups.test.ts`
-- [ ] 4.2 Add history, text formatting, font family and size, and paragraph style controls; port the claims of `toolbar-picker-accessibility.test.ts` and `toolbar-dev-warnings.test.ts`, the claim of `paragraph-style-labels.test.ts`, and the picker claim of `host-window-chrome.test.ts`
-- [ ] 4.3 Add the color picker, highlight, alignment, lists, indent, and line spacing controls, and verify specs for each control's enabled state and value
-- [ ] 4.4 Add table, table border, and table cell fill controls; verify specs that cover border target labels and disabled reasons outside a table
-- [ ] 4.5 Add link and direction controls; port the claims of `toolbar-link-platform.test.ts`, and the direction button claims of `toolbar-direction.test.ts`
-- [ ] 4.6 Show the toolbar in `<docx-editor>` with the `chrome` input (`false` hides it), extend the browser test to bold a word from the toolbar, and verify `bun run test:e2e:angular` passes
-- [ ] 4.7 Document toolbar composition and overrides in the README, update the ledger and API snapshot, and verify `bun run api:check` and `bun run check:angular-parity` pass
+- [x] 4.1 Add the toolbar compound with registry-driven groups and `docxSlot` overrides (D3); port the claims of `chrome-composition.test.ts` and `toolbar-host-groups.test.ts`
+- [x] 4.2 Add history, text formatting, font family and size, and paragraph style controls; port the claims of `toolbar-picker-accessibility.test.ts` and `toolbar-dev-warnings.test.ts`, the claim of `paragraph-style-labels.test.ts`, and the picker claim of `host-window-chrome.test.ts`
+- [x] 4.3 Add the color picker, highlight, alignment, lists, indent, and line spacing controls, and verify specs for each control's enabled state and value
+- [x] 4.4 Add table, table border, and table cell fill controls; verify specs that cover border target labels and disabled reasons outside a table
+- [x] 4.5 Add link and direction controls; port the claims of `toolbar-link-platform.test.ts`, and the direction button claims of `toolbar-direction.test.ts`
+- [x] 4.6 Show the toolbar in `<docx-editor>` with the `chrome` input (`false` hides it), extend the browser test to bold a word from the toolbar, and verify `bun run test:e2e:angular` passes
+- [x] 4.7 Document toolbar composition and overrides in the README, update the ledger and API snapshot, and verify `bun run api:check` and `bun run check:angular-parity` pass
 
 ## 5. Menu bar, context menu, and keyboard
 

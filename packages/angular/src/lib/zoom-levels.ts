@@ -1,6 +1,6 @@
 // The zoom steps of the zoom shortcuts. 25% is below the fit floor on purpose: a fit that sits
 // on the floor must still offer a step down.
-const ZOOM_LEVELS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2] as const;
+export const ZOOM_LEVELS: readonly number[] = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
 
 /** The next zoom step from `zoom`, or `null` at the end of the steps. */
 export function stepZoomLevel(zoom: number, direction: 'in' | 'out'): number | null {

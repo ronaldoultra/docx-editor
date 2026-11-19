@@ -251,11 +251,11 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorSplitCellDialogProps` | interface | | todo | |
 | `DocxEditorTextFormFieldDialog` | const | | todo | |
 | `DocxEditorTextFormFieldDialogProps` | interface | | todo | |
-| `DocxEditorToolbar` | const | | todo | |
-| `DocxEditorToolbarGroupProps` | interface | | todo | |
-| `DocxEditorToolbarNamespace` | interface | | todo | |
-| `DocxEditorToolbarProps` | interface | | todo | |
-| `DocxEditorToolbarSlotProps` | interface | | todo | |
+| `DocxEditorToolbar` | const | `DocxEditorToolbarComponent` | ported | `fieldset[docxEditorToolbar]`. The compound members are standalone parts (`docxToolbarButton`, `docxToolbarAction`, `docxToolbarSeparator`) and `ng-template` directives (`docxSlot`, `docxToolbarGroup`), see D3. |
+| `DocxEditorToolbarGroupProps` | interface | `DocxToolbarGroupDirective` | ported | The props are the directive inputs. `class` is `className`, because an `ng-template` takes no class. |
+| `DocxEditorToolbarNamespace` | interface |  | dropped | Dropped: Angular has no compound namespace object. Each toolbar part is a standalone component with its own selector (see the README table of toolbar parts), and `docxSlot` replaces a part in place. |
+| `DocxEditorToolbarProps` | interface | `DocxEditorToolbarComponent` | ported | The props are the component inputs `preset`, `overflow`, and `t`. `onSave` ports with the save part. |
+| `DocxEditorToolbarSlotProps` | interface | `DocxSlotDirective` | ported | `slotId`, `hidden`, and `overflowContent` are `docxSlot`, `docxSlotHidden`, and `docxSlotOverflow`. |
 | `DocxEditorUnsupportedElement` | const | | todo | |
 | `DocxEditorUnsupportedElementProps` | interface | | todo | |
 | `DocxEditorVerticalRuler` | const | | todo | |
@@ -287,10 +287,10 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `FontConfigurationBase` | re-export from core | | todo | |
 | `FontConfigurationFragment` | re-export from core | `FontConfigurationFragment` | ported |  |
 | `FontFaceRequest` | re-export from core | | todo | |
-| `FontFamilyItemProps` | interface | | todo | |
-| `FontFamilyNamespace` | interface | | todo | |
-| `FontFamilyPartProps` | interface | | todo | |
-| `FontFamilyProps` | interface | | todo | |
+| `FontFamilyItemProps` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectFontFamily`. |
+| `FontFamilyNamespace` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectFontFamily`. |
+| `FontFamilyPartProps` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectFontFamily`. |
+| `FontFamilyProps` | interface | `DocxToolbarFontFamilyComponent` | ported | `div[docxToolbarFontFamily]`. `hidden` is a `docxSlotHidden` template in the toolbar. |
 | `FontLoadFailure` | re-export from core | | todo | |
 | `FontLoadFailureReason` | re-export from core | | todo | |
 | `FontOption` | interface | | todo | |
@@ -419,11 +419,11 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `ParagraphFormatRead` | re-export from core | | todo | |
 | `ParagraphFormatUpdate` | re-export from core | | todo | |
 | `ParagraphsChangeEvent` | re-export from core | | todo | |
-| `ParagraphStyleItemProps` | interface | | todo | |
-| `ParagraphStyleNamespace` | interface | | todo | |
-| `ParagraphStyleOption` | interface | | todo | |
-| `ParagraphStylePartProps` | interface | | todo | |
-| `ParagraphStyleProps` | interface | | todo | |
+| `ParagraphStyleItemProps` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectParagraphStyle`. |
+| `ParagraphStyleNamespace` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectParagraphStyle`. |
+| `ParagraphStyleOption` | interface | `ParagraphStyleOption` | ported |  |
+| `ParagraphStylePartProps` | interface | | dropped | Dropped: the `Trigger`, `Content`, and `Item` compound parts with `asChild` are a Vue mechanism. An Angular host replaces the slot with `docxSlot` and builds its own picker on `injectParagraphStyle`. |
+| `ParagraphStyleProps` | interface | `DocxToolbarParagraphStyleComponent` | ported | `div[docxToolbarParagraphStyle]`. |
 | `ParagraphTabStop` | re-export from core | | todo | |
 | `ParagraphText` | re-export from core | | todo | |
 | `ParagraphTextProofing` | re-export from core | | todo | |
@@ -478,7 +478,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `rulerPageBox` | re-export from core | | todo | |
 | `RulerTick` | re-export from core | | todo | |
 | `RulerUnit` | re-export from core | | todo | |
-| `runToolbarCommand` | re-export from core | | todo | |
+| `runToolbarCommand` | re-export from core | `injectEditorCommand` | ported | `execute` runs `runToolbarCommand`. See `toolbarCommandState`. |
 | `ScopedChromeAnchor` | interface | | todo | |
 | `ScopedChromeAnchorPlacement` | type | | todo | |
 | `ScrollToAnchorOptions` | re-export from core | | todo | |
@@ -502,33 +502,33 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `SlotProps` | interface | | todo | |
 | `SplitCellDialogFields` | interface | | todo | |
 | `TableAction` | type | | todo | |
-| `TableBorderColorNamespace` | interface | | todo | |
-| `TableBorderStyleNamespace` | interface | | todo | |
-| `TableBorderTargetNamespace` | interface | | todo | |
-| `TableBorderWidthNamespace` | interface | | todo | |
-| `TableCellFillNamespace` | interface | | todo | |
-| `TableChromeItemProps` | interface | | todo | |
-| `TableChromePartComponent` | interface | | todo | |
-| `TableChromePartProps` | interface | | todo | |
+| `TableBorderColorNamespace` | interface | `DocxToolbarTableBorderColorComponent` | ported | `div[docxToolbarTableBorderColor]`. The swatch body is the toolbar hex color picker; the shared color picker compound ports with phase 8. |
+| `TableBorderStyleNamespace` | interface | `DocxToolbarTableBorderStyleComponent` | ported | `div[docxToolbarTableBorderStyle]`. |
+| `TableBorderTargetNamespace` | interface | `DocxToolbarTableBorderTargetComponent` | ported | `div[docxToolbarTableBorderTarget]`. |
+| `TableBorderWidthNamespace` | interface | `DocxToolbarTableBorderWidthComponent` | ported | `div[docxToolbarTableBorderWidth]`. |
+| `TableCellFillNamespace` | interface | `DocxToolbarTableCellFillComponent` | ported | `div[docxToolbarTableCellFill]`. |
+| `TableChromeItemProps` | interface | | dropped | Dropped: the `Trigger`, `Content`, `Item`, and `Main` compound parts with `asChild` are a Vue mechanism. An Angular host replaces a table slot with `docxSlot`. |
+| `TableChromePartComponent` | interface | | dropped | Dropped: the `Trigger`, `Content`, `Item`, and `Main` compound parts with `asChild` are a Vue mechanism. An Angular host replaces a table slot with `docxSlot`. |
+| `TableChromePartProps` | interface | | dropped | Dropped: the `Trigger`, `Content`, `Item`, and `Main` compound parts with `asChild` are a Vue mechanism. An Angular host replaces a table slot with `docxSlot`. |
 | `TextFormFieldDialogFields` | interface | | todo | |
 | `TextMatch` | re-export from core | | todo | |
 | `textOffsetFromAccepted` | re-export from core | | todo | |
-| `ToolbarActionProps` | interface | | todo | |
-| `ToolbarAlignmentComponent` | interface | | todo | |
-| `ToolbarButtonProps` | interface | | todo | |
+| `ToolbarActionProps` | interface | `DocxToolbarActionComponent` | ported | The `select` emit is the `select` output. |
+| `ToolbarAlignmentComponent` | interface | `DocxToolbarAlignmentComponent` | ported | `div[docxToolbarAlignment]`. |
+| `ToolbarButtonProps` | interface | `DocxToolbarButtonComponent` | ported | The slot id is the `docxToolbarButton` input. The deprecated `slot` prop has no Angular counterpart. Content in the button replaces the registry icon. |
 | `ToolbarChartInsert` | const | | todo | |
-| `toolbarCommandState` | re-export from core | | todo | |
-| `ToolbarCommandState` | re-export from core | | todo | |
-| `ToolbarContext` | const | | todo | |
-| `ToolbarContextValue` | interface | | todo | |
+| `toolbarCommandState` | re-export from core | `injectEditorCommand` | ported | Angular does not re-export engine functions, so the engine stays one peer copy. `injectEditorCommand` reads `toolbarCommandState`; a host can import it from `@docx-editor.dev/core/editor`. |
+| `ToolbarCommandState` | re-export from core | `EditorCommandState` | ported | See `toolbarCommandState`. |
+| `ToolbarContext` | const | `DOCX_TOOLBAR_PLACEMENT`, `injectToolbarLabel` | ported | The toolbar provides its label function and the panel placement through Angular DI. The context object itself is internal (`DocxToolbarState`). |
+| `ToolbarContextValue` | interface |  | dropped | Dropped: the Vue context value has `t` and `onSave`. Angular reads `t` with `injectToolbarLabel`; the save part ports with its menu in phase 5. |
 | `ToolbarImageProperties` | const | | todo | |
-| `ToolbarPartComponent` | interface | | todo | |
-| `ToolbarPartProps` | type | | todo | |
+| `ToolbarPartComponent` | interface |  | dropped | Dropped: the `docxSlot` static marker is a Vue mechanism. Angular reads the slot from the `docxSlot` template directive and the part selector. |
+| `ToolbarPartProps` | type | `DocxToolbarButtonComponent` | ported | The props of a named part are the inputs of `button[docxToolbarButton]`. `hidden` is a `docxSlotHidden` template, and `asChild` is the host's own element with the part selector. |
 | `ToolbarReviewersProps` | type | | todo | |
-| `ToolbarSeparatorProps` | interface | | todo | |
-| `ToolbarSlotPartComponent` | interface | | todo | |
-| `ToolbarSlotPartProps` | interface | | todo | |
-| `ToolbarTranslate` | type | | todo | |
+| `ToolbarSeparatorProps` | interface | `DocxToolbarSeparatorComponent` | ported |  |
+| `ToolbarSlotPartComponent` | interface |  | dropped | Dropped: the `docxSlot` static marker is a Vue mechanism. Angular reads the slot from the `docxSlot` template directive and the part selector. |
+| `ToolbarSlotPartProps` | interface | `DocxSlotDirective` | ported | `hidden` is `docxSlotHidden`. `class` is the class of the part element. |
+| `ToolbarTranslate` | type | `DocxToolbarTranslate` | ported |  |
 | `TranslationKey` | re-export from core | | todo | |
 | `UnsupportedElement` | re-export from core | | todo | |
 | `UnsupportedElementLayout` | re-export from core | | todo | |
@@ -570,8 +570,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useEditorSnapshot` | function | | todo | |
 | `useEditorState` | function | `injectEditorState` | ported |  |
 | `useEditorValueCommand` | function | `injectEditorValueCommand` | ported |  |
-| `useFontFamily` | function | | todo | |
-| `UseFontFamilyResult` | interface | | todo | |
+| `useFontFamily` | function | `injectFontFamily` | ported |  |
+| `UseFontFamilyResult` | interface | `FontFamilyState` | ported |  |
 | `useFonts` | function | `injectFonts` | ported | It needs no injection context. |
 | `useGoToBookmark` | function | | todo | |
 | `UseGoToBookmarkOptions` | interface | | todo | |
@@ -607,8 +607,8 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `UseParagraphFormatReturn` | interface | | todo | |
 | `useParagraphIndent` | function | | todo | |
 | `UseParagraphIndentReturn` | interface | | todo | |
-| `useParagraphStyle` | function | | todo | |
-| `UseParagraphStyleResult` | interface | | todo | |
+| `useParagraphStyle` | function | `injectParagraphStyle` | ported |  |
+| `UseParagraphStyleResult` | interface | `ParagraphStyleState` | ported |  |
 | `useReviewAuthors` | function | | todo | |
 | `useReviewGutter` | function | | todo | |
 | `useRevisionMarkupDialog` | function | | todo | |
@@ -621,19 +621,19 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `UseSelectedShapeReturn` | interface | | todo | |
 | `useSplitCellDialog` | function | | todo | |
 | `UseSplitCellDialogReturn` | interface | | todo | |
-| `useTableBorderTargetLabel` | function | | todo | |
+| `useTableBorderTargetLabel` | function | `injectTableBorderTargetLabel` | ported |   |
 | `useTextFormFieldDialog` | function | | todo | |
 | `UseTextFormFieldDialogReturn` | interface | | todo | |
-| `useToolbarContext` | function | | todo | |
-| `useToolbarLabel` | function | | todo | |
-| `useToolbarLabelFor` | function | | todo | |
+| `useToolbarContext` | function | `injectToolbarLabel` | ported | The only public reading of the toolbar context is its label function. |
+| `useToolbarLabel` | function | `injectToolbarLabel` | ported |  |
+| `useToolbarLabelFor` | function | `injectToolbarLabel` | ported | A host that needs its own translation passes the toolbar `t` input. |
 | `useTranslation` | function | `injectTranslation` | ported | Returns `DocxEditorTranslation`. |
 | `useWatermark` | function | | todo | |
 | `useWatermarkDialog` | function | | todo | |
 | `UseWatermarkDialogReturn` | interface | | todo | |
 | `UseWatermarkReturn` | interface | | todo | |
-| `useZoom` | function | | todo | |
-| `UseZoomResult` | interface | | todo | |
+| `useZoom` | function | `injectZoom` | ported |  |
+| `UseZoomResult` | interface | `ZoomState` | ported |  |
 | `VERSION` | const | | todo | |
 | `VerticalRuler` | const | | todo | |
 | `VerticalRulerProps` | interface | | todo | |
@@ -653,7 +653,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | --- | --- | --- | --- |
 | `packages/vue/test/bookmark-dialog.test.ts` | | todo | Task 6.4 |
 | `packages/vue/test/build-external.test.ts` | | todo | |
-| `packages/vue/test/chrome-composition.test.ts` | | todo | Task 4.1 |
+| `packages/vue/test/chrome-composition.test.ts` | `packages/angular/src/lib/toolbar/toolbar.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-paragraph.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-table.spec.ts` | todo | Ported (task 4.1): the default bar follows the registry with slot ids; a hidden slot leaves the bar; a slot override keeps registry order and its class; `preset=false` renders only the composed content; Bold reflects live engine state; Escape closes the More panel before the header scope and the format painter; More closes when focus leaves. Ported (tasks 4.2 to 4.4): the contextual table chrome shows in a table only, collapses before the ordinary groups, leads the More panel, and its menu takes its own Escape; the line-spacing menu ticks the spacing in force, also one that no preset matches; a dropdown inside More takes the first Escape and the panel the second; Escape from a host input closes the editing-mode menu and keeps its default. Dropped: the deprecated `slot` prop of `Toolbar.Button`, which Angular never had. The reviewer-icon claim ports with task 10.1, and the More-behind-the-paragraph-dialog claim with task 6.3. The menu, context menu, navigation, hyperlink, loading, image, content control, header and footer, and font notice claims port with phases 5 to 9. |
 | `packages/vue/test/chrome-popup-dismissal.test.ts` | | todo | Task 5.3 |
 | `packages/vue/test/content-control-widget-parts.test.ts` | | todo | Task 9.3 |
 | `packages/vue/test/content-lock-policy-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass the policy, so bold over a locked control succeeds only with it and the text stays; an equal new object does not warn; a changed value is ignored and warns once. |
@@ -668,7 +668,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/deferred-notifier.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/dialog-customization.test.ts` | | todo | Task 6.1 |
 | `packages/vue/test/document-refresh-edit.test.ts` | | todo | Task 10.3 |
-| `packages/vue/test/editing-mode-author.test.ts` | `packages/angular/src/lib/construction-inputs.spec.ts` | todo | Ported: `<docx-editor mode='suggesting'>` with the review module waits for an author, then records typing as tracked changes by that author. The editing mode menu claims port with the toolbar in task 4.2. |
+| `packages/vue/test/editing-mode-author.test.ts` | `packages/angular/src/lib/construction-inputs.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts` | ported | Keeps: `<docx-editor mode='suggesting'>` with the review module waits for an author, then records typing as tracked changes by that author; the open editing mode menu tracks author arrival and removal without a mode change; keyboard travel skips Suggesting without an author. |
 | `packages/vue/test/editor-accessibility.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/editor-composition.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/engine-popup-renderers.test.ts` | | todo | Task 6.1 |
@@ -681,7 +681,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/form-field-i18n.test.ts` | `packages/angular/src/lib/i18n.spec.ts`, `packages/angular/src/lib/live-inputs.spec.ts` | todo | Ported: engine form labels follow the catalog and an explicit `translate` without a new engine, on the root and on `<docx-editor>`. The text form field dialog claims (the open dialog keeps its input and focus) port with task 6.4. |
 | `packages/vue/test/header-footer-chrome.test.ts` | | todo | Task 9.1 |
 | `packages/vue/test/highlights-background-layout.test.ts` | | todo | Task 7.2 |
-| `packages/vue/test/host-window-chrome.test.ts` | `packages/angular/src/lib/host-window.spec.ts` | todo | Ported: the window panel renders in the pop-out while open and comes back on close; turning `open` off moves the panel back before the window closes. The picker-dismissal claim needs the font family control and ports with task 4.2. |
+| `packages/vue/test/host-window-chrome.test.ts` | `packages/angular/src/lib/host-window.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts` | ported | Keeps: the window panel renders in the pop-out while open and comes back on close; turning `open` off moves the panel back before the window closes; a picker in the pop-out closes on a press in its own window, not in the opener. |
 | `packages/vue/test/hydration-renderer-slots.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/hyperlink-as-child.test.ts` | | todo | Task 6.2 |
 | `packages/vue/test/image-authoring.test.ts` | | todo | Task 8.1 |
@@ -712,7 +712,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/paginated-form-save.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts` | ported | Keeps: `save()` refuses (`invalidArgs`) a form field value that its format does not accept, and saves the value again after undo. The Angular spec uses `<docx-editor>`, because `PaginatedDocxEditor` is not ported. |
 | `packages/vue/test/paragraph-dialog.test.ts` | | todo | Task 6.3 |
 | `packages/vue/test/paragraph-hooks-lock-state.test.ts` | | todo | Task 6.3 |
-| `packages/vue/test/paragraph-style-labels.test.ts` |  | todo | Needs the paragraph style picker. Ports with task 4.2. |
+| `packages/vue/test/paragraph-style-labels.test.ts` | `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts` | ported | Keeps: built-in styles take the catalog label (also a localized style id such as `Ttulo1`), and the document's own styles keep their name. |
 | `packages/vue/test/popup-config.test.ts` | | todo | Task 6.1 |
 | `packages/vue/test/print-popup.test.ts` | | todo | Task 6.5 |
 | `packages/vue/test/props-primitives.test.ts` | | todo | Task 10.5 |
@@ -728,11 +728,11 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/slot-ref.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/sugar-host.test.ts` | `packages/angular/src/lib/packaged-api.spec.ts` | todo | Ported: `ready` emits once and the methods exist; `change` and `fontError` emit. Not kept: a new `document` value keeps the engine and calls `load()`, which the Angular browser test checks. The loading, ruler, toolbar, menu, title, context menu, navigation, and chrome band claims port with tasks 9.5, 9.6, 4.6, 5.4, 7.3. |
 | `packages/vue/test/text-highlights.test.ts` | | todo | Task 7.2 |
-| `packages/vue/test/toolbar-dev-warnings.test.ts` | | todo | Task 4.2 |
-| `packages/vue/test/toolbar-direction.test.ts` | `packages/angular/src/lib/i18n.spec.ts` | todo | Ported: the provider `dir` wins over the catalog; a right-to-left catalog mirrors the composed parts; a left-to-right catalog leaves the host direction. The direction button claims port with task 4.5, the packaged-editor claim is in `live-inputs.spec.ts` (Arabic and Hebrew mirror the `.docx-editor` wrapper, Portuguese leaves it). |
-| `packages/vue/test/toolbar-host-groups.test.ts` | | todo | Task 4.1 |
-| `packages/vue/test/toolbar-link-platform.test.ts` | | todo | Task 4.5 |
-| `packages/vue/test/toolbar-picker-accessibility.test.ts` | | todo | Task 4.2 |
+| `packages/vue/test/toolbar-dev-warnings.test.ts` | `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts` | ported | Keeps: a development warning prints once. Dropped: the Vite and Node build signals. Angular decides development mode with `isDevMode()`, which the Angular build sets. |
+| `packages/vue/test/toolbar-direction.test.ts` | `packages/angular/src/lib/i18n.spec.ts`, `packages/angular/src/lib/live-inputs.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-link-direction.spec.ts` | ported | Keeps: the provider `dir` wins over the catalog; a right-to-left catalog mirrors the composed parts; a left-to-right catalog leaves the host direction; the packaged editor mirrors for Arabic and Hebrew and not for Portuguese; Right-to-left writes `w:bidi` and reads back pressed; the pressed state follows the caret; the default toolbar omits the direction buttons for a left-to-right language and shows them after alignment for a right-to-left one. |
+| `packages/vue/test/toolbar-host-groups.test.ts` | `packages/angular/src/lib/toolbar/toolbar.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-table.spec.ts` | todo | Ported (task 4.1): controls leave one at a time from the end of a group and More holds exactly those; a host group is measured, collapses, and shows its actions as panel rows; `after`, built-in ids, hidden groups, and all-hidden groups; label, labelKey, and id headings; `className` in the preset and alone; slot replacement in place with its panel content; a content-sized bar gets its groups back; the panel clamp, also right-to-left; `overflowContent` on a built-in group; the anchor, slot id, built-in setting, and reserved id warnings. Not kept: the template-style empty `hidden` attribute, which `booleanAttribute` covers. Ported (task 4.4): the table part opens a size grid and inserts the picked size; a second trigger click closes the grid and focuses the document; focus that leaves the grid closes it; the grid moves left to stay in the viewport; in More, Escape closes the grid and an insert closes the panel. The Add Comment claims port with task 10.1, the menu bar claims with task 5.1. |
+| `packages/vue/test/toolbar-link-platform.test.ts` | `packages/angular/src/lib/toolbar/toolbar-link-direction.spec.ts` | ported | Keeps: the link control names the Mac modifier like the other buttons, keeps Ctrl on Windows, and normalizes a host translation; it sends the link request to the registered link UI, and without one it is disabled with the engine reason. Dropped: the server-render hydration claim. Angular hydration applies attribute bindings again on the client, so a label that differs between the server and a Mac client cannot cause a mismatch. |
+| `packages/vue/test/toolbar-picker-accessibility.test.ts` | `packages/angular/src/lib/toolbar/toolbar-pickers.spec.ts`, `packages/angular/src/lib/toolbar/toolbar-paragraph.spec.ts` | ported | Keeps: the font family, style, and zoom pickers support arrows, Escape, and focus return; the font size input names its open list; the color popups are dialogs that give the focus back on Escape and to the pages after a pick; Escape closes a click-opened picker and stops there, and a host field keeps its Escape; Escape closes a picker before the header scope and the format painter; a canceled press on the pages closes each of the six popups, and a press inside keeps it. |
 | `packages/vue/test/unsupported-elements.test.ts` | | todo | Task 9.5 |
 | `packages/vue/test/use-comment-draft-request.test.ts` | | todo | Task 10.1 |
 | `packages/vue/test/use-editor-command.test.ts` | `packages/angular/src/lib/editor-command.spec.ts` | ported | Keeps: state follows a payload change with the same type; `execute` returns false on a refusal; many commands share the root listeners; custom equality stops slice updates; a burst collapses through the deferred notifier; outside a root the command is disabled; range binding groups keyboard repeats and cleans up; a held stepper starts before its own keydown handler. |

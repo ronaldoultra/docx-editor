@@ -7,7 +7,7 @@ The package has two levels:
 - `<docx-editor>` is a packaged component for a page that needs only the pages.
 - The composition API is a set of parts that you put together in your own layout. Use it to add your own controls.
 
-The package has no toolbar, menus, context menu, or dialogs yet. `<docx-editor>` shows the pages with a `.docx-editor` wrapper that carries the color mode and the chrome direction.
+The package has a formatting toolbar. It has no menus, context menu, or dialogs yet. `<docx-editor>` shows the toolbar above the pages, in a `.docx-editor` wrapper that carries the color mode and the chrome direction.
 
 ## Requirements
 
@@ -229,6 +229,82 @@ The following template adds a button that moves the pages to a pop-out window:
 </ng-container>
 ```
 
+## Add the toolbar
+
+`fieldset[docxEditorToolbar]` is the formatting toolbar. Put it inside an editor root. It renders the engine's default groups and controls in registry order, and each control carries its slot id, such as `text.bold`, in `data-slot`. The engine decides whether a control is enabled. A disabled control shows the localized engine reason as its title.
+
+The following template puts the toolbar above the pages:
+
+```html
+<ng-container docxEditorRoot [document]="bytes()">
+  <fieldset docxEditorToolbar></fieldset>
+  <docx-editor-viewport style="height: 80vh">
+    <docx-editor-content />
+  </docx-editor-viewport>
+</ng-container>
+```
+
+When the bar has no room, controls leave from the end of the groups in collapse order, into a "⋯" panel. Set `[overflow]="false"` to let the bar wrap instead.
+
+The toolbar has these inputs:
+
+| Input | Description |
+| --- | --- |
+| `preset` | `true` (default) renders the default arrangement. `false` renders only your content. |
+| `overflow` | `true` (default) collapses the controls that do not fit into the "⋯" panel. |
+| `t` | A function that returns your own label for a key, or `undefined` to use the active catalog. |
+
+### Change the default controls
+
+Put `ng-template` elements inside the toolbar to change the default arrangement. You do not copy the arrangement.
+
+- `<ng-template docxSlot="text.bold">` replaces one control in its place. `[docxSlotOverflow]` gives the content of its "⋯" panel row.
+- `<ng-template docxSlot="text.strike" docxSlotHidden />` removes one control.
+- `<ng-template docxToolbarGroup="mine" label="Mine">` adds a group of your own. It is measured with the other groups and collapses into a labeled section of the "⋯" panel. `priority`, `pinned`, and `after` place it.
+- `<ng-template docxToolbarGroup="font">` adds content to a built-in group. `hidden` removes the group.
+
+Other content of the toolbar renders after the groups, in a block that does not collapse.
+
+The following toolbar replaces the bold control, removes strikethrough, and adds a group with a host action:
+
+```html
+<fieldset docxEditorToolbar>
+  <ng-template docxSlot="text.bold">
+    <button docxToolbarButton="text.bold" class="my-bold"></button>
+  </ng-template>
+  <ng-template docxSlot="text.strike" docxSlotHidden />
+  <ng-template docxToolbarGroup="review-nav" label="Review" [priority]="15">
+    <button docxToolbarAction label="Next change" (select)="next()">
+      <svg [docxChromeIcon]="nextIcon"></svg>
+    </button>
+  </ng-template>
+</fieldset>
+```
+
+In the "⋯" panel, a `docxToolbarAction` button renders as a panel row with its icon and label.
+
+### Toolbar parts
+
+Each part is a standalone component that you can also place yourself, for example in a toolbar with `[preset]="false"`:
+
+| Part | Slot |
+| --- | --- |
+| `button[docxToolbarButton]` | Any command slot, such as `history.undo`, `text.bold`, `list.bullet`, `text.link`, or `direction.rtl`. |
+| `button[docxToolbarAction]` | Your own action, with `label` and a `select` output. |
+| `div[docxToolbarSeparator]` | A separator. |
+| `div[docxToolbarFontFamily]` | `font.family` |
+| `span[docxToolbarFontSize]` | `font.size` |
+| `div[docxToolbarParagraphStyle]` | `styles.style` |
+| `span[docxToolbarZoom]` | `zoom.level` |
+| `div[docxToolbarFontColor]`, `div[docxToolbarHighlight]` | `text.color`, `text.highlight` |
+| `div[docxToolbarAlignment]` | The alignment dropdown. |
+| `span[docxToolbarLineSpacing]` | `list.lineSpacing` |
+| `div[docxToolbarEditingMode]` | `review.editingMode` |
+| `span[docxToolbarTableInsert]` | `table.insert` |
+| `div[docxToolbarTableBorderTarget]`, `div[docxToolbarTableBorderStyle]`, `div[docxToolbarTableBorderWidth]`, `div[docxToolbarTableBorderColor]`, `div[docxToolbarTableCellFill]` | The table border and fill slots. They render only while the selection is in a table. |
+
+To build a picker of your own, read its state with `injectFontFamily`, `injectParagraphStyle`, or `injectZoom`, and replace the slot with `docxSlot`.
+
 ## Load a document and its fonts
 
 `injectDocxSource` loads a document from bytes or from a URL, and holds it back until its eager fonts settle. An eager font origin is a configuration, a fragment, a promise, or a loader with no argument. A resolver from `defineFontResolver` needs the open document, so the document opens at once and the resolver answers for each document. Call `injectDocxSource` in an injection context:
@@ -256,7 +332,7 @@ readonly fonts = injectFonts(brandFonts, computed(() => this.extraFonts()));
 
 ## Packaged component API
 
-`<docx-editor>` composes the same public parts that the previous section describes: `docxEditorRoot`, `<docx-editor-viewport>`, and `<docx-editor-content>`. The root inputs have the same names and the same behavior.
+`<docx-editor>` composes the same public parts that the previous sections describe: `docxEditorRoot`, `fieldset[docxEditorToolbar]`, `<docx-editor-viewport>`, and `<docx-editor-content>`. The root inputs have the same names and the same behavior. Set `[chrome]="false"` to show only the pages.
 
 ### Inputs that apply live
 
@@ -265,6 +341,7 @@ A change to one of these inputs applies to the open document without a reload. T
 | Input | Description |
 | --- | --- |
 | `document` | `ArrayBuffer` or `Uint8Array` with the DOCX bytes. A new value opens the new document in the same engine. `null` destroys the engine and its document. |
+| `chrome` | `true` (default) shows the formatting toolbar above the pages. `false` shows only the pages. |
 | `mode` | `'edit'` (default), `'view'`, or `'suggesting'`. Suggesting needs a review module in `modules` and an `author`. Without an author, the editor stays in editing until `author` has a value. |
 | `author` | The author of later comments, replies, and tracked changes. |
 | `colorMode` | `'light'` (default), `'dark'`, or `'system'`, which follows the operating system. |

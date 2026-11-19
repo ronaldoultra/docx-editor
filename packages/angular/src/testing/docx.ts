@@ -55,3 +55,56 @@ export const run = (text: string): string => `<w:r><w:t xml:space="preserve">${t
 
 /** One paragraph with one run. */
 export const paragraph = (text: string): string => `<w:p>${run(text)}</w:p>`;
+
+/** A body paragraph and a default header, for Escape specs that need a header scope. */
+export function headerDocx(): Uint8Array {
+  const R = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  return zipSync({
+    '[Content_Types].xml': strToU8(
+      `<Types xmlns="${CT}">` +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+        '<Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>' +
+        '</Types>'
+    ),
+    '_rels/.rels': strToU8(
+      `<Relationships xmlns="${REL}"><Relationship Id="rId1" Type="${OD}" Target="word/document.xml"/></Relationships>`
+    ),
+    'word/_rels/document.xml.rels': strToU8(
+      `<Relationships xmlns="${REL}"><Relationship Id="rId10" Type="${R}/header" Target="header1.xml"/></Relationships>`
+    ),
+    'word/document.xml': strToU8(
+      `<w:document xmlns:w="${W}" xmlns:r="${R}"><w:body>${paragraph('Body text')}` +
+        `<w:sectPr><w:headerReference w:type="default" r:id="rId10"/></w:sectPr></w:body></w:document>`
+    ),
+    'word/header1.xml': strToU8(`<w:hdr xmlns:w="${W}">${paragraph('Header text')}</w:hdr>`),
+  });
+}
+
+/** DOCX bytes with a styles part: `styles` is the content of `w:styles`. */
+export function stylesDocx(styles: string, body: string): Uint8Array {
+  const STYLES = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles';
+  return zipSync({
+    '[Content_Types].xml': strToU8(
+      `<Types xmlns="${CT}">` +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+        '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>' +
+        '</Types>'
+    ),
+    '_rels/.rels': strToU8(
+      `<Relationships xmlns="${REL}"><Relationship Id="rId1" Type="${OD}" Target="word/document.xml"/></Relationships>`
+    ),
+    'word/_rels/document.xml.rels': strToU8(
+      `<Relationships xmlns="${REL}"><Relationship Id="rIdStyles" Type="${STYLES}" Target="styles.xml"/></Relationships>`
+    ),
+    'word/styles.xml': strToU8(`<w:styles xmlns:w="${W}">${styles}</w:styles>`),
+    'word/document.xml': strToU8(
+      `<w:document xmlns:w="${W}"><w:body>${body}</w:body></w:document>`
+    ),
+  });
+}
+
+/** One paragraph style with an id and a name. */
+export const paragraphStyle = (id: string, name: string, extra = ''): string =>
+  `<w:style w:type="paragraph" w:styleId="${id}"${extra}><w:name w:val="${name}"/></w:style>`;
