@@ -656,7 +656,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/chrome-composition.test.ts` | | todo | Task 4.1 |
 | `packages/vue/test/chrome-popup-dismissal.test.ts` | | todo | Task 5.3 |
 | `packages/vue/test/content-control-widget-parts.test.ts` | | todo | Task 9.3 |
-| `packages/vue/test/content-lock-policy-prop.test.ts` | | todo | Task 3.1 |
+| `packages/vue/test/content-lock-policy-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass the policy, so bold over a locked control succeeds only with it and the text stays; an equal new object does not warn; a changed value is ignored and warns once. |
 | `packages/vue/test/context-menu-add-comment.test.ts` | | todo | |
 | `packages/vue/test/context-menu-chart.test.ts` | | todo | Task 5.2 |
 | `packages/vue/test/context-menu-keyboard.test.ts` | | todo | Task 5.3 |
@@ -668,17 +668,17 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/deferred-notifier.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/dialog-customization.test.ts` | | todo | Task 6.1 |
 | `packages/vue/test/document-refresh-edit.test.ts` | | todo | Task 10.3 |
-| `packages/vue/test/editing-mode-author.test.ts` | | todo | Task 3.1 |
+| `packages/vue/test/editing-mode-author.test.ts` | | todo | The `suggesting` mode needs the review module, so its engine claim ports with task 3.2. The editing mode menu claims port with the toolbar in task 4.2. |
 | `packages/vue/test/editor-accessibility.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/editor-composition.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/engine-popup-renderers.test.ts` | | todo | Task 6.1 |
 | `packages/vue/test/equation-popup.test.ts` | | todo | Task 6.6 |
 | `packages/vue/test/export-popup.test.ts` | | todo | Task 6.5 |
-| `packages/vue/test/field-results-prop.test.ts` | | todo | Task 3.1 |
+| `packages/vue/test/field-results-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass `fieldResults`; `'editable'` types inside the saved result, the default types after it. A later change is ignored and warns once. |
 | `packages/vue/test/font-origins.test.ts` | | todo | Task 3.2 |
 | `packages/vue/test/font-shaping-lifecycle.test.ts` | | todo | Task 3.2 |
 | `packages/vue/test/fonts-prop.test.ts` | | todo | Task 3.2 |
-| `packages/vue/test/form-field-i18n.test.ts` | `packages/angular/src/lib/i18n.spec.ts` | todo | Root claims ported: engine form labels follow the catalog and an explicit `translate` without new controls. The packaged-editor claims port with task 3.1. |
+| `packages/vue/test/form-field-i18n.test.ts` | `packages/angular/src/lib/i18n.spec.ts`, `packages/angular/src/lib/live-inputs.spec.ts` | todo | Ported: engine form labels follow the catalog and an explicit `translate` without a new engine, on the root and on `<docx-editor>`. The text form field dialog claims (the open dialog keeps its input and focus) port with task 6.4. |
 | `packages/vue/test/header-footer-chrome.test.ts` | | todo | Task 9.1 |
 | `packages/vue/test/highlights-background-layout.test.ts` | | todo | Task 7.2 |
 | `packages/vue/test/host-window-chrome.test.ts` | `packages/angular/src/lib/host-window.spec.ts` | todo | Ported: the window panel renders in the pop-out while open and comes back on close; turning `open` off moves the panel back before the window closes. The picker-dismissal claim needs the font family control and ports with task 4.2. |
@@ -691,10 +691,10 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/image-panel-rows.test.ts` | | todo | Task 8.1 |
 | `packages/vue/test/lifecycle-regression.test.ts` | | todo | Task 3.3 |
 | `packages/vue/test/link-row-chrome.test.ts` | | todo | Task 6.2 |
-| `packages/vue/test/live-props.test.ts` | | todo | Task 3.1 |
+| `packages/vue/test/live-props.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | todo | Ported: author, mode, translate, and locale apply to the same engine; another input change does not restore the host mode; a catalog change and then `translate` reach the engine; an equal new `translate` publishes no selection change; `colorMode` applies. The `rulers`, `navigation`, and `title` claims port with tasks 9.6, 7.3, and 5.4. |
 | `packages/vue/test/loading-continued.test.ts` | | todo | Task 9.5 |
 | `packages/vue/test/loading-indicator.test.ts` | | todo | Task 9.5 |
-| `packages/vue/test/locked-control-navigation-prop.test.ts` | | todo | Task 3.1 |
+| `packages/vue/test/locked-control-navigation-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass the mode; `'atomic'` steps over the control, the default steps into it. A later change is ignored and warns once, only for a real change. |
 | `packages/vue/test/menu-composition.test.ts` | | todo | Task 5.1 |
 | `packages/vue/test/menu-download-name.test.ts` | | todo | Task 5.1 |
 | `packages/vue/test/menu-opening.test.ts` | | todo | Task 5.1 |
@@ -729,7 +729,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/sugar-host.test.ts` | | todo | Task 3.3 |
 | `packages/vue/test/text-highlights.test.ts` | | todo | Task 7.2 |
 | `packages/vue/test/toolbar-dev-warnings.test.ts` | | todo | Task 4.2 |
-| `packages/vue/test/toolbar-direction.test.ts` | `packages/angular/src/lib/i18n.spec.ts` | todo | Ported: the provider `dir` wins over the catalog; a right-to-left catalog mirrors the composed parts; a left-to-right catalog leaves the host direction. The direction button claims port with task 4.5, the packaged-editor claim with task 3.1. |
+| `packages/vue/test/toolbar-direction.test.ts` | `packages/angular/src/lib/i18n.spec.ts` | todo | Ported: the provider `dir` wins over the catalog; a right-to-left catalog mirrors the composed parts; a left-to-right catalog leaves the host direction. The direction button claims port with task 4.5, the packaged-editor claim is in `live-inputs.spec.ts` (Arabic and Hebrew mirror the `.docx-editor` wrapper, Portuguese leaves it). |
 | `packages/vue/test/toolbar-host-groups.test.ts` | | todo | Task 4.1 |
 | `packages/vue/test/toolbar-link-platform.test.ts` | | todo | Task 4.5 |
 | `packages/vue/test/toolbar-picker-accessibility.test.ts` | | todo | Task 4.2 |

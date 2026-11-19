@@ -1,22 +1,32 @@
-import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
-  ElementRef,
   NgZone,
-  PLATFORM_ID,
   ViewEncapsulation,
-  effect,
+  computed,
   inject,
   input,
   output,
-  untracked,
   viewChild,
 } from '@angular/core';
-import type { DocumentChange } from '@docx-editor.dev/core/contracts/editor';
-import { createDocxEditor, type DocxEditorInstance } from '@docx-editor.dev/core/editor';
-import en from '@docx-editor.dev/i18n/en';
+import type { DocumentChange, ZoomMode } from '@docx-editor.dev/core/contracts/editor';
+import type {
+  ContentLockPolicy,
+  DocxEditorInstance,
+  FieldResultsMode,
+  LockedControlNavigation,
+} from '@docx-editor.dev/core/editor';
+import type { Translations } from '@docx-editor.dev/i18n';
+import type { DocxEditorColorMode } from './color-mode';
+import { DocxEditorContentComponent } from './content.component';
+import { DOCX_EDITOR_SCOPED } from './context';
+import { DocxEditorI18n, injectChromeDir } from './i18n';
+import {
+  DocxEditorRootDirective,
+  type DocxEditorRootMode,
+  type DocxEditorTranslate,
+} from './root.directive';
+import { DocxEditorViewportComponent } from './viewport.component';
 
 /**
  * The DOCX bytes that `<docx-editor>` accepts.
@@ -26,25 +36,25 @@ import en from '@docx-editor.dev/i18n/en';
 export type DocxEditorDocument = ArrayBuffer | Uint8Array;
 
 /**
- * The host editing mode. `'edit'` allows text edits. `'view'` shows the pages read-only.
- * The engine also has a `'suggesting'` mode, which needs the review module, so this
- * component does not offer it.
+ * The host editing mode. `'edit'` allows edits. `'view'` shows the pages read-only.
+ * `'suggesting'` records edits as tracked changes by the `author`.
  *
  * @public
  */
-export type DocxEditorMode = 'edit' | 'view';
+export type DocxEditorMode = DocxEditorRootMode;
 
 /**
- * A paginated DOCX editor. The engine in `@docx-editor.dev/core` reads, lays out, paints,
- * and edits the document. This component only owns the DOM element and the lifetime of
- * the engine instance.
+ * A complete paginated DOCX editor. It composes the public parts — `docxEditorRoot`,
+ * `<docx-editor-viewport>`, and `<docx-editor-content>` — so a host that composes its own
+ * editor reaches the same behavior. The engine in `@docx-editor.dev/core` reads, lays out,
+ * paints, and edits the document.
  *
- * The engine runs outside the Angular zone when zone.js is present. Only the `change`
- * output enters the zone again, so typing does not start change detection by itself.
+ * The engine runs outside the Angular zone when zone.js is present. Only the outputs and the
+ * state that templates read enter the zone again.
  *
  * @example
  * ```html
- * <docx-editor [document]="bytes()" mode="edit" (change)="dirty.set(true)" />
+ * <docx-editor [document]="bytes()" mode="edit" [zoom]="1.5" (change)="dirty.set(true)" />
  * ```
  *
  * @public
@@ -53,33 +63,90 @@ export type DocxEditorMode = 'edit' | 'view';
   selector: 'docx-editor',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  imports: [DocxEditorRootDirective, DocxEditorViewportComponent, DocxEditorContentComponent],
+  providers: [DocxEditorI18n],
+  // The wrapper below carries the scope class, so the parts inside do not add it again.
+  viewProviders: [{ provide: DOCX_EDITOR_SCOPED, useValue: true }],
+  styles: `
+    docx-editor {
+      display: block;
+    }
+  `,
   template: `
     <div
-      class="docx-editor docx-editor-one-surface docx-editor-one-surface__viewport docx-editor__scroll-container"
-      data-testid="docx-editor-scroll"
-      tabindex="0"
-      role="region"
-      [attr.aria-label]="viewportLabel()"
+      class="docx-editor"
+      data-testid="docx-editor"
+      [class.dark]="dark()"
+      [attr.dir]="chromeDir() ?? null"
+      style="display: flex; flex-direction: column; height: 100%; width: 100%; background-color: var(--doc-bg)"
     >
-      <div class="docx-content-mount">
-        <div #surface class="docx-paginated-surface"></div>
-      </div>
+      @if (document() !== null) {
+        <ng-container
+          docxEditorRoot
+          [document]="document() ?? undefined"
+          [mode]="mode()"
+          [colorMode]="colorMode()"
+          [locale]="locale()"
+          [translate]="translate()"
+          [author]="author()"
+          [zoom]="zoom()"
+          [zoomMode]="zoomMode()"
+          [fieldResults]="fieldResults()"
+          [contentLockPolicy]="contentLockPolicy()"
+          [lockedControlNavigation]="lockedControlNavigation()"
+          (change)="change.emit($event)"
+        >
+          <docx-editor-viewport style="flex: 1; min-height: 0; min-width: 0; overflow-anchor: none">
+            <docx-editor-content />
+          </docx-editor-viewport>
+        </ng-container>
+      }
     </div>
   `,
 })
 export class DocxEditorComponent {
   /**
-   * The DOCX bytes to show. A new value loads the new document into the same engine
-   * instance with `load()`. The engine does not copy the bytes, so do not change them
-   * after you pass them. `null` releases the current document.
+   * The DOCX bytes to show. A new value opens the new document in the same engine with
+   * `load()`. The engine does not copy the bytes, so do not change them after you pass them.
+   * `null` destroys the engine and its document.
    */
   readonly document = input<DocxEditorDocument | null | undefined>(undefined);
 
   /** The host editing mode. A change applies to the open document without a reload. */
   readonly mode = input<DocxEditorMode>('edit');
 
-  /** The accessible name of the scrolling page region. */
-  readonly viewportLabel = input<string>(en.editor.documentViewport);
+  /** The color theme of the chrome. `'system'` follows the operating system. */
+  readonly colorMode = input<DocxEditorColorMode>('light');
+
+  /**
+   * The translation catalog of the chrome. Missing keys fall back to an outer
+   * `docxEditorI18n` provider, then to English. A right-to-left catalog mirrors the chrome.
+   */
+  readonly i18n = input<Translations | undefined>(undefined);
+
+  /** Labels that the engine paints. Defaults to the active translations. */
+  readonly translate = input<DocxEditorTranslate | undefined>(undefined);
+
+  /** The BCP-47 locale for date input and labels that the engine makes. Defaults to `en-US`. */
+  readonly locale = input<string | undefined>(undefined);
+
+  /** The author of later comments, replies, and tracked changes. */
+  readonly author = input<string | undefined>(undefined);
+
+  /** The zoom factor, where `1` is 100 percent. A change applies without a reload. */
+  readonly zoom = input<number | undefined>(undefined);
+
+  /** A fixed zoom, or a zoom that fits the page or its width to the viewport. */
+  readonly zoomMode = input<ZoomMode | 'auto' | undefined>(undefined);
+
+  /** How the reader edits saved field results. Read once, when the engine is created. */
+  readonly fieldResults = input<FieldResultsMode | undefined>(undefined);
+
+  /** Relaxes content-control locks. Read once, when the engine is created. */
+  readonly contentLockPolicy = input<ContentLockPolicy | undefined>(undefined);
+
+  /** How the caret moves through a locked inline control. Read once, at creation. */
+  readonly lockedControlNavigation = input<LockedControlNavigation | undefined>(undefined);
 
   /**
    * Emits for each change that the engine commits: an edit, undo, redo, or a load.
@@ -87,24 +154,21 @@ export class DocxEditorComponent {
    */
   readonly change = output<DocumentChange>();
 
-  private readonly surface = viewChild<ElementRef<HTMLDivElement>>('surface');
   private readonly zone = inject(NgZone);
-  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly root = viewChild(DocxEditorRootDirective);
 
-  private editor: DocxEditorInstance | null = null;
-  private loaded: DocxEditorDocument | null = null;
-  private appliedMode: DocxEditorMode | null = null;
-  private readonly releases: Array<() => void> = [];
+  /** @internal */
+  protected readonly chromeDir = injectChromeDir();
+  /** @internal */
+  protected readonly dark = computed(() => this.root()?.context.dark() ?? false);
 
   constructor() {
-    effect(() => {
-      const host = this.surface()?.nativeElement;
-      const source = this.document() ?? null;
-      const mode = this.mode();
-      if (!host || !this.isBrowser) return;
-      untracked(() => this.zone.runOutsideAngular(() => this.sync(host, source, mode)));
-    });
-    inject(DestroyRef).onDestroy(() => this.release());
+    inject(DocxEditorI18n, { self: true }).use(() => this.i18n());
+  }
+
+  /** The engine instance, or `null` before it exists and after `document` is `null`. */
+  getEditor(): DocxEditorInstance | null {
+    return this.root()?.context.editor() ?? null;
   }
 
   /**
@@ -113,59 +177,8 @@ export class DocxEditorComponent {
    * Rejects when no document is loaded, or when the engine refuses the save.
    */
   save(): Promise<ArrayBuffer> {
-    const editor = this.editor;
+    const editor = this.getEditor();
     if (!editor) return Promise.reject(new Error('docx-editor: no document is loaded.'));
     return this.zone.runOutsideAngular(() => editor.save());
-  }
-
-  private sync(host: HTMLDivElement, source: DocxEditorDocument | null, mode: DocxEditorMode) {
-    if (source === null) {
-      this.release();
-      return;
-    }
-    const editor = this.editor;
-    if (!editor) {
-      this.create(host, source, mode);
-      return;
-    }
-    if (source !== this.loaded) {
-      this.loaded = source;
-      editor.load(source);
-    }
-    if (mode !== this.appliedMode) {
-      this.appliedMode = mode;
-      editor.setMode(mode);
-    }
-  }
-
-  private create(host: HTMLDivElement, source: DocxEditorDocument, mode: DocxEditorMode) {
-    const editor = createDocxEditor({ document: source, mode });
-    this.editor = editor;
-    this.loaded = source;
-    this.appliedMode = mode;
-    this.releases.push(
-      editor.on('change', (change) => this.zone.run(() => this.change.emit(change)))
-    );
-    // A file dropped on the pages must not make the browser open it in place of the app.
-    const preventDrop = (event: DragEvent) => event.preventDefault();
-    host.addEventListener('drop', preventDrop);
-    this.releases.push(() => host.removeEventListener('drop', preventDrop));
-    try {
-      editor.attach(host);
-    } catch (error) {
-      // A document that fails to open is a refusal on the snapshot, not a crash of the
-      // host. Other errors are defects, so they continue to the caller.
-      if (editor.snapshot().openFailure?.code !== 'open.failed') throw error;
-      console.error('[docx-editor] The document failed to open.', error);
-    }
-  }
-
-  private release() {
-    for (const off of this.releases.splice(0)) off();
-    const editor = this.editor;
-    this.editor = null;
-    this.loaded = null;
-    this.appliedMode = null;
-    if (editor) this.zone.runOutsideAngular(() => editor.destroy());
   }
 }
