@@ -7,10 +7,12 @@ import {
   computed,
   inject,
   input,
+  model,
   output,
   viewChild,
   type InputSignal,
   type InputSignalWithTransform,
+  type ModelSignal,
   type Signal,
 } from '@angular/core';
 import type {
@@ -38,7 +40,7 @@ import {
   type ImageDecodePort,
   type LockedControlNavigation,
 } from '@docx-editor.dev/core/editor';
-import type { Translations } from '@docx-editor.dev/core/i18n';
+import type { TFunction, Translations } from '@docx-editor.dev/core/i18n';
 import type { DocxEditorColorMode } from './color-mode';
 import { DocxEditorContentComponent } from './content.component';
 import { DocxEditorContextMenuComponent } from './context-menu/context-menu.component';
@@ -201,25 +203,47 @@ function partOption<T extends object>(value: boolean | string | T | null | undef
           (fontError)="fontError.emit($event)"
         >
           @if (chrome()) {
-            @if (menu(); as bar) {
+            <div
+              data-testid="docx-editor-chrome-band"
+              style="flex: none; display: flex; flex-direction: column; position: relative; z-index: var(--doc-z-overlay); background-color: var(--doc-surface); border-bottom: 1px solid var(--doc-border); box-shadow: 0 1px 3px var(--doc-shadow-subtle)"
+            >
               <div
-                docxEditorMenu
-                style="min-width: 0"
-                [preset]="bar.preset ?? true"
-                [overflow]="bar.overflow ?? true"
-                [t]="bar.t"
-                [fileName]="bar.fileName"
-                [openHandler]="bar.openHandler"
-                [saveHandler]="bar.saveHandler"
-                [pageSetupHandler]="bar.pageSetupHandler"
-                [paragraphDialogHandler]="bar.paragraphDialogHandler"
-                [watermarkDialogHandler]="bar.watermarkDialogHandler"
-                [reportIssueHandler]="bar.reportIssueHandler"
-                [reportIssue]="bar.reportIssue ?? true"
-                (openFile)="bar.onOpenFile?.($event)"
-              ></div>
-            }
-            <fieldset docxEditorToolbar></fieldset>
+                style="display: flex; align-items: center; gap: 8px; padding: 8px 12px 0; color: var(--doc-text)"
+              >
+                <div style="display: flex; flex-direction: column; flex: 1; min-width: 0; gap: 2px">
+                  <input
+                    type="text"
+                    data-testid="docx-editor-title"
+                    style="flex: 1; min-width: 0; font: inherit; color: inherit; background-color: transparent; border: 1px solid transparent; border-radius: 4px; padding: 2px 6px"
+                    [attr.aria-label]="t()('titleBar.documentNameAriaLabel')"
+                    [placeholder]="t()('titleBar.untitled')"
+                    [value]="title() ?? ''"
+                    (input)="onTitleInput($event)"
+                  />
+                  @if (menu(); as bar) {
+                    <div
+                      docxEditorMenu
+                      style="min-width: 0"
+                      [preset]="bar.preset ?? true"
+                      [overflow]="bar.overflow ?? true"
+                      [t]="bar.t"
+                      [fileName]="bar.fileName ?? title()"
+                      [openHandler]="bar.openHandler"
+                      [saveHandler]="bar.saveHandler"
+                      [pageSetupHandler]="bar.pageSetupHandler"
+                      [paragraphDialogHandler]="bar.paragraphDialogHandler"
+                      [watermarkDialogHandler]="bar.watermarkDialogHandler"
+                      [reportIssueHandler]="bar.reportIssueHandler"
+                      [reportIssue]="bar.reportIssue ?? true"
+                      (openFile)="bar.onOpenFile?.($event)"
+                    ></div>
+                  }
+                </div>
+              </div>
+              <div style="padding: 8px 12px">
+                <fieldset docxEditorToolbar></fieldset>
+              </div>
+            </div>
           }
           <docx-editor-viewport style="flex: 1; min-height: 0; min-width: 0; overflow-anchor: none">
             <docx-editor-content />
@@ -253,6 +277,13 @@ export class DocxEditorComponent {
    * pages. Compose `fieldset[docxEditorToolbar]` yourself for another arrangement.
    */
   readonly chrome = input(true, { transform: booleanAttribute });
+
+  /**
+   * The document title in the title bar above the menu bar. It shows only with `chrome`. The
+   * reader can edit it, and each edit emits `titleChange`, so `[(title)]` keeps it in a host
+   * signal. File › Save uses it as the file name, unless `menu` gives a `fileName`.
+   */
+  readonly title: ModelSignal<string | undefined> = model<string | undefined>(undefined);
 
   /**
    * The menu bar above the toolbar. It shows only with `chrome`. `false` removes it. An object
@@ -352,10 +383,19 @@ export class DocxEditorComponent {
   /** @internal */
   protected readonly chromeDir: Signal<DocxEditorDirection | undefined> = injectChromeDir();
   /** @internal */
+  protected readonly t: Signal<TFunction>;
+  /** @internal */
   protected readonly dark = computed(() => this.root()?.context.dark() ?? false);
 
   constructor() {
-    inject(DocxEditorI18n, { self: true }).use(() => this.i18n());
+    const i18n = inject(DocxEditorI18n, { self: true });
+    i18n.use(() => this.i18n());
+    this.t = i18n.t;
+  }
+
+  /** @internal */
+  protected onTitleInput(event: Event): void {
+    this.title.set((event.target as HTMLInputElement).value);
   }
 
   /** The engine instance, or `null` before it exists and after `document` is `null`. */

@@ -747,7 +747,10 @@ describe('the packaged editor', () => {
     const element: HTMLElement = fixture.nativeElement;
     const wrapper = element.querySelector('.docx-editor')!;
     const toolbar = toolbarOf(element);
-    expect(toolbar.parentElement).toBe(wrapper.firstElementChild?.parentElement);
+    // The toolbar sits in the chrome band, the first child of the wrapper.
+    const band = wrapper.firstElementChild!;
+    expect(band.getAttribute('data-testid')).toBe('docx-editor-chrome-band');
+    expect(band.contains(toolbar)).toBe(true);
     // The wrapper carries the scope class, so the toolbar does not repeat it.
     expect(toolbar.classList.contains('docx-editor')).toBe(false);
     const viewport = element.querySelector('docx-editor-viewport')!;

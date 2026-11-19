@@ -41,10 +41,12 @@ import { HistoryGroupBindingOptions } from '@docx-editor.dev/core/editor';
 import { ImageDecodePort } from '@docx-editor.dev/core/editor';
 import { InjectionToken } from '@angular/core';
 import { InputSignal } from '@angular/core';
+import { InputSignalWithTransform } from '@angular/core';
 import { LineSpacingMenuRow } from '@docx-editor.dev/core/editor';
-import { LocaleStrings } from '@docx-editor.dev/i18n';
+import { LocaleStrings } from '@docx-editor.dev/core/i18n';
 import { LockedControlNavigation } from '@docx-editor.dev/core/editor';
 import { MarkedFontResolver } from '@docx-editor.dev/core/editor';
+import { ModelSignal } from '@angular/core';
 import { ObjectSlotValueMap } from '@docx-editor.dev/core/editor';
 import { OnInit } from '@angular/core';
 import { Provider } from '@angular/core';
@@ -53,9 +55,9 @@ import { Signal } from '@angular/core';
 import { TableChromeDraft } from '@docx-editor.dev/core/editor';
 import { TableChromeSlotId } from '@docx-editor.dev/core/editor';
 import { TemplateRef } from '@angular/core';
-import { TFunction } from '@docx-editor.dev/i18n';
+import { TFunction } from '@docx-editor.dev/core/i18n';
 import { ToolbarValueMap } from '@docx-editor.dev/core/editor';
-import { Translations } from '@docx-editor.dev/i18n';
+import { Translations } from '@docx-editor.dev/core/i18n';
 import { Type } from '@angular/core';
 import { WritableSignal } from '@angular/core';
 import { ZoomMode } from '@docx-editor.dev/core/contracts/editor';
@@ -291,7 +293,7 @@ export class DocxContextMenuRowComponent {
 
 // @public
 export class DocxContextMenuRowDirective {
-    readonly docxContextMenuRow: _angular_core.InputSignal<"toc.refresh" | "toc.refreshPageNumbers" | "toc.remove" | "alignment.center" | "alignment.justify" | "table.splitCell" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.selectTable" | "table.mergeCells" | "table.borderColor" | "table.borderWidth" | "contentControl.remove" | "contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.protectDocument" | "history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.right" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.painter" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.authors" | "review.editingMode" | "image.insert" | "image.properties" | "image.editChart" | "image.formatShape" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderStyle" | "table.cellFill" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark" | "edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.cellVerticalAlignment">;
+    readonly docxContextMenuRow: _angular_core.InputSignal<"history.undo" | "history.redo" | "zoom.level" | "styles.style" | "font.family" | "font.size" | "text.bold" | "text.italic" | "text.underline" | "text.strike" | "text.color" | "text.highlight" | "text.link" | "script.super" | "script.sub" | "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify" | "direction.ltr" | "direction.rtl" | "list.bullet" | "list.numbered" | "list.outdent" | "list.indent" | "list.lineSpacing" | "format.painter" | "format.clear" | "review.revisionMarkup" | "review.comments" | "review.addComment" | "review.paragraphMarks" | "review.bookmarks" | "review.protectDocument" | "review.compareDocuments" | "review.simpleMarkup" | "review.allMarkup" | "review.noMarkup" | "review.original" | "review.previousChange" | "review.nextChange" | "review.acceptAllChanges" | "review.rejectAllChanges" | "review.authors" | "review.editingMode" | "contentControl.showAll" | "contentControl.formFill" | "contentControl.inspector" | "contentControl.remove" | "image.insert" | "image.properties" | "image.editChart" | "image.formatShape" | "image.wrap" | "image.altText" | "shape.fill" | "shape.fillTransparency" | "shape.outlineColor" | "shape.outlineWidth" | "shape.outlineDash" | "chart.type" | "chart.title" | "chart.legend" | "chart.dataLabels" | "chart.axes" | "chart.gridlines" | "chart.categoryAxisTitle" | "chart.valueAxisTitle" | "chart.seriesColor" | "chart.data" | "table.insert" | "table.borderTarget" | "table.borderColor" | "table.borderStyle" | "table.borderWidth" | "table.cellFill" | "table.mergeCells" | "table.splitCell" | "file.open" | "file.save" | "file.exportMarkdown" | "file.exportPdf" | "file.print" | "paragraph.dialog" | "file.pageSetup" | "insert.textBox" | "insert.chart" | "insert.footnote" | "insert.endnote" | "insert.pageNumber" | "insert.totalPages" | "insert.sectionPages" | "insert.pageXofY" | "insert.pageBreak" | "insert.sectionBreakNextPage" | "insert.sectionBreakContinuous" | "insert.toc" | "insert.bookmark" | "insert.goToBookmark" | "insert.watermark" | "toc.remove" | "toc.refresh" | "toc.refreshPageNumbers" | "table.deleteRow" | "table.deleteColumn" | "table.deleteTable" | "table.insertRowAbove" | "table.insertRowBelow" | "table.insertColumnLeft" | "table.insertColumnRight" | "table.selectTable" | "edit.cut" | "edit.copy" | "edit.paste" | "edit.pasteWithoutFormatting" | "edit.delete" | "edit.selectAll" | "format.copyFormatting" | "format.pasteFormatting" | "field.edit" | "table.cellVerticalAlignment">;
     readonly docxContextMenuRowHidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
     readonly template: TemplateRef<unknown>;
     // (undocumented)
@@ -319,11 +321,12 @@ export class DocxEditorComponent {
     constructor();
     readonly author: InputSignal<string | undefined>;
     readonly change: _angular_core.OutputEmitterRef<DocumentChange>;
-    readonly chrome: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly chrome: InputSignalWithTransform<boolean, unknown>;
     // @internal (undocumented)
     protected readonly chromeDir: Signal<DocxEditorDirection | undefined>;
     readonly colorMode: InputSignal<DocxEditorColorMode>;
     readonly contentLockPolicy: InputSignal<ContentLockPolicy | undefined>;
+    readonly contextMenu: InputSignalWithTransform<DocxEditorContextMenuOptions | null, boolean | string | DocxEditorContextMenuOptions | null | undefined>;
     // @internal (undocumented)
     protected readonly dark: Signal<boolean>;
     readonly document: InputSignal<DocxEditorDocument | null | undefined>;
@@ -341,8 +344,11 @@ export class DocxEditorComponent {
     load(document: DocumentSource): void;
     readonly locale: InputSignal<string | undefined>;
     readonly lockedControlNavigation: InputSignal<LockedControlNavigation | undefined>;
+    readonly menu: InputSignalWithTransform<DocxEditorMenuOptions | null, boolean | string | DocxEditorMenuOptions | null | undefined>;
     readonly mode: InputSignal<DocxEditorRootMode>;
     readonly modules: InputSignal<readonly EditorModule[] | undefined>;
+    // @internal (undocumented)
+    protected onTitleInput(event: Event): void;
     readonly openFailure: _angular_core.OutputEmitterRef<DocumentOpenFailure>;
     readonly ready: _angular_core.OutputEmitterRef<Editor>;
     save(): Promise<ArrayBuffer>;
@@ -350,11 +356,14 @@ export class DocxEditorComponent {
     snapshot(options?: {
         scope?: EditorScope;
     }): EditorSnapshot;
+    // @internal (undocumented)
+    protected readonly t: Signal<TFunction>;
+    readonly title: ModelSignal<string | undefined>;
     readonly translate: InputSignal<DocxEditorTranslate | undefined>;
     readonly zoom: InputSignal<number | undefined>;
     readonly zoomMode: InputSignal<ZoomMode | "auto" | undefined>;
     // (undocumented)
-    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorComponent, "docx-editor", never, { "author": { "alias": "author"; "isSignal": true; "required": false; }; "chrome": { "alias": "chrome"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "i18n": { "alias": "i18n"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; }, never, never, true, never>;
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorComponent, "docx-editor", never, { "author": { "alias": "author"; "isSignal": true; "required": false; }; "chrome": { "alias": "chrome"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "contextMenu": { "alias": "contextMenu"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "i18n": { "alias": "i18n"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "menu": { "alias": "menu"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "title": { "alias": "title"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; "title": "titleChange"; }, never, never, true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorComponent, never>;
 }
@@ -436,6 +445,16 @@ export class DocxEditorContextMenuComponent {
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorContextMenuComponent, "div[docxEditorContextMenu]", never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "disabled": { "alias": "disabled"; "isSignal": true; "required": false; }; "preset": { "alias": "preset"; "isSignal": true; "required": false; }; "splitCellHandler": { "alias": "splitCellHandler"; "isSignal": true; "required": false; }; "t": { "alias": "t"; "isSignal": true; "required": false; }; }, { "openChange": "openChange"; }, ["rowTemplates", "slotTemplates", "starts"], ["docx-context-menu-start", "*"], true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorContextMenuComponent, never>;
+}
+
+// @public
+export interface DocxEditorContextMenuOptions {
+    readonly className?: string;
+    readonly disabled?: boolean;
+    readonly onOpenChange?: (open: boolean) => void;
+    readonly preset?: boolean;
+    readonly splitCellHandler?: () => void;
+    readonly t?: DocxMenuTranslate;
 }
 
 // @public
@@ -524,6 +543,22 @@ export class DocxEditorMenuComponent {
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorMenuComponent, "div[docxEditorMenu]", never, { "fileName": { "alias": "fileName"; "isSignal": true; "required": false; }; "openHandler": { "alias": "openHandler"; "isSignal": true; "required": false; }; "overflow": { "alias": "overflow"; "isSignal": true; "required": false; }; "pageSetupHandler": { "alias": "pageSetupHandler"; "isSignal": true; "required": false; }; "paragraphDialogHandler": { "alias": "paragraphDialogHandler"; "isSignal": true; "required": false; }; "preset": { "alias": "preset"; "isSignal": true; "required": false; }; "reportIssue": { "alias": "reportIssue"; "isSignal": true; "required": false; }; "reportIssueHandler": { "alias": "reportIssueHandler"; "isSignal": true; "required": false; }; "saveHandler": { "alias": "saveHandler"; "isSignal": true; "required": false; }; "t": { "alias": "t"; "isSignal": true; "required": false; }; "watermarkDialogHandler": { "alias": "watermarkDialogHandler"; "isSignal": true; "required": false; }; }, { "openFile": "openFile"; }, ["ownMenus"], ["docx-menu[menu=file]", "docx-menu[menu=format]", "docx-menu[menu=insert]", "docx-menu[menu=review]", "docx-menu[menu=help]", "docx-menu", "*"], true, never>;
     // (undocumented)
     static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorMenuComponent, never>;
+}
+
+// @public
+export interface DocxEditorMenuOptions {
+    readonly fileName?: string;
+    readonly onOpenFile?: (file: File) => void;
+    readonly openHandler?: () => void;
+    readonly overflow?: boolean;
+    readonly pageSetupHandler?: (trigger: HTMLElement | null) => void;
+    readonly paragraphDialogHandler?: (trigger: HTMLElement | null) => void;
+    readonly preset?: boolean;
+    readonly reportIssue?: boolean;
+    readonly reportIssueHandler?: () => void;
+    readonly saveHandler?: () => void;
+    readonly t?: DocxMenuTranslate;
+    readonly watermarkDialogHandler?: (trigger: HTMLElement | null) => void;
 }
 
 // @public
@@ -973,7 +1008,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly current: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
+        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
         state: EditorCommandState;
         text: string;
     }>;
@@ -986,7 +1021,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly options: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
+        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
         state: EditorCommandState;
         text: string;
     }[]>;

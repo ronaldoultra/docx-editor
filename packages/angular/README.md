@@ -7,7 +7,7 @@ The package has two levels:
 - `<docx-editor>` is a packaged component for a page that needs only the pages.
 - The composition API is a set of parts that you put together in your own layout. Use it to add your own controls.
 
-The package has a formatting toolbar. It has no menus, context menu, or dialogs yet. `<docx-editor>` shows the toolbar above the pages, in a `.docx-editor` wrapper that carries the color mode and the chrome direction.
+The package has a title bar, a menu bar, a formatting toolbar, and a context menu. It has no dialogs yet. `<docx-editor>` shows the title bar, the menu bar, and the toolbar above the pages, in a `.docx-editor` wrapper that carries the color mode and the chrome direction. A right-click on the pages opens the context menu.
 
 ## Requirements
 
@@ -305,6 +305,66 @@ Each part is a standalone component that you can also place yourself, for exampl
 
 To build a picker of your own, read its state with `injectFontFamily`, `injectParagraphStyle`, or `injectZoom`, and replace the slot with `docxSlot`.
 
+## Add the menu bar and the context menu
+
+`div[docxEditorMenu]` is the menu bar. Put it inside an editor root. It renders the engine's menus (`CHROME_MENUS`): File, Format, Insert, Review, and Help. Each menu carries its id in `data-menu`, and each row carries its slot id in `data-slot`. When the menus do not fit on one line, the menus at the end move into one "⋯" menu.
+
+`div[docxEditorContextMenu]` is the menu that a right-click on the pages opens. Put it inside `<docx-editor-viewport>`. It holds the clipboard, format painter, delete, select all, and link rows. In a table, it adds the table rows. On a table of contents, it adds the table of contents rows. Each row asks the engine whether it is enabled.
+
+The following template adds both menus:
+
+```html
+<ng-container docxEditorRoot [document]="bytes()">
+  <div docxEditorMenu fileName="Report" [saveHandler]="save"></div>
+  <fieldset docxEditorToolbar></fieldset>
+  <docx-editor-viewport>
+    <docx-editor-content />
+    <div docxEditorContextMenu (openChange)="menuOpen.set($event)"></div>
+  </docx-editor-viewport>
+</ng-container>
+```
+
+File › Open and Ctrl+O open a file picker. File › Save and Ctrl+S download the document. Set `openHandler` or `saveHandler` to replace them.
+
+### Change the default menus
+
+Put `docx-menu` elements inside the menu bar to change its menus:
+
+- `<docx-menu menu="file">` replaces the File menu in its place. Write the id as a plain attribute, so that the bar can put the menu in its place.
+- `<docx-menu menu="review" hidden />` removes the Review menu.
+- `<docx-menu menu="tools" label="Tools">` adds a menu after the registry menus.
+
+The following template adds a Tools menu with one row:
+
+```html
+<div docxEditorMenu>
+  <docx-menu menu="tools" label="Tools">
+    <button docxMenuRow="tools.count" (activate)="countWords()">Count words</button>
+  </docx-menu>
+</div>
+```
+
+Inside a menu, use `docx-menu-item` with a `slotId` for a registry row, `docx-menu-submenu` for a submenu, `button[docxMenuRow]` for your own row, `div[docxMenuSeparator]`, and `div[docxMenuGroup]`. `ng-template[docxSlot]` replaces one registry row. With `[preset]="false"`, the bar renders only your content.
+
+### Change the context menu rows
+
+Put content inside the context menu to change its rows:
+
+- `<ng-template docxContextMenuRow="edit.cut">` replaces one row. `docxContextMenuRowHidden` removes it.
+- `ng-template[docxSlot]` does the same for a chrome slot row, such as `text.link`.
+- `docx-context-menu-start` holds rows that go above the packaged rows.
+- `docx-context-menu-item` and other content go after the packaged rows.
+
+The following template adds a row at the end:
+
+```html
+<div docxEditorContextMenu>
+  <docx-context-menu-item label="Look up" (activate)="lookUp()" />
+</div>
+```
+
+With `[preset]="false"`, the menu holds only your content. With `disabled`, a right-click shows the browser's menu.
+
 ## Load a document and its fonts
 
 `injectDocxSource` loads a document from bytes or from a URL, and holds it back until its eager fonts settle. An eager font origin is a configuration, a fragment, a promise, or a loader with no argument. A resolver from `defineFontResolver` needs the open document, so the document opens at once and the resolver answers for each document. Call `injectDocxSource` in an injection context:
@@ -332,7 +392,18 @@ readonly fonts = injectFonts(brandFonts, computed(() => this.extraFonts()));
 
 ## Packaged component API
 
-`<docx-editor>` composes the same public parts that the previous sections describe: `docxEditorRoot`, `fieldset[docxEditorToolbar]`, `<docx-editor-viewport>`, and `<docx-editor-content>`. The root inputs have the same names and the same behavior. Set `[chrome]="false"` to show only the pages.
+`<docx-editor>` composes the same public parts that the previous sections describe: `docxEditorRoot`, `div[docxEditorMenu]`, `fieldset[docxEditorToolbar]`, `<docx-editor-viewport>`, `<docx-editor-content>`, and `div[docxEditorContextMenu]`. The root inputs have the same names and the same behavior. Set `[chrome]="false"` to show only the pages.
+
+The `menu` and `contextMenu` inputs take `true`, `false`, or an options object. Each field of the object sets the input of the part with the same name. The outputs of the parts are callbacks: `onOpenFile` for the menu bar and `onOpenChange` for the context menu. The following template saves with a host handler and logs each context menu opening:
+
+```html
+<docx-editor
+  [document]="bytes()"
+  [(title)]="title"
+  [menu]="{ saveHandler: save }"
+  [contextMenu]="{ onOpenChange: log }"
+/>
+```
 
 ### Inputs that apply live
 
@@ -341,7 +412,10 @@ A change to one of these inputs applies to the open document without a reload. T
 | Input | Description |
 | --- | --- |
 | `document` | `ArrayBuffer` or `Uint8Array` with the DOCX bytes. A new value opens the new document in the same engine. `null` destroys the engine and its document. |
-| `chrome` | `true` (default) shows the formatting toolbar above the pages. `false` shows only the pages. |
+| `chrome` | `true` (default) shows the title bar, the menu bar, and the formatting toolbar above the pages. `false` shows only the pages. |
+| `title` | The document title in the title bar. The reader can edit it, so bind it with `[(title)]`. File › Save uses it as the file name, unless `menu` gives a `fileName`. |
+| `menu` | `true` (default) shows the menu bar when `chrome` is on. `false` removes it. A `DocxEditorMenuOptions` object sets its options. |
+| `contextMenu` | `true` (default) opens the context menu on a right-click, with or without `chrome`. `false` removes it. A `DocxEditorContextMenuOptions` object sets its options. |
 | `mode` | `'edit'` (default), `'view'`, or `'suggesting'`. Suggesting needs a review module in `modules` and an `author`. Without an author, the editor stays in editing until `author` has a value. |
 | `author` | The author of later comments, replies, and tracked changes. |
 | `colorMode` | `'light'` (default), `'dark'`, or `'system'`, which follows the operating system. |
@@ -377,6 +451,7 @@ The engine reads these inputs when it is created. A later change has no effect, 
 | Output | Description |
 | --- | --- |
 | `ready` | Emits once for each engine, when it finished opening its first document. |
+| `titleChange` | The title after each edit in the title bar. |
 | `change` | The engine `change` event: an edit, undo, redo, or load. |
 | `selectionChange` | The engine snapshot after each selection change. |
 | `error` | The errors that the engine publishes, such as a refused command or document. |
