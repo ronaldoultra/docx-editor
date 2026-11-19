@@ -10,6 +10,7 @@ import {
   output,
   viewChild,
   type InputSignal,
+  type InputSignalWithTransform,
   type Signal,
 } from '@angular/core';
 import type {
@@ -40,6 +41,7 @@ import {
 import type { Translations } from '@docx-editor.dev/core/i18n';
 import type { DocxEditorColorMode } from './color-mode';
 import { DocxEditorContentComponent } from './content.component';
+import { DocxEditorContextMenuComponent } from './context-menu/context-menu.component';
 import { DOCX_EDITOR_SCOPED } from './context';
 import { DocxEditorI18n, injectChromeDir, type DocxEditorDirection } from './i18n';
 import {
@@ -48,6 +50,8 @@ import {
   type DocxEditorRootMode,
   type DocxEditorTranslate,
 } from './root.directive';
+import { DocxEditorMenuComponent } from './menu/menu-bar.component';
+import type { DocxMenuTranslate } from './menu/menu-state';
 import { DocxEditorToolbarComponent } from './toolbar/toolbar.component';
 import { DocxEditorViewportComponent } from './viewport.component';
 
@@ -67,8 +71,69 @@ export type DocxEditorDocument = ArrayBuffer | Uint8Array;
 export type DocxEditorMode = DocxEditorRootMode;
 
 /**
+ * The options of the menu bar in `<docx-editor>`. Each field sets the input or output of
+ * `div[docxEditorMenu]` with the same name.
+ *
+ * @public
+ */
+export interface DocxEditorMenuOptions {
+  /** Render the registry menus. With `false`, the bar is empty. Defaults to `true`. */
+  readonly preset?: boolean;
+  /** Move the menus that do not fit into one "⋯" menu. Defaults to `true`. */
+  readonly overflow?: boolean;
+  /** Your own labels. A key that this function does not answer uses the active catalog. */
+  readonly t?: DocxMenuTranslate;
+  /** The name of the saved file. `.docx` is added. Defaults to the name of the opened file. */
+  readonly fileName?: string;
+  /** Replaces File › Open and Ctrl+O. */
+  readonly openHandler?: () => void;
+  /** Replaces File › Save and Ctrl+S. */
+  readonly saveHandler?: () => void;
+  /** Opens page setup from File › Page setup. Without it, the row is disabled. */
+  readonly pageSetupHandler?: (trigger: HTMLElement | null) => void;
+  /** Opens the paragraph dialog from Format › Paragraph. */
+  readonly paragraphDialogHandler?: (trigger: HTMLElement | null) => void;
+  /** Opens the watermark dialog from Insert › Watermark. Without it, the row is disabled. */
+  readonly watermarkDialogHandler?: (trigger: HTMLElement | null) => void;
+  /** Replaces Help › Report issue. */
+  readonly reportIssueHandler?: () => void;
+  /** Show Help › Report issue. Defaults to `true`. */
+  readonly reportIssue?: boolean;
+  /** Receives the file that the user picks in File › Open, before the editor loads it. */
+  readonly onOpenFile?: (file: File) => void;
+}
+
+/**
+ * The options of the context menu in `<docx-editor>`. Each field sets the input or output of
+ * `div[docxEditorContextMenu]` with the same name.
+ *
+ * @public
+ */
+export interface DocxEditorContextMenuOptions {
+  /** Render the packaged rows. With `false`, the menu is empty. Defaults to `true`. */
+  readonly preset?: boolean;
+  /** Do not open. A right-click then shows the browser's menu. */
+  readonly disabled?: boolean;
+  /** Your own labels. A key that this function does not answer uses the active catalog. */
+  readonly t?: DocxMenuTranslate;
+  /** More classes for the panel. */
+  readonly className?: string;
+  /** Opens the split cells dialog. Without it, the menu has no Split cells row. */
+  readonly splitCellHandler?: () => void;
+  /** Receives `true` when the menu opens and `false` when it closes. */
+  readonly onOpenChange?: (open: boolean) => void;
+}
+
+/** `true` or an attribute without a value shows the part with its defaults; `false` removes it. */
+function partOption<T extends object>(value: boolean | string | T | null | undefined): T | null {
+  if (value !== null && typeof value === 'object') return value;
+  return booleanAttribute(value ?? true) ? ({} as T) : null;
+}
+
+/**
  * A complete paginated DOCX editor. It composes the public parts — `docxEditorRoot`,
- * `fieldset[docxEditorToolbar]`, `<docx-editor-viewport>`, and `<docx-editor-content>` — so a
+ * `div[docxEditorMenu]`, `fieldset[docxEditorToolbar]`, `<docx-editor-viewport>`,
+ * `<docx-editor-content>`, and `div[docxEditorContextMenu]` — so a
  * host that composes its own editor reaches the same behavior. The engine in `@docx-editor.dev/core` reads, lays out,
  * paints, and edits the document.
  *
@@ -88,9 +153,11 @@ export type DocxEditorMode = DocxEditorRootMode;
   encapsulation: ViewEncapsulation.None,
   imports: [
     DocxEditorRootDirective,
+    DocxEditorMenuComponent,
     DocxEditorToolbarComponent,
     DocxEditorViewportComponent,
     DocxEditorContentComponent,
+    DocxEditorContextMenuComponent,
   ],
   providers: [DocxEditorI18n],
   // The wrapper below carries the scope class, so the parts inside do not add it again.
@@ -134,10 +201,39 @@ export type DocxEditorMode = DocxEditorRootMode;
           (fontError)="fontError.emit($event)"
         >
           @if (chrome()) {
+            @if (menu(); as bar) {
+              <div
+                docxEditorMenu
+                style="min-width: 0"
+                [preset]="bar.preset ?? true"
+                [overflow]="bar.overflow ?? true"
+                [t]="bar.t"
+                [fileName]="bar.fileName"
+                [openHandler]="bar.openHandler"
+                [saveHandler]="bar.saveHandler"
+                [pageSetupHandler]="bar.pageSetupHandler"
+                [paragraphDialogHandler]="bar.paragraphDialogHandler"
+                [watermarkDialogHandler]="bar.watermarkDialogHandler"
+                [reportIssueHandler]="bar.reportIssueHandler"
+                [reportIssue]="bar.reportIssue ?? true"
+                (openFile)="bar.onOpenFile?.($event)"
+              ></div>
+            }
             <fieldset docxEditorToolbar></fieldset>
           }
           <docx-editor-viewport style="flex: 1; min-height: 0; min-width: 0; overflow-anchor: none">
             <docx-editor-content />
+            @if (contextMenu(); as panel) {
+              <div
+                docxEditorContextMenu
+                [preset]="panel.preset ?? true"
+                [disabled]="panel.disabled ?? false"
+                [t]="panel.t"
+                [className]="panel.className"
+                [splitCellHandler]="panel.splitCellHandler"
+                (openChange)="panel.onOpenChange?.($event)"
+              ></div>
+            }
           </docx-editor-viewport>
         </ng-container>
       }
@@ -157,6 +253,29 @@ export class DocxEditorComponent {
    * pages. Compose `fieldset[docxEditorToolbar]` yourself for another arrangement.
    */
   readonly chrome = input(true, { transform: booleanAttribute });
+
+  /**
+   * The menu bar above the toolbar. It shows only with `chrome`. `false` removes it. An object
+   * sets the options of `div[docxEditorMenu]`.
+   */
+  readonly menu: InputSignalWithTransform<
+    DocxEditorMenuOptions | null,
+    boolean | string | DocxEditorMenuOptions | null | undefined
+  > = input(partOption<DocxEditorMenuOptions>(true), {
+    transform: partOption<DocxEditorMenuOptions>,
+  });
+
+  /**
+   * The menu that a right-click on the pages opens, with or without `chrome`. `false` removes
+   * it, and a right-click shows the browser's menu. An object sets the options of
+   * `div[docxEditorContextMenu]`.
+   */
+  readonly contextMenu: InputSignalWithTransform<
+    DocxEditorContextMenuOptions | null,
+    boolean | string | DocxEditorContextMenuOptions | null | undefined
+  > = input(partOption<DocxEditorContextMenuOptions>(true), {
+    transform: partOption<DocxEditorContextMenuOptions>,
+  });
 
   /** The host editing mode. A change applies to the open document without a reload. */
   readonly mode = input<DocxEditorMode>('edit');

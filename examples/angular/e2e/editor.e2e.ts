@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 const fixture = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 const SAMPLE = fixture('../../../packages/core/src/editor/__tests__/fixtures/sample.docx');
 const OTHER = fixture('../../../e2e/fixtures/styled-sample.docx');
+const TABLE = fixture('../../../e2e/fixtures/table-cell-selection-drag.docx');
 const HEADING = '/word/document.xml#0.0.0';
 const SECOND = '/word/document.xml#0.0.1';
 const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
@@ -288,6 +289,33 @@ for (const mode of [
       await page.keyboard.press('End');
       await page.keyboard.type('!');
       await expect.poll(() => paragraphText(page, SECOND)).toMatch(/!$/);
+    });
+
+    test('a right-click on a table cell opens the context menu with the table rows', async ({
+      page,
+    }) => {
+      await open(page, TABLE);
+      await expect(page.locator('docx-editor [data-testid="docx-menubar"]')).toBeVisible();
+      const loaded = await changeCount(page);
+      const cell = page
+        .locator('[data-paragraph-id][data-start]', { hasText: 'Quarterly' })
+        .first();
+      await cell.click();
+      await cell.click({ button: 'right' });
+      const menu = page.locator('[role="menu"].docx-contextmenu');
+      await expect(menu).toBeVisible();
+      await expect(menu.locator('[data-slot="edit.copy"]')).toBeVisible();
+      const insertRow = menu.locator('[data-slot="table.insertRowBelow"]');
+      await expect(insertRow).toBeEnabled();
+
+      // Escape closes the menu, and the next right-click opens it again.
+      await page.keyboard.press('Escape');
+      await expect(menu).toHaveCount(0);
+      await cell.click({ button: 'right' });
+      await expect(insertRow).toBeVisible();
+      await insertRow.click();
+      await expect(menu).toHaveCount(0);
+      await expect.poll(() => changeCount(page)).toBeGreaterThan(loaded);
     });
 
     test('suggesting mode saves typing as a tracked insertion by the author', async ({ page }) => {

@@ -3,7 +3,9 @@
  */
 export {
   DocxEditorComponent,
+  type DocxEditorContextMenuOptions,
   type DocxEditorDocument,
+  type DocxEditorMenuOptions,
   type DocxEditorMode,
 } from './lib/docx-editor.component';
 export {
