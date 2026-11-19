@@ -87,6 +87,17 @@ export {
   injectTableBorderTargetLabel,
 } from './lib/toolbar/toolbar-table.component';
 export { DocxToolbarTableInsertComponent } from './lib/toolbar/toolbar-table-insert.component';
+export { DocxEditorMenuComponent } from './lib/menu/menu-bar.component';
+export { DocxMenuComponent } from './lib/menu/menu.component';
+export { DocxMenuItemComponent } from './lib/menu/menu-item.component';
+export {
+  DocxMenuGroupComponent,
+  DocxMenuRowComponent,
+  DocxMenuSeparatorComponent,
+} from './lib/menu/menu-row.component';
+export { DocxMenuSubmenuComponent } from './lib/menu/menu-submenu.component';
+export { DocxMenuReviewersComponent } from './lib/menu/menu-pickers.component';
+export type { DocxMenuTranslate } from './lib/menu/menu-state';
 // Internal types that the protected members of the toolbar parts name. They are not API.
 export type {
   BarGroup,
@@ -98,6 +109,7 @@ export type {
 } from './lib/toolbar/toolbar-arrangement';
 export type { ToolbarArrangementKey } from './lib/toolbar/toolbar-parts';
 export type { ModeOption } from './lib/toolbar/toolbar-editing-mode.component';
+export type { DocxMenuBarState, MenuHandlers, MenuRegistration } from './lib/menu/menu-state';
 export { ColorSplitBase, type ColorSplitConfig } from './lib/toolbar/toolbar-colors.component';
 export { TableColorBase, TableControlBase } from './lib/toolbar/toolbar-table.component';
 export { DocxTableChromeState, type TableSlotState } from './lib/toolbar/table-chrome-state';

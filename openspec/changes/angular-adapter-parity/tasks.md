@@ -42,7 +42,7 @@
 
 ## 5. Menu bar, context menu, and keyboard
 
-- [ ] 5.1 Add the menu bar compound from `CHROME_MENUS`; port the claims of `menu-composition.test.ts`, `menu-opening.test.ts`, and `menu-download-name.test.ts`
+- [x] 5.1 Add the menu bar compound from `CHROME_MENUS`; port the claims of `menu-composition.test.ts`, `menu-opening.test.ts`, and `menu-download-name.test.ts`
 - [ ] 5.2 Add the context menu compound with clipboard, table, and TOC items; port the claims of `context-menu.test.ts`, `context-menu-target.test.ts`, `context-menu-start.test.ts`, `context-menu-placement.test.ts`, `context-menu-link.test.ts`, and `context-menu-chart.test.ts`
 - [ ] 5.3 Add keyboard navigation and dismissal for menus and popups; port the claims of `context-menu-keyboard.test.ts` and `chrome-popup-dismissal.test.ts`
 - [ ] 5.4 Add the `menu` and `contextMenu` inputs to `<docx-editor>`, extend the browser test to open the context menu on a table cell, and verify `bun run test:e2e:angular` passes

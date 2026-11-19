@@ -193,9 +193,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorLoadingProps` | interface | | todo | |
 | `DocxEditorLoadingSpinner` | const | | todo | |
 | `DocxEditorLoadingSpinnerProps` | interface | | todo | |
-| `DocxEditorMenu` | const | | todo | |
-| `DocxEditorMenuNamespace` | interface | | todo | |
-| `DocxEditorMenuProps` | interface | | todo | |
+| `DocxEditorMenu` | const | `DocxEditorMenuComponent` | ported | `div[docxEditorMenu]`. The compound members are standalone parts (`docx-menu`, `docx-menu-item`, `docx-menu-submenu`, `docxMenuRow`, `docxMenuSeparator`, `docxMenuGroup`, `docx-menu-reviewers`) and `docxSlot` row overrides, see D3. A host `docx-menu` with a registry id in a plain `menu` attribute replaces that menu in place. |
+| `DocxEditorMenuNamespace` | interface |  | dropped | Dropped: Angular has no compound namespace object. Each menu part is a standalone component with its own selector, and the pinned parts (`Menu.File`, `Menu.Save`, `Menu.PageSetup`, and the rest) are `<docx-menu menu="file">` and `<docx-menu-item slotId="file.save">`. |
+| `DocxEditorMenuProps` | interface | `DocxEditorMenuComponent` | ported | Inputs `preset`, `overflow`, `t`, `fileName`, `openHandler`, `saveHandler`, `pageSetupHandler`, `paragraphDialogHandler`, `watermarkDialogHandler`, `reportIssueHandler`, `reportIssue`, and the `openFile` output. `className` is the host `class`. `exporters` and `printSettings` port with task 6.5. Until phase 6, page setup and watermark rows need their handler. |
 | `DocxEditorNamespace` | interface | | todo | |
 | `DocxEditorNavigation` | const | | todo | |
 | `DocxEditorNavigationNamespace` | interface | | todo | |
@@ -342,20 +342,20 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `MarkedFontResolver` | re-export from core | `MarkedFontResolver` | ported |  |
 | `MAX_RESOLVER_FAMILIES` | re-export from core | | todo | |
 | `MaybeRefOrGetter` | type | | todo | |
-| `MenuActionProps` | interface | | todo | |
-| `MenuGroupProps` | interface | | todo | |
-| `MenuId` | type | | todo | |
-| `MenuItemBaseProps` | interface | | todo | |
-| `MenuItemProps` | interface | | todo | |
-| `MenuPartComponent` | interface | | todo | |
-| `MenuProps` | interface | | todo | |
-| `MenuReportIssueProps` | interface | | todo | |
-| `MenuReviewersProps` | type | | todo | |
-| `MenuRowProps` | interface | | todo | |
-| `MenuSeparatorProps` | interface | | todo | |
-| `MenuSubmenuBaseProps` | interface | | todo | |
-| `MenuSubmenuProps` | interface | | todo | |
-| `MenuTableGridProps` | interface | | todo | |
+| `MenuActionProps` | interface | `DocxMenuItemComponent` | ported | `className` and `hidden` are inputs of `docx-menu-item`, which routes `file.open`, `file.save`, and the dialog slots to their handlers. |
+| `MenuGroupProps` | interface | `DocxMenuGroupComponent` | ported | `div[docxMenuGroup]` with `label` and `labelKey`. A host hides it with `@if`. |
+| `MenuId` | type | `DocxMenuComponent` | ported | The `menu` input is a string: a registry id or a host id. |
+| `MenuItemBaseProps` | interface | `DocxMenuItemComponent` | ported | Inputs `labelKey`, `shortcutKey`, `className`, and `hidden`. |
+| `MenuItemProps` | interface | `DocxMenuItemComponent` | ported | The `slotId` input. The deprecated `slot` prop has no Angular counterpart. |
+| `MenuPartComponent` | interface |  | dropped | Dropped: Angular pins a menu with the `menu` input of `docx-menu`, not with a component per id. |
+| `MenuProps` | interface | `DocxMenuComponent` | ported | Inputs `menu` (Vue `id`), `labelKey`, `label`, `icon` (Material Symbols paths), `className`, `hidden`, and `preset`. Row overrides are `docxSlot` templates. |
+| `MenuReportIssueProps` | interface | `DocxEditorMenuComponent` | ported | The bar inputs `reportIssue` (`false` removes the row) and `reportIssueHandler` (Vue `onSelect`) replace the part. |
+| `MenuReviewersProps` | type | `DocxMenuReviewersComponent` | ported | Inputs `className` and `hidden`. |
+| `MenuRowProps` | interface | `DocxMenuRowComponent` | ported | `button[docxMenuRow]`: the attribute value is the `data-slot` marker, inputs `icon`, `shortcut`, `disabled`, `reason` (Vue `title`), `active`, `radio` (Vue `selected`), `rowClass`, and the `activate` output (Vue `onSelect`). An `[docxMenuRowIcon]` element replaces the icon. |
+| `MenuSeparatorProps` | interface | `DocxMenuSeparatorComponent` | ported | `div[docxMenuSeparator]`; the host sets `class`. |
+| `MenuSubmenuBaseProps` | interface | `DocxMenuSubmenuComponent` | ported | Inputs `paths` and `className`; the content is the panel. |
+| `MenuSubmenuProps` | interface | `DocxMenuSubmenuComponent` | ported | Inputs `label` and `labelKey`. |
+| `MenuTableGridProps` | interface |  | dropped | Dropped: the registry `table.insert` row renders the size grid itself. A host grid is the toolbar's `docx-table-size-grid`, which ports as a public part with task 8.1 if a host needs it. |
 | `NavigateHighlightCommand` | re-export from core | | todo | |
 | `NavigateToChangeOptions` | re-export from core | | todo | |
 | `NAVIGATION_PANE_GAP` | const | | todo | |
@@ -695,9 +695,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/loading-continued.test.ts` | | todo | Task 9.5 |
 | `packages/vue/test/loading-indicator.test.ts` | | todo | Task 9.5 |
 | `packages/vue/test/locked-control-navigation-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass the mode; `'atomic'` steps over the control, the default steps into it. A later change is ignored and warns once, only for a real change. |
-| `packages/vue/test/menu-composition.test.ts` | | todo | Task 5.1 |
-| `packages/vue/test/menu-download-name.test.ts` | | todo | Task 5.1 |
-| `packages/vue/test/menu-opening.test.ts` | | todo | Task 5.1 |
+| `packages/vue/test/menu-composition.test.ts` | `packages/angular/src/lib/menu/menu-bar.spec.ts` | ported | Keeps: the default bar renders every registry menu in order; a cancelled press on the pages closes the open menu; a host save handler runs from File › Save; a row override reaches the export submenu without a duplicate row; direct bar actions stay tabbable and follow command state; right-to-left bar arrows follow the visual order and the direction change. Changed: the Page Setup popup claims use `pageSetupHandler` until the `popups` input lands (tasks 6.1 and 6.3). Moved: the export dialog claims (missing converters, Markdown export dialog) port with task 6.5. Added: keyboard open and Escape, engine state on rows, Insert › Table, Review › Markup options, host menus, and the "⋯" menu. |
+| `packages/vue/test/menu-download-name.test.ts` | `packages/angular/src/lib/menu/download.spec.ts` | ported | Keeps: a long run of dots and spaces stays linear; device names with an extension and a padded suffix; truncation leaves no trailing dot or space. |
+| `packages/vue/test/menu-opening.test.ts` | `packages/angular/src/lib/menu/menu-bar.spec.ts` | ported | Keeps: the bar closes and its triggers are disabled while the next document opens, and they come back after the open. |
 | `packages/vue/test/merge-arrangement.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/navigation-goto.test.ts` | | todo | Task 7.1 |
 | `packages/vue/test/navigation-heading-page-break.test.ts` | | todo | Task 7.1 |

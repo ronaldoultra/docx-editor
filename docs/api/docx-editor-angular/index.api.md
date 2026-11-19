@@ -6,6 +6,7 @@
 
 import * as _angular_core from '@angular/core';
 import { ChromeGroupId } from '@docx-editor.dev/core/editor';
+import { ChromeMenuEntry } from '@docx-editor.dev/core/editor';
 import { ChromeSlotId } from '@docx-editor.dev/core/editor';
 import { ContentLockPolicy } from '@docx-editor.dev/core/editor';
 import { DocumentChange } from '@docx-editor.dev/core/contracts/editor';
@@ -45,6 +46,7 @@ import { MarkedFontResolver } from '@docx-editor.dev/core/editor';
 import { ObjectSlotValueMap } from '@docx-editor.dev/core/editor';
 import { OnInit } from '@angular/core';
 import { Provider } from '@angular/core';
+import { ReviewAuthorInfo } from '@docx-editor.dev/core/editor';
 import { Signal } from '@angular/core';
 import { TableChromeDraft } from '@docx-editor.dev/core/editor';
 import { TableChromeSlotId } from '@docx-editor.dev/core/editor';
@@ -210,7 +212,7 @@ export class DocxEditorComponent {
     }): EditorSnapshot;
     readonly translate: InputSignal<DocxEditorTranslate | undefined>;
     readonly zoom: InputSignal<number | undefined>;
-    readonly zoomMode: InputSignal<"auto" | ZoomMode | undefined>;
+    readonly zoomMode: InputSignal<ZoomMode | "auto" | undefined>;
     // (undocumented)
     static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorComponent, "docx-editor", never, { "author": { "alias": "author"; "isSignal": true; "required": false; }; "chrome": { "alias": "chrome"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "i18n": { "alias": "i18n"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; }, never, never, true, never>;
     // (undocumented)
@@ -296,6 +298,53 @@ export interface DocxEditorI18nOptions {
 export { DocxEditorInstance }
 
 // @public
+export class DocxEditorMenuComponent {
+    constructor();
+    // @internal (undocumented)
+    protected readonly chromeDir: Signal<DocxEditorDirection | undefined>;
+    // @internal
+    protected readonly collapsed: Signal<MenuRegistration[]>;
+    readonly fileName: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly hasHostContent: _angular_core.WritableSignal<boolean>;
+    // @internal
+    protected readonly hostMenus: Signal<Set<string>>;
+    // @internal (undocumented)
+    protected readonly label: Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected readonly measuring: Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly moreId = "docx-menubar-more";
+    // @internal (undocumented)
+    protected readonly moreLabel: Signal<string>;
+    // @internal (undocumented)
+    protected readonly morePaths: readonly string[];
+    // @internal (undocumented)
+    protected onFileChange(event: Event): void;
+    // @internal (undocumented)
+    protected onKey(event: KeyboardEvent): void;
+    readonly openFile: _angular_core.OutputEmitterRef<File>;
+    readonly openHandler: _angular_core.InputSignal<(() => void) | undefined>;
+    readonly overflow: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly pageSetupHandler: _angular_core.InputSignal<((trigger: HTMLElement | null) => void) | undefined>;
+    readonly paragraphDialogHandler: _angular_core.InputSignal<((trigger: HTMLElement | null) => void) | undefined>;
+    readonly preset: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly reportIssue: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly reportIssueHandler: _angular_core.InputSignal<(() => void) | undefined>;
+    readonly saveHandler: _angular_core.InputSignal<(() => void) | undefined>;
+    // @internal (undocumented)
+    protected readonly scope: Signal<"" | "docx-editor " | "docx-editor dark ">;
+    readonly t: _angular_core.InputSignal<DocxMenuTranslate | undefined>;
+    readonly watermarkDialogHandler: _angular_core.InputSignal<((trigger: HTMLElement | null) => void) | undefined>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxEditorMenuComponent, "div[docxEditorMenu]", never, { "fileName": { "alias": "fileName"; "isSignal": true; "required": false; }; "openHandler": { "alias": "openHandler"; "isSignal": true; "required": false; }; "overflow": { "alias": "overflow"; "isSignal": true; "required": false; }; "pageSetupHandler": { "alias": "pageSetupHandler"; "isSignal": true; "required": false; }; "paragraphDialogHandler": { "alias": "paragraphDialogHandler"; "isSignal": true; "required": false; }; "preset": { "alias": "preset"; "isSignal": true; "required": false; }; "reportIssue": { "alias": "reportIssue"; "isSignal": true; "required": false; }; "reportIssueHandler": { "alias": "reportIssueHandler"; "isSignal": true; "required": false; }; "saveHandler": { "alias": "saveHandler"; "isSignal": true; "required": false; }; "t": { "alias": "t"; "isSignal": true; "required": false; }; "watermarkDialogHandler": { "alias": "watermarkDialogHandler"; "isSignal": true; "required": false; }; }, { "openFile": "openFile"; }, ["ownMenus"], ["docx-menu[menu=file]", "docx-menu[menu=format]", "docx-menu[menu=insert]", "docx-menu[menu=review]", "docx-menu[menu=help]", "docx-menu", "*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxEditorMenuComponent, never>;
+}
+
+// @public
 export type DocxEditorMode = DocxEditorRootMode;
 
 // @public
@@ -324,7 +373,7 @@ export class DocxEditorRootDirective implements OnInit {
     readonly selectionChange: _angular_core.OutputEmitterRef<EditorSnapshot>;
     readonly translate: _angular_core.InputSignal<DocxEditorTranslate | undefined>;
     readonly zoom: _angular_core.InputSignal<number | undefined>;
-    readonly zoomMode: _angular_core.InputSignal<"auto" | ZoomMode | undefined>;
+    readonly zoomMode: _angular_core.InputSignal<ZoomMode | "auto" | undefined>;
     // (undocumented)
     static ɵdir: _angular_core.ɵɵDirectiveDeclaration<DocxEditorRootDirective, "[docxEditorRoot]", ["docxEditorRoot"], { "author": { "alias": "author"; "isSignal": true; "required": false; }; "colorMode": { "alias": "colorMode"; "isSignal": true; "required": false; }; "contentLockPolicy": { "alias": "contentLockPolicy"; "isSignal": true; "required": false; }; "document": { "alias": "document"; "isSignal": true; "required": false; }; "fieldResults": { "alias": "fieldResults"; "isSignal": true; "required": false; }; "fontShaping": { "alias": "fontShaping"; "isSignal": true; "required": false; }; "fonts": { "alias": "fonts"; "isSignal": true; "required": false; }; "imageDecodePort": { "alias": "imageDecodePort"; "isSignal": true; "required": false; }; "locale": { "alias": "locale"; "isSignal": true; "required": false; }; "lockedControlNavigation": { "alias": "lockedControlNavigation"; "isSignal": true; "required": false; }; "mode": { "alias": "mode"; "isSignal": true; "required": false; }; "modules": { "alias": "modules"; "isSignal": true; "required": false; }; "translate": { "alias": "translate"; "isSignal": true; "required": false; }; "zoom": { "alias": "zoom"; "isSignal": true; "required": false; }; "zoomMode": { "alias": "zoomMode"; "isSignal": true; "required": false; }; }, { "change": "change"; "error": "error"; "fontError": "fontError"; "openFailure": "openFailure"; "ready": "ready"; "selectionChange": "selectionChange"; }, never, never, true, never>;
     // (undocumented)
@@ -448,6 +497,228 @@ export type DocxFontsInput = FontConfiguration | FontConfigurationFragment;
 // @public
 export type DocxFontsSource = DocxFontOrigin | readonly DocxFontOrigin[];
 
+// @internal (undocumented)
+export class DocxMenuBarState {
+    readonly activeMenu: _angular_core.WritableSignal<string | null>;
+    readonly handlers: Signal<MenuHandlers>;
+    readonly measuring: _angular_core.WritableSignal<boolean>;
+    readonly menus: Signal<readonly MenuRegistration[]>;
+    readonly opening: Signal<boolean>;
+    readonly openMenu: _angular_core.WritableSignal<string | null>;
+    readonly overflow: _angular_core.WritableSignal<ReadonlySet<string>>;
+    register(menu: MenuRegistration): () => void;
+    setOpenMenu(id: string | null): void;
+    readonly translate: Signal<DocxMenuTranslate | undefined>;
+    // (undocumented)
+    useHandlers(source: () => MenuHandlers): void;
+    // (undocumented)
+    useOpening(source: () => boolean): void;
+    // (undocumented)
+    useTranslate(source: () => DocxMenuTranslate | undefined): void;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxMenuBarState, never>;
+    // (undocumented)
+    static ɵprov: _angular_core.ɵɵInjectableDeclaration<DocxMenuBarState>;
+}
+
+// @public
+export class DocxMenuComponent implements OnInit {
+    constructor();
+    // @internal
+    protected readonly appended: Signal<DocxSlotDirective[]>;
+    // @internal (undocumented)
+    protected readonly bar: DocxMenuBarState;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly entries: Signal<readonly ChromeMenuEntry[]>;
+    // @internal (undocumented)
+    protected readonly groupAttribute: Signal<string | null>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly icon: _angular_core.InputSignal<readonly string[] | null | undefined>;
+    // @internal (undocumented)
+    protected readonly isMore: Signal<boolean>;
+    readonly label: _angular_core.InputSignal<string | undefined>;
+    readonly labelKey: _angular_core.InputSignal<string | undefined>;
+    readonly menu: _angular_core.InputSignal<string>;
+    // @internal (undocumented)
+    ngOnInit(): void;
+    // @internal (undocumented)
+    protected onPanelKey(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected onTriggerClick(): void;
+    // @internal (undocumented)
+    protected onTriggerEnter(): void;
+    // @internal (undocumented)
+    protected onTriggerKey(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected readonly open: Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly overrides: Signal<Map<ChromeSlotId, DocxSlotDirective>>;
+    // @internal (undocumented)
+    protected readonly panelId: string;
+    readonly preset: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    // @internal (undocumented)
+    protected readonly rootClass: Signal<string>;
+    // @internal (undocumented)
+    protected readonly shown: Signal<boolean>;
+    // @internal (undocumented)
+    protected switchedByHover: boolean;
+    // @internal
+    protected readonly tabStop: Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly text: Signal<string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxMenuComponent, "docx-menu", never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "hidden": { "alias": "hidden"; "isSignal": true; "required": false; }; "icon": { "alias": "icon"; "isSignal": true; "required": false; }; "label": { "alias": "label"; "isSignal": true; "required": false; }; "labelKey": { "alias": "labelKey"; "isSignal": true; "required": false; }; "menu": { "alias": "menu"; "isSignal": true; "required": true; }; "preset": { "alias": "preset"; "isSignal": true; "required": false; }; }, {}, ["slotTemplates", "ownRows", "ownButtons", "ownSubmenus", "ownGroups"], ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxMenuComponent, never>;
+}
+
+// @public
+export class DocxMenuGroupComponent {
+    readonly label: _angular_core.InputSignal<string | undefined>;
+    readonly labelKey: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string | null>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxMenuGroupComponent, "div[docxMenuGroup]", never, { "label": { "alias": "label"; "isSignal": true; "required": false; }; "labelKey": { "alias": "labelKey"; "isSignal": true; "required": false; }; }, {}, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxMenuGroupComponent, never>;
+}
+
+// @public
+export class DocxMenuItemComponent implements OnInit {
+    // @internal (undocumented)
+    protected readonly active: _angular_core.Signal<boolean | undefined>;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly enabled: _angular_core.Signal<boolean>;
+    readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly labelKey: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    ngOnInit(): void;
+    // @internal (undocumented)
+    protected readonly paths: _angular_core.Signal<readonly string[] | null>;
+    // @internal (undocumented)
+    protected readonly radio: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly reason: _angular_core.Signal<string | null>;
+    // @internal (undocumented)
+    protected run(): void;
+    // @internal (undocumented)
+    protected readonly shortcut: _angular_core.Signal<string | undefined>;
+    readonly shortcutKey: _angular_core.InputSignal<string | undefined>;
+    readonly slotId: _angular_core.InputSignal<ChromeSlotId | undefined>;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string>;
+    // @internal (undocumented)
+    protected readonly value: _angular_core.Signal<string | null>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxMenuItemComponent, "docx-menu-item", never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "hidden": { "alias": "hidden"; "isSignal": true; "required": false; }; "labelKey": { "alias": "labelKey"; "isSignal": true; "required": false; }; "shortcutKey": { "alias": "shortcutKey"; "isSignal": true; "required": false; }; "slotId": { "alias": "slotId"; "isSignal": true; "required": false; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxMenuItemComponent, never>;
+}
+
+// @public
+export class DocxMenuReviewersComponent {
+    // @internal (undocumented)
+    protected readonly allVisible: _angular_core.Signal<boolean>;
+    // @internal (undocumented)
+    protected readonly authors: _angular_core.Signal<readonly ReviewAuthorInfo[]>;
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly command: EditorCommandState;
+    readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    // @internal (undocumented)
+    protected readonly hiddenSet: _angular_core.Signal<Set<string>>;
+    // @internal (undocumented)
+    protected readonly label: _angular_core.Signal<(key: string) => string>;
+    // @internal (undocumented)
+    protected toggle(author: string): void;
+    // @internal (undocumented)
+    protected toggleAll(): void;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxMenuReviewersComponent, "docx-menu-reviewers", never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "hidden": { "alias": "hidden"; "isSignal": true; "required": false; }; }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxMenuReviewersComponent, never>;
+}
+
+// @public
+export class DocxMenuRowComponent {
+    readonly activate: _angular_core.OutputEmitterRef<void>;
+    readonly active: _angular_core.InputSignal<boolean | undefined>;
+    // @internal (undocumented)
+    protected readonly className: _angular_core.Signal<string>;
+    // @internal (undocumented)
+    protected readonly described: _angular_core.Signal<boolean>;
+    readonly disabled: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly docxMenuRow: _angular_core.InputSignal<string>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    readonly icon: _angular_core.InputSignal<readonly string[] | null | undefined>;
+    // @internal (undocumented)
+    protected onClick(): void;
+    readonly radio: _angular_core.InputSignalWithTransform<boolean, unknown>;
+    readonly reason: _angular_core.InputSignal<string | null | undefined>;
+    // @internal (undocumented)
+    protected readonly reasonId: string;
+    // @internal (undocumented)
+    protected readonly role: _angular_core.Signal<"menuitem" | "menuitemradio" | "menuitemcheckbox">;
+    readonly rowClass: _angular_core.InputSignal<string | undefined>;
+    readonly shortcut: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly shortcutText: _angular_core.Signal<string | null>;
+    // @internal (undocumented)
+    protected readonly tabIndex: number;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxMenuRowComponent, "button[docxMenuRow]", never, { "active": { "alias": "active"; "isSignal": true; "required": false; }; "disabled": { "alias": "disabled"; "isSignal": true; "required": false; }; "docxMenuRow": { "alias": "docxMenuRow"; "isSignal": true; "required": false; }; "icon": { "alias": "icon"; "isSignal": true; "required": false; }; "radio": { "alias": "radio"; "isSignal": true; "required": false; }; "reason": { "alias": "reason"; "isSignal": true; "required": false; }; "rowClass": { "alias": "rowClass"; "isSignal": true; "required": false; }; "shortcut": { "alias": "shortcut"; "isSignal": true; "required": false; }; }, { "activate": "activate"; }, never, ["[docxMenuRowIcon]", "*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxMenuRowComponent, never>;
+}
+
+// @public
+export class DocxMenuSeparatorComponent {
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxMenuSeparatorComponent, "div[docxMenuSeparator]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxMenuSeparatorComponent, never>;
+}
+
+// @public
+export class DocxMenuSubmenuComponent implements OnInit {
+    constructor();
+    readonly className: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    protected readonly guard: (event: Event) => void;
+    // @internal (undocumented)
+    protected readonly hostClass: _angular_core.Signal<string>;
+    readonly label: _angular_core.InputSignal<string | undefined>;
+    readonly labelKey: _angular_core.InputSignal<string | undefined>;
+    // @internal (undocumented)
+    ngOnInit(): void;
+    // @internal (undocumented)
+    protected onFocusOut(event: FocusEvent): void;
+    // @internal (undocumented)
+    protected onKey(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected onPanelKey(event: KeyboardEvent): void;
+    // @internal (undocumented)
+    protected readonly open: _angular_core.WritableSignal<boolean>;
+    // @internal (undocumented)
+    protected readonly panelId: string;
+    readonly paths: _angular_core.InputSignal<readonly string[] | null | undefined>;
+    // @internal (undocumented)
+    protected readonly text: _angular_core.Signal<string>;
+    // (undocumented)
+    static ɵcmp: _angular_core.ɵɵComponentDeclaration<DocxMenuSubmenuComponent, "docx-menu-submenu", never, { "className": { "alias": "className"; "isSignal": true; "required": false; }; "label": { "alias": "label"; "isSignal": true; "required": false; }; "labelKey": { "alias": "labelKey"; "isSignal": true; "required": false; }; "paths": { "alias": "paths"; "isSignal": true; "required": false; }; }, {}, never, ["*"], true, never>;
+    // (undocumented)
+    static ɵfac: _angular_core.ɵɵFactoryDeclaration<DocxMenuSubmenuComponent, never>;
+}
+
+// @public
+export type DocxMenuTranslate = (key: string) => string | undefined;
+
 // @public
 export class DocxSlotDirective {
     readonly docxSlot: _angular_core.InputSignal<ChromeSlotId>;
@@ -520,7 +791,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly current: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
+        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
         state: EditorCommandState;
         text: string;
     }>;
@@ -533,7 +804,7 @@ export class DocxToolbarAlignmentComponent {
     // @internal (undocumented)
     protected readonly options: _angular_core.Signal<{
         paths: readonly string[] | null;
-        slot: "alignment.left" | "alignment.center" | "alignment.right" | "alignment.justify";
+        slot: "alignment.center" | "alignment.justify" | "alignment.left" | "alignment.right";
         state: EditorCommandState;
         text: string;
     }[]>;
@@ -692,9 +963,9 @@ export class DocxToolbarFontSizeComponent {
 
 // @public
 export class DocxToolbarGroupDirective {
-    readonly after: _angular_core.InputSignal<ChromeGroupId | (string & {}) | undefined>;
+    readonly after: _angular_core.InputSignal<(string & {}) | ChromeGroupId | undefined>;
     readonly className: _angular_core.InputSignal<string | undefined>;
-    readonly docxToolbarGroup: _angular_core.InputSignal<ChromeGroupId | (string & {})>;
+    readonly docxToolbarGroup: _angular_core.InputSignal<(string & {}) | ChromeGroupId>;
     readonly hidden: _angular_core.InputSignalWithTransform<boolean, unknown>;
     readonly label: _angular_core.InputSignal<string | undefined>;
     readonly labelKey: _angular_core.InputSignal<string | undefined>;
@@ -1103,6 +1374,33 @@ export { LocaleStrings }
 export { LockedControlNavigation }
 
 export { MarkedFontResolver }
+
+// @internal
+export interface MenuHandlers {
+    // (undocumented)
+    readonly open?: () => void;
+    // (undocumented)
+    readonly pageSetup?: (trigger: HTMLElement | null) => void;
+    // (undocumented)
+    readonly paragraphDialog?: (trigger: HTMLElement | null) => void;
+    // (undocumented)
+    readonly reportIssue?: () => void;
+    readonly reportIssueRow: boolean;
+    // (undocumented)
+    readonly save?: () => void;
+    // (undocumented)
+    readonly watermarkDialog?: (trigger: HTMLElement | null) => void;
+}
+
+// @internal
+export interface MenuRegistration {
+    // (undocumented)
+    readonly id: string;
+    // (undocumented)
+    readonly rows: Signal<TemplateRef<unknown> | undefined>;
+    // (undocumented)
+    readonly text: Signal<string>;
+}
 
 // @internal
 export interface ModeOption {
