@@ -265,10 +265,10 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `DocxEditorWatermarkDialogProps` | interface | | todo | |
 | `DocxEditorWindow` | const | `DocxEditorWindowComponent` | ported |  |
 | `DocxEditorWindowProps` | interface | `DocxEditorWindowComponent`, `DocxEditorWindowStyles` | ported | `onClose` is the `close` output. `open` has two-way binding through `openChange`. |
-| `DocxFontOrigin` | type | | todo | |
-| `DocxFontsInput` | type | | todo | |
-| `DocxFontsSource` | type | | todo | |
-| `DocxSource` | type | | todo | |
+| `DocxFontOrigin` | type | `DocxFontOrigin` | ported |  |
+| `DocxFontsInput` | type | `DocxFontsInput` | ported |  |
+| `DocxFontsSource` | type | `DocxFontsSource` | ported |  |
+| `DocxSource` | type | `DocxSource` | ported |  |
 | `DrawingGraphicKind` | re-export from core | | todo | |
 | `DrawingSupport` | re-export from core | | todo | |
 | `DrawingSupportIssue` | re-export from core | | todo | |
@@ -298,7 +298,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `FontResolutionRequest` | re-export from core | | todo | |
 | `FontResolver` | re-export from core | | todo | |
 | `FontResolverMark` | re-export from core | | todo | |
-| `FontsInput` | type | | todo | |
+| `FontsInput` | type | `FontOriginInput` | ported | Angular reads a signal origin with `isSignal`; every other function is a resolver. |
 | `FontSource` | re-export from core | | todo | |
 | `FontSourceSubstitution` | re-export from core | | todo | |
 | `FontUrlSource` | re-export from core | | todo | |
@@ -557,9 +557,9 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `UseDocumentSearchOptions` | interface | | todo | |
 | `UseDocumentSearchResult` | interface | | todo | |
 | `useDocxEditor` | function | `injectDocxEditor` | ported |  |
-| `useDocxSource` | function | | todo | |
-| `UseDocxSourceOptions` | interface | | todo | |
-| `UseDocxSourceResult` | interface | | todo | |
+| `useDocxSource` | function | `injectDocxSource` | ported |  |
+| `UseDocxSourceOptions` | interface | `DocxSourceOptions` | ported |  |
+| `UseDocxSourceResult` | interface | `DocxSourceState` | ported | The members are signals. |
 | `useEditorCaret` | function | | todo | |
 | `useEditorColorMode` | function | `injectEditorColorMode` | ported |  |
 | `UseEditorColorModeReturn` | interface | `EditorColorModeState` | ported |  |
@@ -572,7 +572,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `useEditorValueCommand` | function | `injectEditorValueCommand` | ported |  |
 | `useFontFamily` | function | | todo | |
 | `UseFontFamilyResult` | interface | | todo | |
-| `useFonts` | function | | todo | |
+| `useFonts` | function | `injectFonts` | ported | It needs no injection context. |
 | `useGoToBookmark` | function | | todo | |
 | `UseGoToBookmarkOptions` | interface | | todo | |
 | `UseGoToBookmarkReturn` | interface | | todo | |
@@ -668,16 +668,16 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/deferred-notifier.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/dialog-customization.test.ts` | | todo | Task 6.1 |
 | `packages/vue/test/document-refresh-edit.test.ts` | | todo | Task 10.3 |
-| `packages/vue/test/editing-mode-author.test.ts` | | todo | The `suggesting` mode needs the review module, so its engine claim ports with task 3.2. The editing mode menu claims port with the toolbar in task 4.2. |
+| `packages/vue/test/editing-mode-author.test.ts` | `packages/angular/src/lib/construction-inputs.spec.ts` | todo | Ported: `<docx-editor mode='suggesting'>` with the review module waits for an author, then records typing as tracked changes by that author. The editing mode menu claims port with the toolbar in task 4.2. |
 | `packages/vue/test/editor-accessibility.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/editor-composition.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/engine-popup-renderers.test.ts` | | todo | Task 6.1 |
 | `packages/vue/test/equation-popup.test.ts` | | todo | Task 6.6 |
 | `packages/vue/test/export-popup.test.ts` | | todo | Task 6.5 |
 | `packages/vue/test/field-results-prop.test.ts` | `packages/angular/src/lib/live-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` pass `fieldResults`; `'editable'` types inside the saved result, the default types after it. A later change is ignored and warns once. |
-| `packages/vue/test/font-origins.test.ts` | | todo | Task 3.2 |
-| `packages/vue/test/font-shaping-lifecycle.test.ts` | | todo | Task 3.2 |
-| `packages/vue/test/fonts-prop.test.ts` | | todo | Task 3.2 |
+| `packages/vue/test/font-origins.test.ts` | `packages/angular/src/lib/fonts.spec.ts` | ported | Keeps: an eager loader holds the document until it settles; a failing loader releases it and warns; eager origins compose first-wins and one rejection keeps the others; an on-demand resolver releases the document at once behind one stable identity that reads the latest origins; one resolver makes a list on demand, and a loader in it gets no argument; `injectFonts` gives the request to marked and unmarked resolvers of every arity, composes resolvers, returns a marked resolver, reports a function that returns an origin, reads `computed` and signal origins again on each resolve. |
+| `packages/vue/test/font-shaping-lifecycle.test.ts` | `packages/angular/src/lib/construction-inputs.spec.ts` | ported | Keeps: an equal new `fontShaping` keeps edits, selection, and undo; a changed `maxFontBytes` creates a new engine, and later equal values keep that one. |
+| `packages/vue/test/fonts-prop.test.ts` | `packages/angular/src/lib/construction-inputs.spec.ts` | ported | Keeps: a new `fonts` value on the root and on `<docx-editor>` reaches the same engine and session through `setFonts`. |
 | `packages/vue/test/form-field-i18n.test.ts` | `packages/angular/src/lib/i18n.spec.ts`, `packages/angular/src/lib/live-inputs.spec.ts` | todo | Ported: engine form labels follow the catalog and an explicit `translate` without a new engine, on the root and on `<docx-editor>`. The text form field dialog claims (the open dialog keeps its input and focus) port with task 6.4. |
 | `packages/vue/test/header-footer-chrome.test.ts` | | todo | Task 9.1 |
 | `packages/vue/test/highlights-background-layout.test.ts` | | todo | Task 7.2 |
@@ -685,7 +685,7 @@ This ledger maps each `@docx-editor.dev/vue` export and each Vue test file to it
 | `packages/vue/test/hydration-renderer-slots.test.ts` | | todo | Task 10.5 |
 | `packages/vue/test/hyperlink-as-child.test.ts` | | todo | Task 6.2 |
 | `packages/vue/test/image-authoring.test.ts` | | todo | Task 8.1 |
-| `packages/vue/test/image-decode-port-prop.test.ts` | | todo | Task 3.2 |
+| `packages/vue/test/image-decode-port-prop.test.ts` | `packages/angular/src/lib/construction-inputs.spec.ts` | ported | Keeps: the root and `<docx-editor>` decode the picture with the port and keep its bytes on save; a new port creates a new engine that uses it; destroying the editor aborts a running decode. |
 | `packages/vue/test/image-insert-refusal.test.ts` | | todo | Task 8.1 |
 | `packages/vue/test/image-overlay-history.test.ts` | | todo | Task 8.1 |
 | `packages/vue/test/image-panel-rows.test.ts` | | todo | Task 8.1 |

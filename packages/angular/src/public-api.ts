@@ -8,9 +8,21 @@ export {
 } from './lib/docx-editor.component';
 export {
   DocxEditorRootDirective,
+  type DocxEditorFonts,
   type DocxEditorRootMode,
   type DocxEditorTranslate,
 } from './lib/root.directive';
+export {
+  injectDocxSource,
+  injectFonts,
+  type DocxFontOrigin,
+  type DocxFontsInput,
+  type DocxFontsSource,
+  type DocxSource,
+  type DocxSourceOptions,
+  type DocxSourceState,
+  type FontOriginInput,
+} from './lib/fonts';
 export { DocxEditorViewportComponent } from './lib/viewport.component';
 export { DocxEditorContentComponent } from './lib/content.component';
 export { DocxEditorWindowComponent, type DocxEditorWindowStyles } from './lib/window.component';

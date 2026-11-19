@@ -9,11 +9,18 @@ import {
   output,
   viewChild,
 } from '@angular/core';
-import type { DocumentChange, ZoomMode } from '@docx-editor.dev/core/contracts/editor';
+import type {
+  DocumentChange,
+  EditorFontError,
+  ZoomMode,
+} from '@docx-editor.dev/core/contracts/editor';
 import type {
   ContentLockPolicy,
   DocxEditorInstance,
+  EditorModule,
   FieldResultsMode,
+  FontShapingOptions,
+  ImageDecodePort,
   LockedControlNavigation,
 } from '@docx-editor.dev/core/editor';
 import type { Translations } from '@docx-editor.dev/i18n';
@@ -23,6 +30,7 @@ import { DOCX_EDITOR_SCOPED } from './context';
 import { DocxEditorI18n, injectChromeDir } from './i18n';
 import {
   DocxEditorRootDirective,
+  type DocxEditorFonts,
   type DocxEditorRootMode,
   type DocxEditorTranslate,
 } from './root.directive';
@@ -94,7 +102,12 @@ export type DocxEditorMode = DocxEditorRootMode;
           [fieldResults]="fieldResults()"
           [contentLockPolicy]="contentLockPolicy()"
           [lockedControlNavigation]="lockedControlNavigation()"
+          [fonts]="fonts()"
+          [fontShaping]="fontShaping()"
+          [modules]="modules()"
+          [imageDecodePort]="imageDecodePort()"
           (change)="change.emit($event)"
+          (fontError)="fontError.emit($event)"
         >
           <docx-editor-viewport style="flex: 1; min-height: 0; min-width: 0; overflow-anchor: none">
             <docx-editor-content />
@@ -148,11 +161,26 @@ export class DocxEditorComponent {
   /** How the caret moves through a locked inline control. Read once, at creation. */
   readonly lockedControlNavigation = input<LockedControlNavigation | undefined>(undefined);
 
+  /** Font sources. A new value replaces the fonts in place, so edits and history stay. */
+  readonly fonts = input<DocxEditorFonts | undefined>(undefined);
+
+  /** Font shaping limits. A changed `maxFontBytes` creates a new engine. */
+  readonly fontShaping = input<FontShapingOptions | undefined>(undefined);
+
+  /** Engine modules, such as the review module. A new array creates a new engine. */
+  readonly modules = input<readonly EditorModule[] | undefined>(undefined);
+
+  /** The decoder for raster images. A new port creates a new engine. */
+  readonly imageDecodePort = input<ImageDecodePort | undefined>(undefined);
+
   /**
    * Emits for each change that the engine commits: an edit, undo, redo, or a load.
    * This is the engine's `change` event without changes to its payload.
    */
   readonly change = output<DocumentChange>();
+
+  /** Emits when a font fails to load. The engine keeps measuring with its fallback. */
+  readonly fontError = output<EditorFontError>();
 
   private readonly zone = inject(NgZone);
   private readonly root = viewChild(DocxEditorRootDirective);

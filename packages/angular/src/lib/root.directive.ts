@@ -18,14 +18,19 @@ import type {
   DocumentChange,
   DocumentSource,
   Editor,
+  EditorFontError,
   ZoomMode,
 } from '@docx-editor.dev/core/contracts/editor';
 import {
   createDocxEditor,
   hostWindowOf,
   type ContentLockPolicy,
+  type DocxEditorConfig,
   type DocxEditorInstance,
+  type EditorModule,
   type FieldResultsMode,
+  type FontShapingOptions,
+  type ImageDecodePort,
   type LockedControlNavigation,
 } from '@docx-editor.dev/core/editor';
 import { resolveIsDark, subscribeSystemDark, type DocxEditorColorMode } from './color-mode';
@@ -45,6 +50,9 @@ import {
  * @public
  */
 export type DocxEditorRootMode = 'edit' | 'view' | 'suggesting';
+
+/** The font sources that the `fonts` input accepts. @public */
+export type DocxEditorFonts = NonNullable<DocxEditorConfig['fonts']>;
 
 /** A translation function for labels that the engine paints, such as form controls. @public */
 export type DocxEditorTranslate = (key: string, params?: Record<string, string | number>) => string;
@@ -125,8 +133,35 @@ export class DocxEditorRootDirective implements OnInit {
    */
   readonly lockedControlNavigation = input<LockedControlNavigation | undefined>(undefined);
 
-  /** Emits once, when the engine finished opening its first document. */
+  /**
+   * Font sources: a configuration, fragments, or a resolver. A new value replaces the fonts of
+   * the same engine with `setFonts`, so edits and undo history stay.
+   */
+  readonly fonts = input<DocxEditorFonts | undefined>(undefined);
+
+  /**
+   * Font shaping limits. A changed `maxFontBytes` creates a new engine, which opens the
+   * `document` input again. An equal new object changes nothing.
+   */
+  readonly fontShaping = input<FontShapingOptions | undefined>(undefined);
+
+  /**
+   * Engine modules, such as the review module that `'suggesting'` needs. A new array creates a
+   * new engine, which opens the `document` input again.
+   */
+  readonly modules = input<readonly EditorModule[] | undefined>(undefined);
+
+  /**
+   * The decoder for raster images. A new port creates a new engine, which opens the
+   * `document` input again. Destroying the engine aborts the decodes that are still running.
+   */
+  readonly imageDecodePort = input<ImageDecodePort | undefined>(undefined);
+
+  /** Emits once for each engine, when it finished opening its first document. */
   readonly ready = output<Editor>();
+
+  /** Emits when a font fails to load. The engine keeps measuring with its fallback. */
+  readonly fontError = output<EditorFontError>();
 
   /** Emits for each change that the engine commits: an edit, undo, redo, or a load. */
   readonly change = output<DocumentChange>();
@@ -144,6 +179,10 @@ export class DocxEditorRootDirective implements OnInit {
   private appliedMode: DocxEditorRootMode | undefined;
   private readonly appliedZoom: AppliedZoom = { zoom: undefined, mode: undefined };
   private readonly created: Partial<Record<CreationOption, unknown>> = {};
+  /** The inputs that the current engine was created with; a change creates a new engine. */
+  private createdWith: readonly unknown[] = [];
+  /** The fonts that the current engine holds: created with, or last given to `setFonts`. */
+  private appliedFonts: DocxEditorFonts | undefined;
 
   /** The function that the engine uses for its labels. */
   private readonly translateResolver = computed<DocxEditorTranslate>(() => {
@@ -187,6 +226,24 @@ export class DocxEditorRootDirective implements OnInit {
         warnCreationOptionChanged(option, this.created[option], this[option]())
       );
     }
+    this.whenEditor((editor) => {
+      const fonts = this.fonts();
+      if (fonts === this.appliedFonts) return;
+      this.appliedFonts = fonts;
+      // Rejects only after destroy. Font failures report through `fontError`.
+      editor.setFonts(fonts).catch(() => {});
+    });
+    effect(() => {
+      const next = this.constructionInputs();
+      untracked(() => {
+        const editor = this.context.editor();
+        if (!editor || next.every((value, index) => value === this.createdWith[index])) return;
+        this.zone.runOutsideAngular(() => {
+          this.release();
+          this.create();
+        });
+      });
+    });
     inject(DestroyRef).onDestroy(() => this.release());
   }
 
@@ -205,8 +262,17 @@ export class DocxEditorRootDirective implements OnInit {
     });
   }
 
+  /** The inputs that the engine reads only when it is created. */
+  private constructionInputs(): readonly unknown[] {
+    return [this.modules(), this.fontShaping()?.maxFontBytes, this.imageDecodePort()];
+  }
+
   private create(): void {
     const source = untracked(this.document);
+    const fonts = untracked(this.fonts);
+    const fontShaping = untracked(this.fontShaping);
+    const modules = untracked(this.modules);
+    const imageDecodePort = untracked(this.imageDecodePort);
     const mode = untracked(this.mode);
     const locale = untracked(this.locale);
     const author = untracked(this.author);
@@ -225,8 +291,15 @@ export class DocxEditorRootDirective implements OnInit {
       ...(fieldResults !== undefined ? { fieldResults } : {}),
       ...(contentLockPolicy !== undefined ? { contentLockPolicy } : {}),
       ...(lockedControlNavigation !== undefined ? { lockedControlNavigation } : {}),
+      ...(fonts !== undefined ? { fonts } : {}),
+      ...(fontShaping !== undefined ? { fontShaping } : {}),
+      ...(modules !== undefined ? { modules } : {}),
+      ...(imageDecodePort !== undefined ? { imageDecodePort } : {}),
       translate: untracked(this.translateResolver),
+      onFontError: (error) => this.zone.run(() => this.fontError.emit(error)),
     });
+    this.createdWith = untracked(() => this.constructionInputs());
+    this.appliedFonts = fonts;
     this.loaded = source;
     this.appliedMode = mode;
     this.appliedZoom.zoom = zoom;
