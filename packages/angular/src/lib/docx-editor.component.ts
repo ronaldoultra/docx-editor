@@ -43,17 +43,17 @@ import {
 import type { TFunction, Translations } from '@docx-editor.dev/core/i18n';
 import type { DocxEditorColorMode } from './color-mode';
 import { DocxEditorContentComponent } from './content.component';
-import { DocxEditorContextMenuComponent } from './context-menu/context-menu.component';
 import { DOCX_EDITOR_SCOPED } from './context';
+import { DocxEditorContextMenuComponent } from './context-menu/context-menu.component';
 import { DocxEditorI18n, injectChromeDir, type DocxEditorDirection } from './i18n';
+import { DocxEditorMenuComponent } from './menu/menu-bar.component';
+import type { DocxMenuTranslate } from './menu/menu-state';
 import {
   DocxEditorRootDirective,
   type DocxEditorFonts,
   type DocxEditorRootMode,
   type DocxEditorTranslate,
 } from './root.directive';
-import { DocxEditorMenuComponent } from './menu/menu-bar.component';
-import type { DocxMenuTranslate } from './menu/menu-state';
 import { DocxEditorToolbarComponent } from './toolbar/toolbar.component';
 import { DocxEditorViewportComponent } from './viewport.component';
 
@@ -210,11 +210,11 @@ function partOption<T extends object>(value: boolean | string | T | null | undef
               <div
                 style="display: flex; align-items: center; gap: 8px; padding: 8px 12px 0; color: var(--doc-text)"
               >
-                <div style="display: flex; flex-direction: column; flex: 1; min-width: 0; gap: 2px">
+                <div style="display: flex; flex-direction: row; flex: 1; min-width: 0; gap: 2px">
                   <input
                     type="text"
                     data-testid="docx-editor-title"
-                    style="flex: 1; min-width: 0; font: inherit; color: inherit; background-color: transparent; border: 1px solid transparent; border-radius: 4px; padding: 2px 6px"
+                    style="min-width: 10rem; font: inherit; color: inherit; background-color: transparent; border: 1px solid transparent; border-radius: 4px; padding: 2px 6px"
                     [attr.aria-label]="t()('titleBar.documentNameAriaLabel')"
                     [placeholder]="t()('titleBar.untitled')"
                     [value]="title() ?? ''"

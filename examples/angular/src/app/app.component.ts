@@ -43,42 +43,7 @@ type Variant = 'packaged' | 'composed';
       <button type="button" [disabled]="!bytes()" (click)="close()">Fechar</button>
       <span class="status" data-testid="status">{{ status() }}</span>
     </div>
-    @if (variant() === 'packaged') {
-      <div class="options">
-        <label>
-          Modo
-          <select data-testid="packaged-mode" (change)="mode.set(pick($event))">
-            <option value="edit">Edição</option>
-            <option value="view">Somente leitura</option>
-            <option value="suggesting">Sugestão</option>
-          </select>
-        </label>
-        <label>
-          Autor
-          <input type="text" [value]="author()" (change)="author.set(text($event))" />
-        </label>
-        <label>
-          Tema
-          <select data-testid="packaged-theme" (change)="colorMode.set(pick($event))">
-            <option value="dark">Escuro</option>
-            <option value="light">Claro</option>
-            <option value="system">Sistema</option>
-          </select>
-        </label>
-        <label>
-          Idioma
-          <select data-testid="packaged-language" (change)="language.set(pick($event))">
-            <option value="pt-BR">Português</option>
-            <option value="en">English</option>
-          </select>
-        </label>
-        <span class="zoom">
-          <button type="button" aria-label="Diminuir zoom" (click)="stepZoom(-1)">−</button>
-          <output data-testid="packaged-zoom">{{ zoomPercent() }}%</output>
-          <button type="button" aria-label="Aumentar zoom" (click)="stepZoom(1)">+</button>
-        </span>
-      </div>
-    }
+
     @if (bytes(); as document) {
       @if (variant() === 'packaged') {
         <docx-editor
@@ -92,6 +57,7 @@ type Variant = 'packaged' | 'composed';
           [modules]="modules"
           (change)="onChange($event)"
           (openFailure)="lastSource.set('falha ao abrir')"
+          [title]="fileName()"
         />
       } @else {
         <app-composed-editor

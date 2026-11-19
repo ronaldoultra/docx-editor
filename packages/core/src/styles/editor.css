@@ -71,18 +71,26 @@
     * ==================================================================== */
 
   /* Surfaces */
-  --doc-surface: #ffffff; /* panels, menus, dropdowns, cards */
-  --doc-popover-bg: var(--doc-surface); /* floating previews and contextual menus */
-  --doc-card: #f8fbff; /* collapsed comment / suggestion cards (near-white) */
-  --doc-bg: #f8f9fa; /* app background behind the page */
-  --doc-bg-subtle: #f5f5f5; /* subtle section backgrounds */
-  --doc-bg-hover: #f1f3f4; /* hover states */
-  --doc-bg-input: #f8f9fa; /* input backgrounds */
+  --doc-surface: #ffffff;
+  /* panels, menus, dropdowns, cards */
+  --doc-popover-bg: var(--doc-surface);
+  /* floating previews and contextual menus */
+  --doc-card: #f8fbff;
+  /* collapsed comment / suggestion cards (near-white) */
+  --doc-bg: #f8f9fa;
+  /* app background behind the page */
+  --doc-bg-subtle: #f5f5f5;
+  /* subtle section backgrounds */
+  --doc-bg-hover: #f1f3f4;
+  /* hover states */
+  --doc-bg-input: #f8f9fa;
+  /* input backgrounds */
 
   /* Primary action color (Google blue) */
   --doc-primary: #1a73e8;
   --doc-primary-hover: #1557b0;
-  --doc-primary-light: #e8f0fe; /* selected/active backgrounds */
+  --doc-primary-light: #e8f0fe;
+  /* selected/active backgrounds */
 
   /* Accent (indigo — agent / assistant UI) */
   --doc-accent: #6366f1;
@@ -115,32 +123,51 @@
   --doc-comment-resolved-active-border: rgba(245, 174, 0, 0.6);
 
   /* Text */
-  --doc-text: #202124; /* primary text */
-  --doc-popover-fg: var(--doc-text); /* text inside floating previews and menus */
-  --doc-text-muted: #5f6368; /* secondary text */
-  --doc-text-subtle: #9aa0a6; /* tertiary/disabled text */
-  --doc-text-placeholder: #999; /* placeholder text */
+  --doc-text: #202124;
+  /* primary text */
+  --doc-popover-fg: var(--doc-text);
+  /* text inside floating previews and menus */
+  --doc-text-muted: #5f6368;
+  /* secondary text */
+  --doc-text-subtle: #9aa0a6;
+  /* tertiary/disabled text */
+  --doc-text-placeholder: #999;
+  /* placeholder text */
 
   /* Borders */
-  --doc-border: #e0e0e0; /* standard borders */
-  --doc-border-light: #dadce0; /* lighter borders */
-  --doc-border-dark: #d0d0d0; /* darker borders (tables) */
-  --doc-border-input: #ccc; /* input borders */
+  --doc-border: #e0e0e0;
+  /* standard borders */
+  --doc-border-light: #dadce0;
+  /* lighter borders */
+  --doc-border-dark: #d0d0d0;
+  /* darker borders (tables) */
+  --doc-border-input: #ccc;
+  /* input borders */
 
   /* Status */
-  --doc-error: #c5221f; /* error states */
-  --doc-error-bg: #fce8e6; /* error backgrounds */
-  --doc-danger: var(--doc-error); /* invalid and refused controls */
-  --doc-destructive: var(--doc-error); /* destructive menu/context rows */
+  --doc-error: #c5221f;
+  /* error states */
+  --doc-error-bg: #fce8e6;
+  /* error backgrounds */
+  --doc-danger: var(--doc-error);
+  /* invalid and refused controls */
+  --doc-destructive: var(--doc-error);
+  /* destructive menu/context rows */
   --doc-destructive-hover-bg: var(--doc-error-bg);
-  --doc-success: #34a853; /* success states */
-  --doc-success-bg: #e8f5e9; /* success backgrounds */
-  --doc-warning: #f9a825; /* warning states (icon/accent/border) */
-  --doc-warning-bg: #fff8e1; /* warning backgrounds */
-  --doc-warning-text: #856404; /* readable warning text on warning-bg */
+  --doc-success: #34a853;
+  /* success states */
+  --doc-success-bg: #e8f5e9;
+  /* success backgrounds */
+  --doc-warning: #f9a825;
+  /* warning states (icon/accent/border) */
+  --doc-warning-bg: #fff8e1;
+  /* warning backgrounds */
+  --doc-warning-text: #856404;
+  /* readable warning text on warning-bg */
 
   /* Link */
-  --doc-link: #0563c1; /* hyperlinks */
+  --doc-link: #0563c1;
+  /* hyperlinks */
 
   /* Revision indicators */
   --doc-revision-insertion: #2e7d32;
@@ -167,11 +194,9 @@
   --doc-revision-deletion-active-bg: rgba(198, 40, 40, 0.24);
   /* A format or structural change decorates no characters, so it takes a neutral fill
      rather than one claiming text was added or removed. */
-  --doc-revision-other-active-bg: color-mix(
-    in srgb,
-    var(--doc-text-muted, #8a8f98) 14%,
-    transparent
-  );
+  --doc-revision-other-active-bg: color-mix(in srgb,
+      var(--doc-text-muted, #8a8f98) 14%,
+      transparent);
   /* The wash a PENDING change wears. The painter puts this on the run itself, so it covers
      tracked text anywhere in the document rather than only where the band layer reaches; the
      band adds the full tint on top for the one the caret is in, and the two multiply into a
@@ -244,7 +269,8 @@
   --doc-shadow: rgba(0, 0, 0, 0.15);
   --doc-shadow-strong: rgba(0, 0, 0, 0.3);
   --doc-shadow-subtle: rgba(0, 0, 0, 0.06);
-  --doc-overlay: rgba(0, 0, 0, 0.5); /* modal backdrops */
+  --doc-overlay: rgba(0, 0, 0, 0.5);
+  /* modal backdrops */
   /* Open header/footer: body + inactive furniture opacity (screen chrome only; print resets). */
   --doc-hf-dim-opacity: 0.45;
 
@@ -366,39 +392,59 @@
   /* Palette sampled from Microsoft Word Online dark mode (chrome + canvas).
     * shadcn / Tailwind tokens (HSL triples) — mirror the --doc-* chrome values
     * below so shadcn-based components (Select, Button) re-theme in lockstep. */
-  --background: 0 0% 12%; /* #1f1f1f ribbon/surface */
-  --foreground: 0 0% 91%; /* #e8e8e8 */
-  --card: 0 0% 18%; /* #2d2d2d */
+  --background: 0 0% 12%;
+  /* #1f1f1f ribbon/surface */
+  --foreground: 0 0% 91%;
+  /* #e8e8e8 */
+  --card: 0 0% 18%;
+  /* #2d2d2d */
   --card-foreground: 0 0% 91%;
-  --popover: 0 0% 18%; /* #2d2d2d */
+  --popover: 0 0% 18%;
+  /* #2d2d2d */
   --popover-foreground: 0 0% 91%;
-  --primary: 212 100% 65%; /* #4e9dff Word accent */
+  --primary: 212 100% 65%;
+  /* #4e9dff Word accent */
   --primary-foreground: 0 0% 12%;
-  --secondary: 0 0% 20%; /* #333333 */
+  --secondary: 0 0% 20%;
+  /* #333333 */
   --secondary-foreground: 0 0% 91%;
-  --muted: 0 0% 20%; /* #333333 */
-  --muted-foreground: 0 0% 63%; /* #a0a0a0 */
-  --accent: 0 0% 23%; /* #3a3a3a */
+  --muted: 0 0% 20%;
+  /* #333333 */
+  --muted-foreground: 0 0% 63%;
+  /* #a0a0a0 */
+  --accent: 0 0% 23%;
+  /* #3a3a3a */
   --accent-foreground: 212 100% 65%;
-  --destructive: 0 72% 60%; /* #e05656 */
+  --destructive: 0 72% 60%;
+  /* #e05656 */
   --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 24%; /* #3c3c3c */
+  --border: 0 0% 24%;
+  /* #3c3c3c */
   --input: 0 0% 24%;
   --ring: 212 100% 60%;
 
   /* chrome palette (Word Online dark) */
-  --doc-surface: #1f1f1f; /* ribbon / toolbar / title bar */
-  --doc-card: #2d2d2d; /* collapsed comment / suggestion cards */
-  --doc-bg: #262626; /* workspace behind the page */
-  --doc-bg-subtle: #2d2d2d; /* dropdowns, dialogs, panels */
-  --doc-bg-hover: #3a3a3a; /* hover states */
-  --doc-bg-input: #333333; /* input fields */
-  --doc-primary: #4e9dff; /* Word accent blue (Home-tab underline) */
+  --doc-surface: #1f1f1f;
+  /* ribbon / toolbar / title bar */
+  --doc-card: #2d2d2d;
+  /* collapsed comment / suggestion cards */
+  --doc-bg: #262626;
+  /* workspace behind the page */
+  --doc-bg-subtle: #2d2d2d;
+  /* dropdowns, dialogs, panels */
+  --doc-bg-hover: #3a3a3a;
+  /* hover states */
+  --doc-bg-input: #333333;
+  /* input fields */
+  --doc-primary: #4e9dff;
+  /* Word accent blue (Home-tab underline) */
   --doc-primary-hover: #6cb0ff;
-  --doc-primary-light: rgba(78, 157, 255, 0.18); /* selected/active bg */
+  --doc-primary-light: rgba(78, 157, 255, 0.18);
+  /* selected/active bg */
   --doc-accent: #4e9dff;
   --doc-accent-bg: #1f3047;
-  --doc-on-primary: #1f1f1f; /* text/icon on a filled primary surface */
+  --doc-on-primary: #1f1f1f;
+  /* text/icon on a filled primary surface */
   --doc-toggle-active-bg: var(--doc-primary-light);
   --doc-toggle-active-fg: var(--doc-primary);
   /* Mixed from the OPAQUE accent, not from the translucent `--doc-primary-light` above. */
@@ -427,14 +473,21 @@
   --doc-review-change-bar: #9e9e9e;
   --doc-bookmark-mark: #9e9e9e;
   --doc-review-change-bar-simple: #f0524a;
-  --doc-text: #e8e8e8; /* primary text */
-  --doc-text-muted: #a0a0a0; /* secondary text */
-  --doc-text-subtle: #6e6e6e; /* tertiary/disabled text */
+  --doc-text: #e8e8e8;
+  /* primary text */
+  --doc-text-muted: #a0a0a0;
+  /* secondary text */
+  --doc-text-subtle: #6e6e6e;
+  /* tertiary/disabled text */
   --doc-text-placeholder: #6e6e6e;
-  --doc-border: #3c3c3c; /* standard borders */
-  --doc-border-light: #353535; /* lighter borders */
-  --doc-border-dark: #555555; /* darker borders (tables) */
-  --doc-border-input: #4a4a4a; /* input borders */
+  --doc-border: #3c3c3c;
+  /* standard borders */
+  --doc-border-light: #353535;
+  /* lighter borders */
+  --doc-border-dark: #555555;
+  /* darker borders (tables) */
+  --doc-border-input: #4a4a4a;
+  /* input borders */
   --doc-error: #f28b82;
   --doc-error-bg: #3c1f1d;
   --doc-success: #81c995;
@@ -489,15 +542,11 @@
    where it clamps to zero, landing on a dark olive that reads as a redaction bar. Word keeps
    a highlight its authored colour, so the run is inverted back — the same treatment media
    already gets, for the same reason. */
-.docx-editor.dark
-  :is(
-    .docx-page-content,
-    .docx-page > .docx-hf > :not([data-no-color-invert]),
-    .docx-page > .docx-hf-behind-layer,
-    .docx-page > .docx-notes,
-    .docx-page > .docx-drawing-layer
-  )
-  [data-highlight] {
+.docx-editor.dark :is(.docx-page-content,
+  .docx-page > .docx-hf > :not([data-no-color-invert]),
+  .docx-page > .docx-hf-behind-layer,
+  .docx-page > .docx-notes,
+  .docx-page > .docx-drawing-layer) [data-highlight] {
   filter: invert(1) hue-rotate(180deg);
 }
 
@@ -505,45 +554,36 @@
    the filter receives, not what the user sees. A normal blue came out orange; this is the
    pre-image that inverts back to the accent blue. The comment further up claiming the
    selection overlay sits outside the inverted page is true of the legacy lane only. */
-.docx-editor.dark
-  :is(
-    .docx-page-content,
-    .docx-page > .docx-hf > :not([data-no-color-invert]),
-    .docx-page > .docx-hf-behind-layer,
-    .docx-page > .docx-notes,
-    .docx-page > .docx-drawing-layer
-  )
-  ::selection {
+.docx-editor.dark :is(.docx-page-content,
+  .docx-page > .docx-hf > :not([data-no-color-invert]),
+  .docx-page > .docx-hf-behind-layer,
+  .docx-page > .docx-notes,
+  .docx-page > .docx-drawing-layer) ::selection {
   background-color: rgba(177, 98, 0, 0.32);
 }
+
 /* Every layer of document ink is inverted, not only the body. The header and footer
    bands, the notes area, and the floating drawing layers are siblings of
    `.docx-page-content` on the sheet, so a rule naming the body alone painted header text
    black on the dark page. A band's CHILDREN are inverted rather than the band, so its hover
    tint and edit border stay chrome colours, and the engine caret is left out. */
-.docx-editor.dark
-  :is(
-    .docx-page-content,
-    .docx-page > .docx-hf > :not([data-no-color-invert]),
-    .docx-page > .docx-hf-behind-layer,
-    .docx-page > .docx-notes,
-    .docx-page > .docx-drawing-layer
-  ) {
+.docx-editor.dark :is(.docx-page-content,
+  .docx-page > .docx-hf > :not([data-no-color-invert]),
+  .docx-page > .docx-hf-behind-layer,
+  .docx-page > .docx-notes,
+  .docx-page > .docx-drawing-layer) {
   /* contrast(0.92) softens the pure black/white extremes a plain invert
     * produces, landing on Word's gentler off-white text / dark-grey fills
     * rather than #fff on #000. The page FRAME sits outside this filter, so
     * its own shadow needs no counter-treatment. */
   filter: invert(1) hue-rotate(180deg) contrast(0.92);
 }
-.docx-editor.dark
-  :is(
-    .docx-page-content,
-    .docx-page > .docx-hf > :not([data-no-color-invert]),
-    .docx-page > .docx-hf-behind-layer,
-    .docx-page > .docx-notes,
-    .docx-page > .docx-drawing-layer
-  )
-  :is(img, svg, canvas, video, [data-no-color-invert]) {
+
+.docx-editor.dark :is(.docx-page-content,
+  .docx-page > .docx-hf > :not([data-no-color-invert]),
+  .docx-page > .docx-hf-behind-layer,
+  .docx-page > .docx-notes,
+  .docx-page > .docx-drawing-layer) :is(img, svg, canvas, video, [data-no-color-invert]) {
   filter: invert(1) hue-rotate(180deg);
 }
 
@@ -949,45 +989,36 @@ a.docx-hyperlink:focus-visible {
 .docx-bookmark-mark {
   box-sizing: border-box;
   pointer-events: none;
-  width: max(
-    var(--doc-bookmark-mark-size),
-    calc(var(--doc-bookmark-mark-size) * var(--docx-bookmark-scale, 1))
-  );
+  width: max(var(--doc-bookmark-mark-size),
+      calc(var(--doc-bookmark-mark-size) * var(--docx-bookmark-scale, 1)));
   border: 0 solid var(--doc-bookmark-mark);
 }
 
 /* Brackets sit OUTSIDE the range: the start one just before the first bookmarked character,
  * the end one just after the last, so neither covers a glyph. */
 .docx-bookmark-mark--start {
-  border-width: var(--doc-bookmark-mark-width) 0 var(--doc-bookmark-mark-width)
-    var(--doc-bookmark-mark-width);
+  border-width: var(--doc-bookmark-mark-width) 0 var(--doc-bookmark-mark-width) var(--doc-bookmark-mark-width);
   transform: translateX(-100%);
 }
 
 .docx-bookmark-mark--end {
-  border-width: var(--doc-bookmark-mark-width) var(--doc-bookmark-mark-width)
-    var(--doc-bookmark-mark-width) 0;
+  border-width: var(--doc-bookmark-mark-width) var(--doc-bookmark-mark-width) var(--doc-bookmark-mark-width) 0;
 }
 
 .docx-bookmark-mark--point {
   border-width: var(--doc-bookmark-mark-width) 0;
   transform: translateX(-50%);
-  background: var(
-    --doc-bookmark-point-glyph,
-    linear-gradient(var(--doc-bookmark-mark), var(--doc-bookmark-mark)) center /
-      var(--doc-bookmark-mark-width) 100% no-repeat
-  );
+  background: var(--doc-bookmark-point-glyph,
+      linear-gradient(var(--doc-bookmark-mark), var(--doc-bookmark-mark)) center / var(--doc-bookmark-mark-width) 100% no-repeat);
 }
 
 .docx-bookmark-mark--start.docx-bookmark-mark--rtl {
-  border-width: var(--doc-bookmark-mark-width) var(--doc-bookmark-mark-width)
-    var(--doc-bookmark-mark-width) 0;
+  border-width: var(--doc-bookmark-mark-width) var(--doc-bookmark-mark-width) var(--doc-bookmark-mark-width) 0;
   transform: none;
 }
 
 .docx-bookmark-mark--end.docx-bookmark-mark--rtl {
-  border-width: var(--doc-bookmark-mark-width) 0 var(--doc-bookmark-mark-width)
-    var(--doc-bookmark-mark-width);
+  border-width: var(--doc-bookmark-mark-width) 0 var(--doc-bookmark-mark-width) var(--doc-bookmark-mark-width);
   transform: translateX(-100%);
 }
 
@@ -1054,8 +1085,7 @@ a.docx-hyperlink:focus-visible {
  * caret or a click. The surface sets `data-hover` on the painted chrome while the pointer
  * is over the region and takes it off again on the way out.
  */
-.docx-content-control-chrome[data-docx-toc]:not([data-hover]):not([data-boundary-visible])
-  .docx-content-control-boundary {
+.docx-content-control-chrome[data-docx-toc]:not([data-hover]):not([data-boundary-visible]) .docx-content-control-boundary {
   opacity: 0;
 }
 
@@ -1180,14 +1210,11 @@ a.docx-hyperlink:focus-visible {
   border-radius: 0.125em;
   background:
     linear-gradient(currentcolor, currentcolor) 0.125em 0.125em / 0.125em 0.125em no-repeat,
-    linear-gradient(
-        to top right,
-        transparent 46%,
-        currentcolor 50%,
-        currentcolor 62%,
-        transparent 66%
-      )
-      0 0 / 100% 100% no-repeat;
+    linear-gradient(to top right,
+      transparent 46%,
+      currentcolor 50%,
+      currentcolor 62%,
+      transparent 66%) 0 0 / 100% 100% no-repeat;
 }
 
 .docx-content-control-widget[data-docx-cc-widget='date']::after {
@@ -1217,17 +1244,14 @@ a.docx-hyperlink:focus-visible {
    (the painter sizes it from the glyph's span), so hover and active states are a soft tint
    behind the glyph, the way Word lights a control under the pointer, never a second box. */
 .docx-content-control-widget[data-docx-cc-widget='checkbox'],
-.docx-content-control-chrome[data-read-only]:hover
-  .docx-content-control-widget[data-docx-cc-widget='checkbox'] {
+.docx-content-control-chrome[data-read-only]:hover .docx-content-control-widget[data-docx-cc-widget='checkbox'] {
   border-radius: 0.2em;
   background: transparent;
   border-color: transparent !important;
 }
 
-.docx-content-control-chrome[data-active]
-  .docx-content-control-widget[data-docx-cc-widget='checkbox'],
-.docx-content-control-chrome[data-open]
-  .docx-content-control-widget[data-docx-cc-widget='checkbox'],
+.docx-content-control-chrome[data-active] .docx-content-control-widget[data-docx-cc-widget='checkbox'],
+.docx-content-control-chrome[data-open] .docx-content-control-widget[data-docx-cc-widget='checkbox'],
 .docx-content-control-chrome:hover .docx-content-control-widget[data-docx-cc-widget='checkbox'] {
   background: color-mix(in srgb, var(--doc-primary) 16%, transparent);
   border-color: transparent !important;
@@ -1417,6 +1441,7 @@ a.docx-hyperlink:focus-visible {
   gap: 4px;
   min-width: 0;
 }
+
 .docx-content-control-calendar-month,
 .docx-content-control-calendar-year,
 .docx-content-control-menu-input {
@@ -1428,24 +1453,30 @@ a.docx-hyperlink:focus-visible {
   min-height: 2rem;
   min-width: 0;
 }
+
 .docx-content-control-calendar-month {
   flex: 1;
 }
+
 .docx-content-control-calendar-year {
   width: 4rem;
 }
+
 .docx-content-control-menu-list {
   overflow: auto;
   max-height: 16rem;
 }
+
 .docx-content-control-menu-item[aria-selected='true'] {
   background: var(--doc-primary-light);
 }
+
 .docx-content-control-menu-item:focus-visible,
 .docx-content-control-calendar :is(input, select, button):focus-visible {
   outline: 2px solid var(--doc-primary);
   outline-offset: -2px;
 }
+
 .docx-content-control-calendar-announcement {
   position: absolute;
   width: 1px;
@@ -1454,29 +1485,35 @@ a.docx-hyperlink:focus-visible {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
 .docx-content-control-calendar-entry {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 6px;
   margin-top: 6px;
 }
+
 .docx-content-control-calendar-entry .docx-content-control-menu-input {
   margin: 0;
   height: 32px;
   padding: 0 8px;
 }
+
 .docx-editor .docx-content-control-calendar .docx-dialog__footer {
   margin-top: 6px;
   padding: 0;
 }
+
 .docx-content-control-calendar .docx-dialog__button {
   min-height: 32px;
   padding: 4px 10px;
 }
+
 .docx-content-control-calendar-day {
   width: 100%;
   min-width: 0;
 }
+
 .docx-form-checkbox-hit {
   position: absolute;
   left: 50%;
@@ -1492,6 +1529,7 @@ a.docx-hyperlink:focus-visible {
   /* An arrow over pictures, as Word shows. Inline drawings paint INSIDE the line, so
    * without this they inherit the content box's I-beam. */
   cursor: default;
+  background-color: red;
 }
 
 /* Text boxes carry rendered text, so they keep the I-beam the arrow above would cover. */
@@ -1510,19 +1548,17 @@ a.docx-hyperlink:focus-visible {
   inset: 0;
   z-index: 1;
   cursor: move;
-  clip-path: polygon(
-    evenodd,
-    0 0,
-    100% 0,
-    100% 100%,
-    0 100%,
-    0 0,
-    7px 7px,
-    7px calc(100% - 7px),
-    calc(100% - 7px) calc(100% - 7px),
-    calc(100% - 7px) 7px,
-    7px 7px
-  );
+  clip-path: polygon(evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      7px 7px,
+      7px calc(100% - 7px),
+      calc(100% - 7px) calc(100% - 7px),
+      calc(100% - 7px) 7px,
+      7px 7px);
 }
 
 .docx-drawing-layer {
@@ -1545,13 +1581,13 @@ a.docx-hyperlink:focus-visible {
  * table border or tab leader inside a drawing cannot escape over the body either. The
  * band's own in-front drawings are contained by the band, whose clip makes it a stacking
  * context. */
-.docx-page > .docx-drawing-layer-front[data-docx-hf-front] {
+.docx-page>.docx-drawing-layer-front[data-docx-hf-front] {
   z-index: 0;
 }
 
 /* A `front` page border is over every drawing on the sheet, the body's in-front drawings
  * included: the same level as their layer, and later in the sheet's child order. */
-.docx-page > .docx-page-borders[data-docx-z-order='front'] {
+.docx-page>.docx-page-borders[data-docx-z-order='front'] {
   z-index: 2;
 }
 
@@ -1578,7 +1614,7 @@ a.docx-hyperlink:focus-visible {
   color: inherit;
 }
 
-.docx-drawing-placeholder-card[data-docx-customized] > .docx-unsupported-slot {
+.docx-drawing-placeholder-card[data-docx-customized]>.docx-unsupported-slot {
   display: block;
   width: 100%;
   height: 100%;
@@ -1850,6 +1886,7 @@ a.docx-hyperlink:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .docx-table-chrome__option,
   .docx-table-chrome__target-btn,
   .docx-table-chrome__width-row {
@@ -1957,6 +1994,7 @@ a.docx-hyperlink:focus-visible {
   background-color: var(--doc-bg-hover);
   color: var(--doc-text);
 }
+
 .docx-editor .docx-editor-toolbar-toggle[data-active='true'],
 .docx-editor .docx-editor-toolbar-toggle[data-active='true']:hover {
   background-color: var(--doc-toggle-active-bg);
@@ -1983,11 +2021,13 @@ a.docx-hyperlink:focus-visible {
     color 0.12s ease,
     box-shadow 0.12s ease;
 }
+
 .docx-outline-toggle:hover {
   background: var(--doc-border);
   color: var(--doc-text);
   box-shadow: 0 1px 3px rgba(60, 64, 67, 0.18);
 }
+
 .docx-outline-toggle:focus-visible {
   outline: 2px solid var(--doc-primary);
   outline-offset: 2px;
@@ -1998,10 +2038,12 @@ a.docx-hyperlink:focus-visible {
     JS timer instead; both land on the same 530ms half-period, which is the
     platform default. Defined here so the keyframes aren't duplicated per adapter. */
 @keyframes docx-editor-caret-blink {
+
   0%,
   49% {
     opacity: 1;
   }
+
   50%,
   100% {
     opacity: 0;
@@ -2012,10 +2054,12 @@ a.docx-hyperlink:focus-visible {
     (DocxEditorPagedArea.tsx / DocxEditor.vue set `animation: hf-caret-blink ...`
     inline). Defined once here so the keyframes aren't duplicated per adapter. */
 @keyframes hf-caret-blink {
+
   0%,
   49% {
     opacity: 1;
   }
+
   50%,
   100% {
     opacity: 0;
@@ -2031,6 +2075,7 @@ a.docx-hyperlink:focus-visible {
     opacity: 0;
     transform: translateX(100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -2041,6 +2086,7 @@ a.docx-hyperlink:focus-visible {
 .docx-section-break {
   position: relative;
 }
+
 .docx-section-break::after {
   content: 'Section Break (' attr(data-section-break) ')';
   display: block;
@@ -2072,7 +2118,8 @@ a.docx-hyperlink:focus-visible {
   word-break: normal;
   pointer-events: none;
 }
-.docx-editor .ProseMirror-yjs-cursor > div {
+
+.docx-editor .ProseMirror-yjs-cursor>div {
   position: absolute;
   top: -1.05em;
   left: -1px;
@@ -2175,20 +2222,16 @@ a.docx-hyperlink:focus-visible {
   transform: translate(-50%, -50%);
   /* Word's checked state is a bold X across the box. */
   background:
-    linear-gradient(
-      to top right,
+    linear-gradient(to top right,
       transparent 44%,
       currentcolor 46%,
       currentcolor 54%,
-      transparent 56%
-    ),
-    linear-gradient(
-      to top left,
+      transparent 56%),
+    linear-gradient(to top left,
       transparent 44%,
       currentcolor 46%,
       currentcolor 54%,
-      transparent 56%
-    );
+      transparent 56%);
 }
 
 /* Focus and hover affordances are canvas ink too, so they survive the dark theme's inversion. */
@@ -2215,6 +2258,7 @@ a.docx-hyperlink:focus-visible {
 /* Field shading NEVER prints — Word does not print it either. A printed form has no blanks
    left to find, and a page number on paper is just a page number. */
 @media print {
+
   .docx-field-atom--shaded,
   .docx-field-atom--active {
     background-color: transparent;
@@ -2246,6 +2290,7 @@ a.docx-hyperlink:focus-visible {
 .docx-paragraph-mark {
   opacity: 0;
 }
+
 .docx-show-paragraph-marks .docx-paragraph-mark {
   opacity: 1;
 }
@@ -2346,7 +2391,7 @@ a.docx-hyperlink:focus-visible {
   -webkit-user-select: none;
 }
 
-.docx-editor-one-surface__content > * {
+.docx-editor-one-surface__content>* {
   position: absolute;
 }
 
@@ -2601,7 +2646,7 @@ a.docx-hyperlink:focus-visible {
   background: var(--doc-bg);
 }
 
-.docx-editor-shell__ruler-h > * {
+.docx-editor-shell__ruler-h>* {
   flex-shrink: 0;
   margin-inline: auto;
 }
@@ -2626,7 +2671,7 @@ a.docx-hyperlink:focus-visible {
 /* The one-surface viewport fills the canvas. Page centering stays the page
  * stack's own job (`margin-inline: auto` on `.docx-editor-one-surface__pages`), so the
  * shell adds no offset the engine would have to be told about. */
-.docx-editor-shell__canvas > .docx-editor-one-surface {
+.docx-editor-shell__canvas>.docx-editor-one-surface {
   flex: 1;
   min-width: 0;
 }
@@ -2666,6 +2711,7 @@ a.docx-hyperlink:focus-visible {
 .docx-editor-one-surface__viewport--hosted {
   overflow: visible;
 }
+
 /* The title + menu column, INSIDE the header row (legacy layout). It used to render as
  * two full-width bands under the header, which turned a single ~110px product band into
  * three tall stacked strips with the menu floating in whitespace. */
@@ -2698,13 +2744,13 @@ a.docx-hyperlink:focus-visible {
 }
 
 /* A child with its own `dir` keeps it, as it did under the left-to-right scroller. */
-.docx-editor__scroll-container[data-chrome-dir='rtl'] > :not([dir]) {
+.docx-editor__scroll-container[data-chrome-dir='rtl']> :not([dir]) {
   direction: ltr;
 }
 
 /* A right-to-left scroller reaches overflow on its left only. The mount grows to the pages'
  * width, so a page wider than the viewport overflows leftward instead of out of reach. */
-.docx-editor__scroll-container[data-chrome-dir='rtl'] > .docx-content-mount {
+.docx-editor__scroll-container[data-chrome-dir='rtl']>.docx-content-mount {
   min-width: max-content;
 }
 
@@ -2712,16 +2758,13 @@ a.docx-hyperlink:focus-visible {
  * direction the chrome declares with `dir`. `:dir()` follows the `dir` attribute, not the
  * scroller's `direction`, so a right-to-left host or catalog still reaches them. Each one
  * positions itself with physical coordinates, so mirroring its content moves nothing. */
-.docx-editor__scroll-container
-  :is(
-    .docx-contextmenu,
-    .docx-dialog-mount,
-    .docx-review,
-    .docx-hyperlink-popup,
-    .docx-equation-popup,
-    .docx-content-control-widget-popup,
-    .docx-note-properties__panel
-  ):dir(rtl) {
+.docx-editor__scroll-container :is(.docx-contextmenu,
+  .docx-dialog-mount,
+  .docx-review,
+  .docx-hyperlink-popup,
+  .docx-equation-popup,
+  .docx-content-control-widget-popup,
+  .docx-note-properties__panel):dir(rtl) {
   direction: rtl;
 }
 
@@ -3211,6 +3254,7 @@ a.docx-hyperlink:focus-visible {
   margin-inline-start: 0;
   margin-inline-end: 4px;
 }
+
 .docx-editor__theme-option {
   padding: 3px 8px;
 }
@@ -3297,11 +3341,9 @@ a.docx-hyperlink:focus-visible {
   margin: 0 0.15em;
   border: 1px dashed var(--doc-border, #b4b8bf);
   border-radius: 3px;
-  background: repeating-linear-gradient(
-    45deg,
-    color-mix(in srgb, var(--doc-border, #b4b8bf) 22%, transparent) 0 4px,
-    transparent 4px 8px
-  );
+  background: repeating-linear-gradient(45deg,
+      color-mix(in srgb, var(--doc-border, #b4b8bf) 22%, transparent) 0 4px,
+      transparent 4px 8px);
   cursor: default;
   user-select: none;
 }
@@ -3327,32 +3369,29 @@ a.docx-hyperlink:focus-visible {
   position: relative;
   outline: none;
 }
+
 .docx-editor.dark :is(.docx-paginated-surface, .docx-preview-surface) .docx-page {
   background: var(--doc-page-bg-rendered);
 }
+
 /* Paper is always white, whatever the screen theme. Without resetting the CONTENT
    inversion here, printing in dark mode left near-white text on paper the printer drops to
    white — blank pages. `print-color-adjust` stops the sheet colour being dropped too. */
 @media print {
-  .docx-editor.dark
-    :is(
-      .docx-page-content,
-      .docx-page > .docx-hf > :not([data-no-color-invert]),
-      .docx-page > .docx-hf-behind-layer,
-      .docx-page > .docx-notes,
-      .docx-page > .docx-drawing-layer
-    ),
-  .docx-editor.dark
-    :is(
-      .docx-page-content,
-      .docx-page > .docx-hf > :not([data-no-color-invert]),
-      .docx-page > .docx-hf-behind-layer,
-      .docx-page > .docx-notes,
-      .docx-page > .docx-drawing-layer
-    )
-    :is(img, svg, canvas, video, [data-no-color-invert]) {
+
+  .docx-editor.dark :is(.docx-page-content,
+    .docx-page > .docx-hf > :not([data-no-color-invert]),
+    .docx-page > .docx-hf-behind-layer,
+    .docx-page > .docx-notes,
+    .docx-page > .docx-drawing-layer),
+  .docx-editor.dark :is(.docx-page-content,
+    .docx-page > .docx-hf > :not([data-no-color-invert]),
+    .docx-page > .docx-hf-behind-layer,
+    .docx-page > .docx-notes,
+    .docx-page > .docx-drawing-layer) :is(img, svg, canvas, video, [data-no-color-invert]) {
     filter: none !important;
   }
+
   :is(.docx-paginated-surface, .docx-preview-surface) .docx-page {
     background: #ffffff !important;
     color: #000000 !important;
@@ -3361,6 +3400,7 @@ a.docx-hyperlink:focus-visible {
     -webkit-print-color-adjust: exact;
   }
 }
+
 :is(.docx-paginated-surface, .docx-preview-surface) .docx-page {
   /* A rebuilt sheet must not invalidate style/layout/paint across hundreds of sibling pages. */
   contain: layout style paint;
@@ -3378,6 +3418,7 @@ a.docx-hyperlink:focus-visible {
   user-select: text;
   -webkit-user-select: text;
 }
+
 /* The caret and the TEXT highlight are the BROWSER's, so they follow real glyph shapes and
    per-line metrics instead of the uniform band a hand-drawn rectangle produces. */
 :is(.docx-paginated-surface, .docx-preview-surface) .docx-pages {
@@ -3450,12 +3491,8 @@ a.docx-hyperlink:focus-visible {
 
 /* The pill is a LATER sibling, not the next one: the band paints under the body and the
  * pill over it, so the kinds are matched here instead of by adjacency. */
-.docx-pages
-  .docx-hf[data-docx-hf='header']:not([data-docx-hf-active]):hover
-  ~ .docx-hf-edit-hint[data-docx-hf-hint='header'],
-.docx-pages
-  .docx-hf[data-docx-hf='footer']:not([data-docx-hf-active]):hover
-  ~ .docx-hf-edit-hint[data-docx-hf-hint='footer'] {
+.docx-pages .docx-hf[data-docx-hf='header']:not([data-docx-hf-active]):hover~.docx-hf-edit-hint[data-docx-hf-hint='header'],
+.docx-pages .docx-hf[data-docx-hf='footer']:not([data-docx-hf-active]):hover~.docx-hf-edit-hint[data-docx-hf-hint='footer'] {
   opacity: 1;
 }
 
@@ -3506,12 +3543,8 @@ a.docx-hyperlink:focus-visible {
   border-radius: 4px;
 }
 
-.docx-pages
-  .docx-hf-hover[data-docx-hf-hover='header']:hover
-  ~ .docx-hf-edit-hint[data-docx-hf-hint='header'],
-.docx-pages
-  .docx-hf-hover[data-docx-hf-hover='footer']:hover
-  ~ .docx-hf-edit-hint[data-docx-hf-hint='footer'] {
+.docx-pages .docx-hf-hover[data-docx-hf-hover='header']:hover~.docx-hf-edit-hint[data-docx-hf-hint='header'],
+.docx-pages .docx-hf-hover[data-docx-hf-hover='footer']:hover~.docx-hf-edit-hint[data-docx-hf-hint='footer'] {
   opacity: 1;
 }
 
@@ -3522,8 +3555,7 @@ a.docx-hyperlink:focus-visible {
 .docx-pages--hf-editing .docx-hf--placeholder:hover,
 .docx-paginated-surface--viewing .docx-hf--placeholder:hover,
 .docx-pages--hf-editing .docx-hf:not([data-docx-hf-active]):not(.docx-hf--placeholder):hover,
-.docx-paginated-surface--viewing
-  .docx-hf:not([data-docx-hf-active]):not(.docx-hf--placeholder):hover,
+.docx-paginated-surface--viewing .docx-hf:not([data-docx-hf-active]):not(.docx-hf--placeholder):hover,
 .docx-pages--hf-editing .docx-hf-hover:hover,
 .docx-paginated-surface--viewing .docx-hf-hover:hover {
   background: none;
@@ -3556,12 +3588,14 @@ a.docx-hyperlink:focus-visible {
 .docx-paginated-surface--viewing .docx-drawing-textbox {
   cursor: default;
 }
+
 /* Viewing selects no object, so a text box's edge ring has nothing to do. */
 .docx-paginated-surface--viewing .docx-drawing-textbox-box::after {
   display: none;
 }
 
 @media print {
+
   .docx-hf--placeholder,
   .docx-hf-hover,
   .docx-hf-edit-hint {
@@ -3579,14 +3613,14 @@ a.docx-hyperlink:focus-visible {
  * inline objects sit over the open story. While it is open they dim with the body text and
  * never take a press meant for it. `!important` and the universal child selector beat the
  * explicit `auto` that drawings carry inline. */
-.docx-pages--hf-editing .docx-page > .docx-drawing-layer:not([data-docx-hf-front]) {
+.docx-pages--hf-editing .docx-page>.docx-drawing-layer:not([data-docx-hf-front]) {
   opacity: var(--doc-hf-dim-opacity);
   transition: opacity 0.15s ease;
 }
 
 .docx-pages--hf-editing .docx-page-content *,
-.docx-pages--hf-editing .docx-page > .docx-drawing-layer:not([data-docx-hf-front]),
-.docx-pages--hf-editing .docx-page > .docx-drawing-layer:not([data-docx-hf-front]) * {
+.docx-pages--hf-editing .docx-page>.docx-drawing-layer:not([data-docx-hf-front]),
+.docx-pages--hf-editing .docx-page>.docx-drawing-layer:not([data-docx-hf-front]) * {
   pointer-events: none !important;
 }
 
@@ -3603,12 +3637,8 @@ a.docx-hyperlink:focus-visible {
   transition: opacity 0.15s ease;
 }
 
-.docx-pages--hf-editing
-  .docx-page[data-docx-hf-active-kind='header']
-  .docx-change-bar[data-docx-story='header'],
-.docx-pages--hf-editing
-  .docx-page[data-docx-hf-active-kind='footer']
-  .docx-change-bar[data-docx-story='footer'] {
+.docx-pages--hf-editing .docx-page[data-docx-hf-active-kind='header'] .docx-change-bar[data-docx-story='header'],
+.docx-pages--hf-editing .docx-page[data-docx-hf-active-kind='footer'] .docx-change-bar[data-docx-story='footer'] {
   opacity: 1;
 }
 
@@ -3626,8 +3656,9 @@ a.docx-hyperlink:focus-visible {
 }
 
 @media print {
+
   .docx-pages--hf-editing .docx-page-content,
-  .docx-pages--hf-editing .docx-page > .docx-drawing-layer:not([data-docx-hf-front]),
+  .docx-pages--hf-editing .docx-page>.docx-drawing-layer:not([data-docx-hf-front]),
   .docx-pages--hf-editing .docx-hf {
     opacity: 1 !important;
     pointer-events: auto !important;
@@ -3737,7 +3768,7 @@ a.docx-hyperlink:focus-visible {
   box-shadow: 0 0 0 2px var(--doc-surface);
 }
 
-.docx-collaboration-avatars .docx-collaboration-avatar + .docx-collaboration-avatar {
+.docx-collaboration-avatars .docx-collaboration-avatar+.docx-collaboration-avatar {
   margin-inline-start: -8px;
 }
 
@@ -3821,6 +3852,7 @@ a.docx-hyperlink:focus-visible {
 .docx-toolbar {
   display: flex;
   align-items: center;
+  justify-content: center;
   min-inline-size: 0;
   margin: 8px 12px;
   border: 0;
@@ -3897,10 +3929,8 @@ a.docx-hyperlink:focus-visible {
  * the anchor there: the rows are full-width, so an underline across one would read as a rule
  * between rows rather than as a state. */
 .docx-toolbar__button[data-slot='format.painter'][data-value='locked']::after,
-.docx-toolbar__more-command[data-slot='format.painter'][data-value='locked']
-  .docx-toolbar__more-command-icon::after,
-.docx-menubar__item[data-slot='format.painter'][data-value='locked']
-  .docx-menubar__item-icon::after {
+.docx-toolbar__more-command[data-slot='format.painter'][data-value='locked'] .docx-toolbar__more-command-icon::after,
+.docx-menubar__item[data-slot='format.painter'][data-value='locked'] .docx-menubar__item-icon::after {
   content: '';
   position: absolute;
   left: 5px;
@@ -4088,7 +4118,7 @@ a.docx-hyperlink:focus-visible {
   inset-inline-start: auto;
 }
 
-.docx-toolbar__more-section + .docx-toolbar__more-section {
+.docx-toolbar__more-section+.docx-toolbar__more-section {
   margin-top: 4px;
   padding-top: 4px;
   border-top: 1px solid var(--doc-border-light);
@@ -4190,7 +4220,7 @@ a.docx-hyperlink:focus-visible {
   padding: 2px 6px 2px 10px;
 }
 
-.docx-toolbar__more-host > .docx-toolbar__more-command {
+.docx-toolbar__more-host>.docx-toolbar__more-command {
   flex: 1 0 100%;
   margin-inline-start: -4px;
 }
@@ -4285,8 +4315,8 @@ a.docx-hyperlink:focus-visible {
  * its g. The trigger is a 32px flex row centring this span, so the extra leading costs no
  * layout; it just stops the clip. Same reason on the font-family trigger, where it went
  * unnoticed only because "Arial" and "Calibri" have no descenders. */
-.docx-toolbar__style-trigger > span:first-child,
-.docx-toolbar__font-family-trigger > span:first-child {
+.docx-toolbar__style-trigger>span:first-child,
+.docx-toolbar__font-family-trigger>span:first-child {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -4788,7 +4818,7 @@ a.docx-hyperlink:focus-visible {
 }
 
 /* Base row breathes before the tint/shade block, the way Word separates them. */
-.docx-toolbar__swatch-grid--theme > .docx-toolbar__swatch:nth-child(10) {
+.docx-toolbar__swatch-grid--theme>.docx-toolbar__swatch:nth-child(10) {
   margin-bottom: 3px;
 }
 
@@ -4826,13 +4856,11 @@ a.docx-hyperlink:focus-visible {
 /* No Color: a white chip with the red slash. */
 .docx-toolbar__swatch-clear-chip--none {
   background:
-    linear-gradient(
-      to top right,
+    linear-gradient(to top right,
       transparent calc(50% - 1px),
       #d83b01 calc(50% - 1px),
       #d83b01 calc(50% + 1px),
-      transparent calc(50% + 1px)
-    ),
+      transparent calc(50% + 1px)),
     #ffffff;
 }
 
@@ -5352,7 +5380,7 @@ a.docx-hyperlink:focus-visible {
    `.docx-paginated-surface > .docx-pages > .docx-page`. React and Vue apply the layout
    page size and zoom to the surface. The shared surface margin and page rule then control
    centring, paper colour, and shadow without a second approximation. */
-.docx-editor__loading-surface > .docx-pages {
+.docx-editor__loading-surface>.docx-pages {
   position: relative;
   width: 100%;
   height: 100%;
@@ -5363,7 +5391,7 @@ a.docx-hyperlink:focus-visible {
    scrolls and the pages take input. The indicator sits in a band BELOW THE LAST LAID-OUT
    PAGE (`.docx-opening-indicator`), so it scrolls with the document instead of floating
    over it. */
-:where(:has([data-docx-opening-preview])) > .docx-editor__loading--overlay {
+:where(:has([data-docx-opening-preview]))>.docx-editor__loading--overlay {
   display: none;
 }
 
@@ -5376,7 +5404,7 @@ a.docx-hyperlink:focus-visible {
   pointer-events: none;
 }
 
-.docx-opening-indicator > .docx-editor__loading-page-status > * {
+.docx-opening-indicator>.docx-editor__loading-page-status>* {
   pointer-events: auto;
 }
 
@@ -5765,8 +5793,7 @@ a.docx-hyperlink:focus-visible {
 
 /* A right-to-left interface puts the column on the page's left. Markers and the button keep
    to the column's page edge, which is then its right. */
-.docx-editor__scroll-container[data-review-side='left']
-  :is(.docx-review__markers > .docx-review__marker, .docx-review__add) {
+.docx-editor__scroll-container[data-review-side='left'] :is(.docx-review__markers > .docx-review__marker, .docx-review__add) {
   left: auto;
   right: 0;
 }
@@ -5777,20 +5804,17 @@ a.docx-hyperlink:focus-visible {
 }
 
 /* The icon's tail points at the page, as the markers' do. */
-.docx-editor__scroll-container[data-review-side='left'] .docx-review__add > svg {
+.docx-editor__scroll-container[data-review-side='left'] .docx-review__add>svg {
   transform: scaleX(-1);
 }
 
 /* The compact card grows from the column's side, which is then the left. */
-.docx-editor__scroll-container[data-review-side='left']
-  .docx-review__slot--compact
-  .docx-review__card {
+.docx-editor__scroll-container[data-review-side='left'] .docx-review__slot--compact .docx-review__card {
   transform-origin: left center;
 }
 
 /* The speech bubble's tail points at the page, which is then on its right. */
-.docx-editor__scroll-container[data-review-side='left']
-  .docx-review__marker[data-marker='initials'],
+.docx-editor__scroll-container[data-review-side='left'] .docx-review__marker[data-marker='initials'],
 .docx-editor__scroll-container[data-review-side='left'] .docx-review__badge {
   border-radius: 13px 13px 3px 13px;
 }
@@ -5940,7 +5964,7 @@ a.docx-hyperlink:focus-visible {
   color: var(--doc-text-muted);
 }
 
-.docx-review__badge > svg {
+.docx-review__badge>svg {
   width: 14px;
   height: 14px;
 }
@@ -5966,6 +5990,7 @@ a.docx-hyperlink:focus-visible {
 }
 
 @media (hover: hover) and (pointer: fine) {
+
   .docx-review__marker[data-marker='initials']:hover .docx-review__badge,
   .docx-review__resolved-toggle:hover .docx-review__badge {
     transform: translateY(-1px);
@@ -5978,9 +6003,7 @@ a.docx-hyperlink:focus-visible {
   }
 
   /* Dark: the lifted shadow keeps the hairline outside the ring. */
-  .docx-editor.dark
-    .docx-review__marker[data-marker='initials']:hover
-    .docx-review__badge:not([data-resolved]) {
+  .docx-editor.dark .docx-review__marker[data-marker='initials']:hover .docx-review__badge:not([data-resolved]) {
     box-shadow:
       0 0 0 2px var(--doc-surface),
       0 0 0 3px var(--doc-border),
@@ -6094,7 +6117,7 @@ a.docx-hyperlink:focus-visible {
   cursor: pointer;
 }
 
-.docx-review__send > svg {
+.docx-review__send>svg {
   width: 14px;
   height: 14px;
 }
@@ -6189,7 +6212,7 @@ a.docx-hyperlink:focus-visible {
   color: var(--doc-text);
 }
 
-.docx-editor .docx-nav > * {
+.docx-editor .docx-nav>* {
   pointer-events: auto;
 }
 
@@ -6222,8 +6245,8 @@ a.docx-hyperlink:focus-visible {
  * (`--docx-nav-block-size`, published by the adapter). Sticky offsets resolve inside the
  * scroller's padding, so the start offset cancels the shift padding the pane causes and
  * the review gutter's mirrored strip; the page still moves, the pane does not. */
-.docx-editor .docx-editor__scroll-container > .docx-nav,
-.docx-editor.docx-editor__scroll-container > .docx-nav {
+.docx-editor .docx-editor__scroll-container>.docx-nav,
+.docx-editor.docx-editor__scroll-container>.docx-nav {
   position: sticky;
   order: -1;
   flex: none;
@@ -6232,23 +6255,19 @@ a.docx-hyperlink:focus-visible {
   /* The margin moves the strip's normal position back over the start padding; the
    * negative offset lets sticky keep it there. Both are needed. The margin follows the
    * padding's transition, so the two cancel at every frame and the pane holds still. */
-  inset-inline-start: calc(
-    -1 * (var(--docx-nav-shift, 0px) + var(--docx-review-gutter-start, 0px))
-  );
-  margin-inline-start: calc(
-    -1 * (var(--docx-nav-shift, 0px) + var(--docx-review-gutter-start, 0px))
-  );
+  inset-inline-start: calc(-1 * (var(--docx-nav-shift, 0px) + var(--docx-review-gutter-start, 0px)));
+  margin-inline-start: calc(-1 * (var(--docx-nav-shift, 0px) + var(--docx-review-gutter-start, 0px)));
   transition: margin-inline-start 0.2s ease;
   height: 0;
 }
 
-.docx-editor .docx-editor__scroll-container[data-zoom-fit] > .docx-nav,
-.docx-editor.docx-editor__scroll-container[data-zoom-fit] > .docx-nav {
+.docx-editor .docx-editor__scroll-container[data-zoom-fit]>.docx-nav,
+.docx-editor.docx-editor__scroll-container[data-zoom-fit]>.docx-nav {
   transition: none;
 }
 
-.docx-editor .docx-editor__scroll-container > .docx-nav .docx-nav__panel-shell,
-.docx-editor.docx-editor__scroll-container > .docx-nav .docx-nav__panel-shell {
+.docx-editor .docx-editor__scroll-container>.docx-nav .docx-nav__panel-shell,
+.docx-editor.docx-editor__scroll-container>.docx-nav .docx-nav__panel-shell {
   inset-block-end: auto;
   height: var(--docx-nav-block-size, 100vh);
 }
@@ -6260,8 +6279,8 @@ a.docx-hyperlink:focus-visible {
   width: 100%;
 }
 
-.docx-editor .docx-editor__scroll-container > .docx-nav--overlay,
-.docx-editor.docx-editor__scroll-container > .docx-nav--overlay {
+.docx-editor .docx-editor__scroll-container>.docx-nav--overlay,
+.docx-editor.docx-editor__scroll-container>.docx-nav--overlay {
   width: var(--docx-nav-inline-size, 100%);
 }
 
@@ -6600,11 +6619,9 @@ a.docx-hyperlink:focus-visible {
 .docx-review__reply-avatar,
 .docx-review__marker {
   --doc-review-author-ink: var(--doc-review-author-current, #c0392b);
-  --doc-review-author-disc: color-mix(
-    in srgb,
-    var(--doc-review-author-current, #c0392b) 82%,
-    white
-  );
+  --doc-review-author-disc: color-mix(in srgb,
+      var(--doc-review-author-current, #c0392b) 82%,
+      white);
 }
 
 .docx-editor.dark .docx-review__card,
@@ -6612,11 +6629,9 @@ a.docx-hyperlink:focus-visible {
 .docx-editor.dark .docx-review__reply-avatar,
 .docx-editor.dark .docx-review__marker {
   --doc-review-author-ink: color-mix(in srgb, var(--doc-review-author-current, #c0392b) 55%, white);
-  --doc-review-author-disc: color-mix(
-    in srgb,
-    var(--doc-review-author-current, #c0392b) 62%,
-    white
-  );
+  --doc-review-author-disc: color-mix(in srgb,
+      var(--doc-review-author-current, #c0392b) 62%,
+      white);
 }
 
 .docx-review__card {
@@ -6722,7 +6737,7 @@ a.docx-hyperlink:focus-visible {
   text-transform: uppercase;
 }
 
-.docx-review__card[data-resolved-miniature][open] > .docx-review__resolved-toggle {
+.docx-review__card[data-resolved-miniature][open]>.docx-review__resolved-toggle {
   width: 100%;
   height: 28px;
   margin: -4px 0 4px;
@@ -6731,9 +6746,7 @@ a.docx-hyperlink:focus-visible {
   border-radius: 4px;
 }
 
-.docx-review__card[data-resolved-miniature][open]
-  > .docx-review__resolved-toggle
-  > .docx-review__resolved-status {
+.docx-review__card[data-resolved-miniature][open]>.docx-review__resolved-toggle>.docx-review__resolved-status {
   display: inline;
 }
 
@@ -6764,7 +6777,7 @@ a.docx-hyperlink:focus-visible {
   color: var(--doc-text-muted);
 }
 
-.docx-review__resolved-comment > svg {
+.docx-review__resolved-comment>svg {
   width: 16px;
   height: 16px;
 }
@@ -6778,7 +6791,7 @@ a.docx-hyperlink:focus-visible {
   color: var(--doc-success);
 }
 
-.docx-review__resolved-tick > svg {
+.docx-review__resolved-tick>svg {
   width: 10px;
   height: 10px;
 }
@@ -6885,20 +6898,16 @@ a.docx-hyperlink:focus-visible {
 
 /* A reply reveals its OWN control. Scoped through the reply's head so a reply cannot reveal
    the control belonging to the comment it answers. */
-.docx-review__reply:hover > .docx-review__head [data-testid='review-delete'],
-.docx-review__reply:focus-within > .docx-review__head [data-testid='review-delete'] {
+.docx-review__reply:hover>.docx-review__head [data-testid='review-delete'],
+.docx-review__reply:focus-within>.docx-review__head [data-testid='review-delete'] {
   visibility: visible;
 }
 
 /* And the card reveals its own — `>` for the card's own head, and the `:has()` guard so
    hovering a nested reply does not light up its parent's control as well. Two identical
    trash icons offered at once is how a reader deletes the wrong one. */
-.docx-review__card:hover:not(:has(.docx-review__reply:hover))
-  > .docx-review__head
-  [data-testid='review-delete'],
-.docx-review__card:focus-within:not(:has(.docx-review__reply:focus-within))
-  > .docx-review__head
-  [data-testid='review-delete'] {
+.docx-review__card:hover:not(:has(.docx-review__reply:hover))>.docx-review__head [data-testid='review-delete'],
+.docx-review__card:focus-within:not(:has(.docx-review__reply:focus-within))>.docx-review__head [data-testid='review-delete'] {
   visibility: visible;
 }
 
@@ -7186,10 +7195,8 @@ p.docx-review__refused {
 }
 
 .docx-text-highlight--active {
-  background-color: var(
-    --doc-text-highlight-set-active-color,
-    var(--doc-text-highlight-active-color)
-  );
+  background-color: var(--doc-text-highlight-set-active-color,
+      var(--doc-text-highlight-active-color));
 }
 
 /* Highlight sets with a `kind`: the covered text joins a shared `spelling-error` or
@@ -7505,7 +7512,7 @@ p.docx-review__refused {
   padding: 0;
 }
 
-.docx-editor .docx-nav__goto-group + .docx-nav__goto-group {
+.docx-editor .docx-nav__goto-group+.docx-nav__goto-group {
   margin-block-start: 8px;
 }
 
@@ -7550,7 +7557,7 @@ p.docx-review__refused {
   color: var(--doc-primary);
 }
 
-.docx-editor .docx-nav__goto-row > .docx-nav__result-text {
+.docx-editor .docx-nav__goto-row>.docx-nav__result-text {
   display: block;
   flex: 1;
   min-width: 0;
@@ -7676,10 +7683,11 @@ p.docx-review__refused {
 
 /* Reduced motion: the page still moves when it has to, it just does not glide. */
 @media (prefers-reduced-motion: reduce) {
+
   .docx-editor .docx-editor__scroll-container,
   .docx-editor.docx-editor__scroll-container,
-  .docx-editor .docx-editor__scroll-container > .docx-nav,
-  .docx-editor.docx-editor__scroll-container > .docx-nav {
+  .docx-editor .docx-editor__scroll-container>.docx-nav,
+  .docx-editor.docx-editor__scroll-container>.docx-nav {
     transition-duration: 0s;
   }
 }
@@ -7752,7 +7760,7 @@ p.docx-review__refused {
 }
 
 /* The "⋯" menu's panel is never wider than the viewport less its margins. */
-.docx-editor .docx-menubar__menu-root[data-toolbar-more] > .docx-menubar__menu {
+.docx-editor .docx-menubar__menu-root[data-toolbar-more]>.docx-menubar__menu {
   max-width: calc(100vw - 16px);
 }
 
@@ -7830,18 +7838,14 @@ p.docx-review__refused {
  * packaged editor sets for a right-to-left catalog. Logical properties mirror the layout;
  * these rules mirror the icons that point along the reading direction. The viewport keeps
  * a left-to-right base, so nothing here reaches the painted pages. */
-.docx-editor
-  :is(
-    [data-slot='history.undo'],
-    [data-slot='history.redo'],
-    [data-slot='list.bullet'],
-    [data-slot='list.numbered'],
-    [data-slot='list.indent'],
-    [data-slot='list.outdent']
-  )
-  svg:dir(rtl),
+.docx-editor :is([data-slot='history.undo'],
+  [data-slot='history.redo'],
+  [data-slot='list.bullet'],
+  [data-slot='list.numbered'],
+  [data-slot='list.indent'],
+  [data-slot='list.outdent']) svg:dir(rtl),
 .docx-editor .docx-menubar__item-caret:dir(rtl),
-.docx-review__send > svg:dir(rtl) {
+.docx-review__send>svg:dir(rtl) {
   transform: scaleX(-1);
 }
 
@@ -7850,7 +7854,7 @@ p.docx-review__refused {
   position: relative;
 }
 
-.docx-editor .docx-menubar__submenu > .docx-menubar__item[data-open] {
+.docx-editor .docx-menubar__submenu>.docx-menubar__item[data-open] {
   background: var(--doc-bg-hover);
 }
 
@@ -7872,7 +7876,7 @@ p.docx-review__refused {
 
 /* The third-level reviewer list can be long. Keep the hierarchy anchored to its source,
  * but let only the roster scroll instead of pushing the whole Review menu off-screen. */
-.docx-editor .docx-menubar__reviewers-submenu > .docx-menubar__submenu-panel {
+.docx-editor .docx-menubar__reviewers-submenu>.docx-menubar__submenu-panel {
   max-height: min(420px, calc(100vh - 24px));
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -7906,7 +7910,7 @@ p.docx-review__refused {
 }
 
 /* No leading gap on the first group: the panel's own padding is already there. */
-.docx-editor .docx-menubar__group:first-child > .docx-menubar__group-label {
+.docx-editor .docx-menubar__group:first-child>.docx-menubar__group-label {
   padding-top: 2px;
 }
 
@@ -7966,14 +7970,11 @@ p.docx-review__refused {
 
 /* While a preview shows over the pages, the live document's chrome describes pages the reader
    cannot see: picture handles, control widgets, and popups stay hidden until it ends. */
-[data-docx-previewing]
-  :is(
-    .docx-image-selection-overlay,
-    .docx-content-control-widget,
-    .docx-content-control-menu,
-    .docx-equation-popup,
-    .docx-hyperlink-popup
-  ):not(.docx-preview-surface *) {
+[data-docx-previewing] :is(.docx-image-selection-overlay,
+  .docx-content-control-widget,
+  .docx-content-control-menu,
+  .docx-equation-popup,
+  .docx-hyperlink-popup):not(.docx-preview-surface *) {
   display: none;
 }
 
@@ -8026,9 +8027,9 @@ p.docx-review__refused {
 /* `ContextMenu.Start` ends with a separator, and host rows can bring their own, so a
  * separator with nothing above it, nothing below it, or another separator before it is
  * hidden rather than drawn as a stray or doubled rule. */
-.docx-contextmenu > .docx-toolbar__menu-separator:first-child,
-.docx-contextmenu > .docx-toolbar__menu-separator:last-child,
-.docx-contextmenu > .docx-toolbar__menu-separator + .docx-toolbar__menu-separator {
+.docx-contextmenu>.docx-toolbar__menu-separator:first-child,
+.docx-contextmenu>.docx-toolbar__menu-separator:last-child,
+.docx-contextmenu>.docx-toolbar__menu-separator+.docx-toolbar__menu-separator {
   display: none;
 }
 
@@ -8164,8 +8165,8 @@ p.docx-review__refused {
 }
 
 /* In the "⋯" panel these parts draw a full-width row, so their wrapper spans the row too. */
-.docx-toolbar__more-section > .docx-toolbar__image-wrap,
-.docx-toolbar__more-section > .docx-toolbar__alt-text {
+.docx-toolbar__more-section>.docx-toolbar__image-wrap,
+.docx-toolbar__more-section>.docx-toolbar__alt-text {
   display: flex;
   width: 100%;
 }
@@ -8242,13 +8243,16 @@ p.docx-review__refused {
   font: 13px/1.5 var(--doc-font-ui, system-ui, sans-serif);
   overflow: hidden;
 }
+
 .docx-text-form-dialog[open] {
   display: flex;
   flex-direction: column;
 }
+
 .docx-text-form-dialog::backdrop {
   background: var(--doc-overlay);
 }
+
 .docx-text-form-dialog__header {
   margin: 0;
   padding: 16px 20px 12px;
@@ -8257,6 +8261,7 @@ p.docx-review__refused {
   font-size: 16px;
   font-weight: 600;
 }
+
 .docx-text-form-dialog__body {
   display: flex;
   flex-direction: column;
@@ -8265,15 +8270,18 @@ p.docx-review__refused {
   min-height: 0;
   overflow-y: auto;
 }
+
 .docx-text-form-dialog__row {
   display: flex;
   align-items: center;
   gap: 12px;
 }
+
 .docx-text-form-dialog__label {
   flex: 0 0 132px;
   color: var(--doc-text-muted);
 }
+
 .docx-text-form-dialog__input {
   flex: 1;
   min-width: 0;
@@ -8284,14 +8292,17 @@ p.docx-review__refused {
   color: var(--doc-text);
   font: inherit;
 }
+
 .docx-text-form-dialog__checkbox-row {
   display: flex;
   align-items: center;
   gap: 8px;
 }
+
 .docx-text-form-dialog__checkbox-row input {
   accent-color: var(--doc-primary);
 }
+
 .docx-text-form-dialog__footer {
   display: flex;
   justify-content: flex-end;
@@ -8300,6 +8311,7 @@ p.docx-review__refused {
   border-top: 1px solid var(--doc-border);
   flex-shrink: 0;
 }
+
 .docx-text-form-dialog__button {
   padding: 6px 16px;
   border: 1px solid var(--doc-border);
@@ -8309,35 +8321,43 @@ p.docx-review__refused {
   font: inherit;
   cursor: pointer;
 }
+
 .docx-text-form-dialog__button:hover {
   background: var(--doc-bg-hover);
 }
+
 .docx-text-form-dialog__button--primary {
   border-color: var(--doc-primary);
   background: var(--doc-primary);
   color: var(--doc-on-primary);
 }
+
 .docx-text-form-dialog__button--primary:hover {
   background: var(--doc-primary-hover);
 }
+
 .docx-text-form-dialog :is(input, select, button):focus-visible {
   outline: 2px solid var(--doc-primary);
   outline-offset: 2px;
 }
+
 .docx-text-form-dialog__error {
   margin: 0;
   color: var(--doc-danger);
   font-size: 12px;
 }
+
 .docx-text-form-dialog__error:empty {
   display: none;
 }
+
 @media (max-width: 420px) {
   .docx-text-form-dialog__row {
     flex-direction: column;
     align-items: stretch;
     gap: 6px;
   }
+
   .docx-text-form-dialog__label {
     flex-basis: auto;
   }
@@ -8350,6 +8370,7 @@ p.docx-review__refused {
   overflow: hidden;
   clip-path: inset(50%);
 }
+
 /* Field results can span many word boxes. Native selection and field shading
    provide feedback without outlining each separately painted word. */
 
@@ -8410,34 +8431,40 @@ p.docx-review__refused {
   box-shadow:
     0 12px 32px var(--doc-shadow),
     0 2px 6px var(--doc-shadow-subtle);
-  font: var(--doc-dialog-font-size, 13px) / 1.5
-    var(--doc-dialog-font-family, var(--doc-font-ui, system-ui, sans-serif));
+  font: var(--doc-dialog-font-size, 13px) / 1.5 var(--doc-dialog-font-family, var(--doc-font-ui, system-ui, sans-serif));
 }
+
 .docx-editor .docx-dialog[open],
 .docx-editor.docx-dialog[open] {
   display: flex;
   flex-direction: column;
 }
+
 .docx-editor .docx-dialog::backdrop,
 .docx-editor.docx-dialog::backdrop {
   background: var(--doc-overlay);
 }
+
 .docx-editor .docx-dialog:where([data-docx-dialog='paragraph']),
 .docx-editor.docx-dialog:where([data-docx-dialog='paragraph']) {
   max-width: 720px;
 }
+
 .docx-editor .docx-dialog:where([data-docx-dialog='textFormField']),
 .docx-editor.docx-dialog:where([data-docx-dialog='textFormField']) {
   max-width: 520px;
 }
+
 .docx-editor .docx-dialog:where([data-docx-dialog='watermark']),
 .docx-editor.docx-dialog:where([data-docx-dialog='watermark']) {
   max-width: 520px;
 }
+
 /* Watermark: each choice's controls sit indented under its radio. */
 .docx-editor .docx-dialog__section--indented {
   padding-inline-start: 24px;
 }
+
 /* Watermark: the page preview beside the choices; it wraps above them in a narrow dialog. */
 .docx-editor .docx-dialog__watermark-layout {
   display: flex;
@@ -8445,6 +8472,7 @@ p.docx-review__refused {
   align-items: flex-start;
   gap: 16px 20px;
 }
+
 .docx-editor .docx-dialog__fieldset {
   display: flex;
   flex: 1 1 280px;
@@ -8455,6 +8483,7 @@ p.docx-review__refused {
   padding: 0;
   border: 0;
 }
+
 .docx-editor .docx-dialog__preview {
   position: relative;
   flex: 0 0 auto;
@@ -8464,19 +8493,23 @@ p.docx-review__refused {
   border: 1px solid var(--doc-border);
   box-shadow: var(--doc-card-shadow);
 }
+
 .docx-editor .docx-dialog__preview-page {
   /* The section's page proportion comes from the SVG view box. */
   display: block;
   width: 100%;
   height: auto;
 }
+
 .docx-editor .docx-dialog__preview-sheet {
   fill: var(--doc-page-bg-rendered, var(--doc-surface));
 }
+
 .docx-editor .docx-dialog__preview-line {
   /* Stands for text on the sheet, so it follows the page colour in both themes. */
   fill: color-mix(in srgb, var(--doc-text) 22%, var(--doc-page-bg-rendered));
 }
+
 .docx-editor .docx-dialog__checkbox-row :where(input[type='radio']) {
   flex: 0 0 auto;
   width: 16px;
@@ -8485,19 +8518,23 @@ p.docx-review__refused {
   accent-color: var(--doc-primary);
   cursor: pointer;
 }
+
 .docx-editor .docx-dialog__checkbox-row:where(:has(input:disabled)) {
   color: var(--doc-text-subtle);
   cursor: default;
 }
+
 .docx-editor .docx-dialog__range {
   flex: 1 1 auto;
   min-width: 0;
   accent-color: var(--doc-primary);
 }
+
 .docx-editor .docx-dialog__input--narrow {
   flex: 0 0 64px;
   width: 64px;
 }
+
 .docx-editor .docx-dialog__color {
   flex: 0 0 auto;
   width: 48px;
@@ -8507,6 +8544,7 @@ p.docx-review__refused {
   border: 1px solid var(--doc-border-input);
   border-radius: var(--doc-dialog-control-radius, 4px);
 }
+
 .docx-editor .docx-dialog__color:where(:disabled) {
   background: var(--doc-bg-subtle);
   border-color: var(--doc-border);
@@ -8525,6 +8563,7 @@ p.docx-review__refused {
   justify-content: center;
   background: var(--doc-overlay);
 }
+
 .docx-editor .docx-dialog-overlay .docx-dialog,
 .docx-editor.docx-dialog-overlay .docx-dialog {
   position: relative;
@@ -8540,6 +8579,7 @@ p.docx-review__refused {
   padding-inline: var(--doc-dialog-padding, 24px);
   color: var(--doc-text);
 }
+
 .docx-editor .docx-dialog__title {
   display: block;
   font-size: 1.385em;
@@ -8547,6 +8587,7 @@ p.docx-review__refused {
   line-height: 1.3;
   color: var(--doc-text);
 }
+
 .docx-editor .docx-dialog__header:where(:not(:has(.docx-dialog__title))) {
   font-size: 1.385em;
   font-weight: 600;
@@ -8563,10 +8604,12 @@ p.docx-review__refused {
   padding-inline: var(--doc-dialog-padding, 24px);
   overflow-y: auto;
 }
+
 /* The open-failure dialog: its message and the error code a person can quote. */
 .docx-editor .docx-dialog__message {
   margin: 0;
 }
+
 .docx-editor .docx-dialog__code {
   margin: 0;
   color: var(--doc-text-muted);
@@ -8574,11 +8617,13 @@ p.docx-review__refused {
   font-size: 0.92em;
   overflow-wrap: anywhere;
 }
+
 .docx-editor .docx-dialog__columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px 32px;
 }
+
 .docx-editor .docx-dialog__column,
 .docx-editor .docx-dialog__section {
   display: flex;
@@ -8586,6 +8631,7 @@ p.docx-review__refused {
   gap: var(--doc-dialog-gap, 12px);
   min-width: 0;
 }
+
 .docx-editor .docx-dialog__section-label {
   margin-top: 8px;
   font-size: 0.85em;
@@ -8594,12 +8640,15 @@ p.docx-review__refused {
   text-transform: uppercase;
   color: var(--doc-text-muted);
 }
+
 .docx-editor .docx-dialog__section-label:where(:first-child) {
   margin-top: 0;
 }
+
 .docx-editor .docx-dialog__section-label--spaced {
   margin-top: 8px;
 }
+
 .docx-editor .docx-dialog [data-docx-field='tabStops'] {
   display: flex;
   flex-direction: column;
@@ -8613,10 +8662,12 @@ p.docx-review__refused {
   gap: 10px;
   min-width: 0;
 }
+
 .docx-editor .docx-dialog__row--actions {
   justify-content: flex-end;
   padding-top: 4px;
 }
+
 .docx-editor .docx-dialog__label,
 .docx-editor .docx-dialog__field-label {
   flex: 0 0 auto;
@@ -8625,30 +8676,36 @@ p.docx-review__refused {
   line-height: 1.3;
   color: var(--doc-text);
 }
+
 .docx-editor .docx-dialog:where([data-docx-dialog='textFormField']) .docx-dialog__label,
 .docx-editor.docx-dialog:where([data-docx-dialog='textFormField']) .docx-dialog__label {
   width: 132px;
 }
+
 /* Outside a row the label stacks above its control, so it sizes to its text. */
-.docx-editor .docx-dialog__section > .docx-dialog__label,
-.docx-editor .docx-dialog__section > .docx-dialog__field-label {
+.docx-editor .docx-dialog__section>.docx-dialog__label,
+.docx-editor .docx-dialog__section>.docx-dialog__field-label {
   width: auto;
 }
+
 .docx-editor .docx-dialog__unit {
   flex: 0 0 auto;
   min-width: 20px;
   font-size: 0.92em;
   color: var(--doc-text-muted);
 }
+
 .docx-editor .docx-dialog__tab-position {
   color: var(--doc-text);
 }
+
 .docx-editor .docx-dialog__tab-description {
   flex: 1;
   min-width: 0;
   font-size: 1em;
   color: var(--doc-text-muted);
 }
+
 .docx-editor .docx-dialog__note,
 .docx-editor .docx-dialog__hint {
   margin: 0;
@@ -8679,10 +8736,12 @@ p.docx-review__refused {
     border-color 0.12s ease,
     box-shadow 0.12s ease;
 }
+
 .docx-editor .docx-dialog__select {
   padding-inline-end: 4px;
   cursor: pointer;
 }
+
 .docx-editor .docx-dialog__textarea {
   height: auto;
   min-height: 72px;
@@ -8690,33 +8749,40 @@ p.docx-review__refused {
   line-height: 1.5;
   resize: vertical;
 }
+
 .docx-editor .docx-dialog__input--full {
   flex: none;
   width: 100%;
 }
+
 /* The Bookmark dialog's list: a native list box, tall enough for several names. */
 .docx-editor .docx-bookmark-dialog__list {
   height: auto;
   min-height: 10em;
   padding: 2px;
 }
+
 .docx-editor.docx-dialog:where([data-docx-dialog='bookmark']) .docx-dialog__label,
 .docx-editor .docx-dialog:where([data-docx-dialog='bookmark']) .docx-dialog__label {
   width: 120px;
 }
+
 /* One line kept free, so the dialog does not jump when a note appears. */
 .docx-editor .docx-bookmark-dialog__status {
   min-height: 1.4em;
   justify-content: space-between;
 }
-.docx-editor .docx-bookmark-dialog__status > .docx-dialog__button {
+
+.docx-editor .docx-bookmark-dialog__status>.docx-dialog__button {
   flex: 0 0 auto;
 }
+
 .docx-editor .docx-dialog__input:where(:hover),
 .docx-editor .docx-dialog__select:where(:hover),
 .docx-editor .docx-dialog__textarea:where(:hover) {
   border-color: var(--doc-border-dark);
 }
+
 .docx-editor .docx-dialog__input:where(:focus, :focus-visible),
 .docx-editor .docx-dialog__select:where(:focus, :focus-visible),
 .docx-editor .docx-dialog__textarea:where(:focus, :focus-visible) {
@@ -8724,6 +8790,7 @@ p.docx-review__refused {
   outline: none;
   box-shadow: 0 0 0 1px var(--doc-primary);
 }
+
 .docx-editor .docx-dialog__input:where(:disabled),
 .docx-editor .docx-dialog__select:where(:disabled),
 .docx-editor .docx-dialog__textarea:where(:disabled) {
@@ -8732,6 +8799,7 @@ p.docx-review__refused {
   border-color: var(--doc-border);
   cursor: default;
 }
+
 .docx-editor .docx-dialog__input:where([aria-invalid='true']),
 .docx-editor .docx-dialog__select:where([aria-invalid='true']),
 .docx-editor .docx-dialog__textarea:where([aria-invalid='true']) {
@@ -8748,6 +8816,7 @@ p.docx-review__refused {
   color: var(--doc-text);
   cursor: pointer;
 }
+
 .docx-editor .docx-dialog__checkbox-row :where(input[type='checkbox']) {
   flex: 0 0 auto;
   width: 16px;
@@ -8767,15 +8836,18 @@ p.docx-review__refused {
   padding-block: 12px 20px;
   padding-inline: var(--doc-dialog-padding, 24px);
 }
+
 .docx-editor .docx-dialog__error {
   margin: 0 auto 0 0;
   font-size: 0.92em;
   line-height: 1.4;
   color: var(--doc-danger);
 }
+
 .docx-editor .docx-dialog__error:where(:empty) {
   display: none;
 }
+
 .docx-editor .docx-dialog__button {
   display: inline-flex;
   align-items: center;
@@ -8799,38 +8871,46 @@ p.docx-review__refused {
     background-color 0.12s ease,
     border-color 0.12s ease;
 }
+
 /* A link styled as a dialog button, such as an open-failure support action. */
 .docx-editor a.docx-dialog__button {
   text-decoration: none;
 }
+
 .docx-editor .docx-dialog__button:where(:hover) {
   background: var(--doc-bg-hover);
   border-color: var(--doc-border-dark);
 }
+
 .docx-editor .docx-dialog__button:where(:active) {
   background: var(--doc-bg-subtle);
 }
+
 .docx-editor .docx-dialog__apply,
 .docx-editor .docx-dialog__button--primary {
   color: var(--doc-on-primary);
   background: var(--doc-primary);
   border-color: var(--doc-primary);
 }
+
 .docx-editor .docx-dialog__apply:where(:hover),
 .docx-editor .docx-dialog__button--primary:where(:hover) {
   background: var(--doc-primary-hover);
   border-color: var(--doc-primary-hover);
 }
+
 .docx-editor .docx-dialog__apply:where(:active),
 .docx-editor .docx-dialog__button--primary:where(:active) {
   background: var(--doc-primary-hover);
 }
+
 /* Host actions sit beside Close, so the row wraps on a narrow screen and long translated
    labels wrap inside their button rather than pushing the row past the panel. */
 .docx-editor .docx-dialog:where([data-docx-dialog='openFailure']) .docx-dialog__footer,
 .docx-editor.docx-dialog:where([data-docx-dialog='openFailure']) .docx-dialog__footer {
   flex-wrap: wrap;
 }
+
 .docx-editor :where([data-docx-dialog='openFailure']) .docx-dialog__button,
 .docx-editor:where([data-docx-dialog='openFailure']) .docx-dialog__button {
   height: auto;
@@ -8841,6 +8921,7 @@ p.docx-review__refused {
   text-align: center;
   line-height: 1.3;
 }
+
 .docx-editor .docx-dialog__link-button {
   display: inline-flex;
   align-items: center;
@@ -8856,21 +8937,25 @@ p.docx-review__refused {
   cursor: pointer;
   appearance: none;
 }
+
 .docx-editor .docx-dialog__link-button:where(:hover) {
   background: var(--doc-primary-light);
 }
+
 .docx-editor .docx-dialog__button:where(:disabled),
 .docx-editor .docx-dialog__link-button:where(:disabled) {
   opacity: 0.5;
   cursor: default;
   pointer-events: none;
 }
+
 .docx-editor .docx-dialog__button:where(:focus-visible),
 .docx-editor .docx-dialog__link-button:where(:focus-visible),
 .docx-editor .docx-dialog__checkbox-row :where(input:focus-visible) {
   outline: 2px solid var(--doc-primary);
   outline-offset: 2px;
 }
+
 @media (max-width: 640px) {
   .docx-editor .docx-dialog__columns {
     grid-template-columns: 1fr;
@@ -8894,10 +8979,10 @@ p.docx-review__refused {
   box-shadow:
     0 8px 24px var(--doc-shadow),
     0 1px 3px var(--doc-shadow-subtle);
-  font: var(--doc-dialog-font-size, 13px) / 1.5
-    var(--doc-dialog-font-family, var(--doc-font-ui, system-ui, sans-serif));
+  font: var(--doc-dialog-font-size, 13px) / 1.5 var(--doc-dialog-font-family, var(--doc-font-ui, system-ui, sans-serif));
 }
-.docx-editor .docx-content-control-widget-popup > :where(input, select) {
+
+.docx-editor .docx-content-control-widget-popup> :where(input, select) {
   box-sizing: border-box;
   width: 100%;
   height: 32px;
@@ -8910,11 +8995,13 @@ p.docx-review__refused {
   border-radius: var(--doc-dialog-control-radius, 4px);
   outline: none;
 }
-.docx-editor .docx-content-control-widget-popup > :where(input, select):where(:focus-visible) {
+
+.docx-editor .docx-content-control-widget-popup> :where(input, select):where(:focus-visible) {
   border-color: var(--doc-primary);
   box-shadow: 0 0 0 1px var(--doc-primary);
 }
-.docx-editor .docx-content-control-widget-popup > :where(button) {
+
+.docx-editor .docx-content-control-widget-popup> :where(button) {
   margin: 0;
   padding: 6px 8px;
   font: inherit;
@@ -8926,36 +9013,40 @@ p.docx-review__refused {
   cursor: pointer;
   appearance: none;
 }
-.docx-editor .docx-content-control-widget-popup > :where(button):where(:hover) {
+
+.docx-editor .docx-content-control-widget-popup> :where(button):where(:hover) {
   background: var(--doc-bg-hover);
 }
-.docx-editor .docx-content-control-widget-popup > :where([role='alert']) {
+
+.docx-editor .docx-content-control-widget-popup> :where([role='alert']) {
   font-size: 0.92em;
   color: var(--doc-danger);
 }
+
 .docx-editor .docx-content-control-widget-popup .docx-dialog__footer {
   padding: 4px 0 0;
 }
+
 .docx-editor .docx-content-control-widget-popup[data-kind='date'] {
   padding: 0;
   gap: 0;
 }
-.docx-editor
-  .docx-content-control-widget-popup
-  .docx-content-control-calendar
-  .docx-dialog__footer {
+
+.docx-editor .docx-content-control-widget-popup .docx-content-control-calendar .docx-dialog__footer {
   padding: 0;
 }
 
 /* Alt text popover: a stacked label, text area and footer inside the toolbar panel. */
-.docx-editor .docx-toolbar__alt-text-panel > .docx-dialog__label {
+.docx-editor .docx-toolbar__alt-text-panel>.docx-dialog__label {
   display: block;
   width: auto;
   margin-bottom: 6px;
 }
+
 .docx-editor .docx-toolbar__alt-text-panel .docx-dialog__textarea {
   width: 100%;
 }
+
 .docx-editor .docx-toolbar__alt-text-panel .docx-dialog__footer {
   padding: 12px 0 0;
 }
@@ -8975,38 +9066,46 @@ p.docx-review__refused {
 .docx-editor.docx-export-dialog {
   max-width: 380px;
 }
+
 .docx-editor .docx-export-dialog__progress {
   display: flex;
   justify-content: center;
   margin: 4px 0 16px;
 }
+
 .docx-editor .docx-export-dialog--pending,
 .docx-editor.docx-export-dialog--pending {
   text-align: center;
 }
+
 .docx-editor .docx-export-dialog--pending .docx-dialog__footer,
 .docx-editor.docx-export-dialog--pending .docx-dialog__footer {
   justify-content: center;
 }
+
 .docx-editor .docx-print-dialog .docx-dialog__footer,
 .docx-editor.docx-print-dialog .docx-dialog__footer {
   flex-wrap: wrap;
 }
+
 .docx-editor .docx-print-dialog .docx-dialog__fieldset,
 .docx-editor.docx-print-dialog .docx-dialog__fieldset {
   /* The settings body is one column: the column basis would become a fixed height. */
   flex: none;
   gap: 8px;
 }
+
 .docx-editor .docx-print-dialog__open {
   margin-inline-end: auto;
   text-decoration: none;
 }
+
 .docx-editor .docx-export-dialog__message {
   margin: 0;
   color: var(--doc-text-muted);
   overflow-wrap: anywhere;
 }
+
 .docx-editor .docx-export-dialog__spinner {
   flex: 0 0 28px;
   width: 28px;
@@ -9017,11 +9116,13 @@ p.docx-review__refused {
   border-radius: 50%;
   animation: docx-export-spin 0.8s linear infinite;
 }
+
 @keyframes docx-export-spin {
   to {
     transform: rotate(360deg);
   }
 }
+
 @media (prefers-reduced-motion: reduce) {
   .docx-editor .docx-export-dialog__spinner {
     animation: none;
@@ -9033,19 +9134,17 @@ p.docx-review__refused {
 .docx-image-selection-overlay__frame[data-textbox='true'] {
   box-sizing: content-box;
   margin: -2px 0 0 -2px;
-  clip-path: polygon(
-    evenodd,
-    0 0,
-    100% 0,
-    100% 100%,
-    0 100%,
-    0 0,
-    6px 6px,
-    6px calc(100% - 6px),
-    calc(100% - 6px) calc(100% - 6px),
-    calc(100% - 6px) 6px,
-    6px 6px
-  );
+  clip-path: polygon(evenodd,
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 0,
+      6px 6px,
+      6px calc(100% - 6px),
+      calc(100% - 6px) calc(100% - 6px),
+      calc(100% - 6px) 6px,
+      6px 6px);
 }
 
 .docx-editor {
@@ -9090,33 +9189,38 @@ p.docx-review__refused {
   border-radius: var(--doc-dialog-radius, 0.75rem);
   color: var(--doc-text);
   background: var(--doc-bg);
-  font: var(--doc-dialog-font-size, 13px) / 1.5
-    var(--doc-dialog-font-family, var(--doc-font-ui, system-ui, sans-serif));
+  font: var(--doc-dialog-font-size, 13px) / 1.5 var(--doc-dialog-font-family, var(--doc-font-ui, system-ui, sans-serif));
 }
+
 .docx-compare-documents-dialog h2 {
   margin: 0 0 0.5rem;
   font-size: 1.125rem;
   font-weight: 600;
 }
+
 .docx-compare-documents-dialog p {
   margin: 0 0 0.75rem;
   color: var(--doc-text-muted);
 }
+
 .docx-compare-documents-body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
+
 .docx-compare-documents-body label {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
+
 .docx-compare-documents-body label.docx-compare-documents-check {
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
 }
+
 .docx-compare-documents-body input[type='text'] {
   padding: 0.3rem 0.375rem;
   border: 1px solid var(--doc-border);
@@ -9124,14 +9228,17 @@ p.docx-review__refused {
   color: var(--doc-text);
   background: var(--doc-bg);
 }
+
 .docx-compare-documents-dialog .docx-compare-documents-error,
 .docx-compare-documents-dialog .docx-compare-documents-notice {
   min-height: 1.25rem;
   margin: 0.5rem 0 0;
 }
+
 .docx-compare-documents-dialog .docx-compare-documents-error {
   color: var(--doc-error);
 }
+
 /* Said before a compare: the open document's tracked changes count as accepted. */
 .docx-compare-documents-dialog .docx-compare-documents-tracked {
   margin: 0 0 0.75rem;
@@ -9141,6 +9248,7 @@ p.docx-review__refused {
   color: var(--doc-warning-text);
   background: var(--doc-warning-bg);
 }
+
 /* While a compare runs: a thin bar that fills with each reported step, a band that sweeps
  * across it until the first step, and a spinner in the Compare button. */
 .docx-compare-documents-dialog .docx-compare-documents-progress {
@@ -9157,35 +9265,39 @@ p.docx-review__refused {
   background-color: var(--doc-border);
   animation: docx-compare-documents-appear 0.2s ease-out;
 }
+
 .docx-compare-documents-dialog .docx-compare-documents-progress::-webkit-progress-bar {
   background: transparent;
 }
+
 .docx-compare-documents-dialog .docx-compare-documents-progress::-webkit-progress-value {
   border-radius: inherit;
   background: var(--doc-primary);
   transition: inline-size 0.3s ease-out;
 }
+
 .docx-compare-documents-dialog .docx-compare-documents-progress::-moz-progress-bar {
   border-radius: inherit;
   background: var(--doc-primary);
 }
+
 .docx-compare-documents-dialog .docx-compare-documents-progress:indeterminate {
-  background-image: linear-gradient(
-    90deg,
-    transparent,
-    var(--doc-primary) 30%,
-    var(--doc-primary) 70%,
-    transparent
-  );
+  background-image: linear-gradient(90deg,
+      transparent,
+      var(--doc-primary) 30%,
+      var(--doc-primary) 70%,
+      transparent);
   background-repeat: no-repeat;
   background-size: 40% 100%;
   animation:
     docx-compare-documents-appear 0.2s ease-out,
     docx-compare-documents-sweep 1.4s ease-in-out infinite;
 }
+
 .docx-compare-documents-dialog .docx-compare-documents-progress:indeterminate::-moz-progress-bar {
   background: transparent;
 }
+
 .docx-compare-documents-dialog .docx-compare-documents-phase {
   display: block;
   margin: 0.25rem 0 0;
@@ -9193,6 +9305,7 @@ p.docx-review__refused {
   font-variant-numeric: tabular-nums;
   animation: docx-compare-documents-appear 0.2s ease-out;
 }
+
 /* The Compare button stays legible while it works, with a spinner before its label. */
 .docx-compare-documents-dialog[data-docx-busy] .docx-compare-documents-actions button:last-child {
   display: inline-flex;
@@ -9200,9 +9313,8 @@ p.docx-review__refused {
   gap: 0.5rem;
   opacity: 0.85;
 }
-.docx-compare-documents-dialog[data-docx-busy]
-  .docx-compare-documents-actions
-  button:last-child::before {
+
+.docx-compare-documents-dialog[data-docx-busy] .docx-compare-documents-actions button:last-child::before {
   content: '';
   flex: 0 0 auto;
   width: 0.875em;
@@ -9213,47 +9325,54 @@ p.docx-review__refused {
   border-radius: 50%;
   animation: docx-compare-documents-spin 0.7s linear infinite;
 }
+
 @keyframes docx-compare-documents-sweep {
+
   /* With a band of 40% width, -67% and 167% start and end it fully outside the bar. */
   from {
     background-position: -67% 0;
   }
+
   to {
     background-position: 167% 0;
   }
 }
+
 @keyframes docx-compare-documents-spin {
   to {
     transform: rotate(360deg);
   }
 }
+
 @keyframes docx-compare-documents-appear {
   from {
     opacity: 0;
   }
 }
+
 @media (prefers-reduced-motion: reduce) {
+
   .docx-compare-documents-dialog .docx-compare-documents-progress,
   .docx-compare-documents-dialog .docx-compare-documents-progress:indeterminate,
   .docx-compare-documents-dialog .docx-compare-documents-phase,
-  .docx-compare-documents-dialog[data-docx-busy]
-    .docx-compare-documents-actions
-    button:last-child::before {
+  .docx-compare-documents-dialog[data-docx-busy] .docx-compare-documents-actions button:last-child::before {
     animation: none;
   }
+
   /* A still band in the middle still says that work is under way. */
   .docx-compare-documents-dialog .docx-compare-documents-progress:indeterminate {
     background-position: 50% 0;
   }
+
   .docx-compare-documents-dialog .docx-compare-documents-progress::-webkit-progress-value {
     transition: none;
   }
 }
+
 /* One message line: the notice takes the error's place, never a second line. An empty
  * message region stays in the accessibility tree, so a later message is announced; it is
  * only hidden from view (the `.docx-editor-sr-only` pattern). */
-.docx-compare-documents-dialog
-  .docx-compare-documents-error:empty:has(+ .docx-compare-documents-notice:not(:empty)),
+.docx-compare-documents-dialog .docx-compare-documents-error:empty:has(+ .docx-compare-documents-notice:not(:empty)),
 .docx-compare-documents-dialog .docx-compare-documents-notice:empty {
   position: absolute;
   width: 1px;
@@ -9266,12 +9385,14 @@ p.docx-review__refused {
   white-space: nowrap;
   border: 0;
 }
+
 .docx-compare-documents-actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
   padding-top: 0.75rem;
 }
+
 .docx-compare-documents-actions button {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--doc-border);
@@ -9280,15 +9401,18 @@ p.docx-review__refused {
   color: var(--doc-text);
   cursor: pointer;
 }
+
 .docx-compare-documents-actions button:last-child {
   background: var(--doc-primary);
   color: var(--doc-on-primary);
   border-color: var(--doc-primary);
 }
+
 .docx-compare-documents-actions button:disabled {
   opacity: 0.5;
   cursor: default;
 }
+
 .docx-compare-documents-dialog button:focus-visible,
 .docx-compare-documents-dialog input:focus-visible {
   outline: 2px solid var(--doc-primary);
@@ -9312,43 +9436,50 @@ p.docx-review__refused {
   border-radius: var(--doc-dialog-radius, 0.75rem);
   color: var(--doc-text);
   background: var(--doc-bg);
-  font: var(--doc-dialog-font-size, 13px) / 1.5
-    var(--doc-dialog-font-family, var(--doc-font-ui, system-ui, sans-serif));
+  font: var(--doc-dialog-font-size, 13px) / 1.5 var(--doc-dialog-font-family, var(--doc-font-ui, system-ui, sans-serif));
 }
-.docx-revision-markup-dialog > [data-docx-part='header'] {
+
+.docx-revision-markup-dialog>[data-docx-part='header'] {
   flex: none;
 }
+
 .docx-revision-markup-dialog[open] {
   display: flex;
   flex-direction: column;
 }
+
 .docx-revision-markup-dialog h2 {
   margin: 0 0 0.75rem;
   font-size: 1.125rem;
   font-weight: 600;
   flex: none;
 }
+
 .docx-revision-markup-body {
   overflow-y: auto;
   min-height: 0;
   padding: 0.125rem;
 }
+
 .docx-revision-markup-dialog fieldset {
   margin: 0 0 0.75rem;
   padding: 0.625rem;
   border: 1px solid var(--doc-border);
   border-radius: 0.375rem;
 }
+
 .docx-revision-markup-dialog legend {
   padding: 0 0.25rem;
   font-weight: 600;
 }
+
 .docx-revision-markup-dialog label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.8125rem;
 }
+
 .docx-revision-markup-row {
   display: grid;
   grid-template-columns: 7.5rem minmax(0, 1fr) minmax(0, 1fr);
@@ -9356,11 +9487,13 @@ p.docx-review__refused {
   gap: 0.75rem;
   margin-bottom: 0.375rem;
 }
+
 .docx-revision-markup-row label {
   align-items: stretch;
   flex-direction: column;
   gap: 0.25rem;
 }
+
 .docx-revision-markup-dialog select {
   min-width: 0;
   padding: 0.3rem 0.375rem;
@@ -9369,14 +9502,17 @@ p.docx-review__refused {
   color: var(--doc-text);
   background: var(--doc-bg);
 }
+
 .docx-revision-markup-dialog select:disabled {
   opacity: 0.5;
 }
+
 .docx-revision-markup-dialog p {
   font-size: 0.75rem;
   color: var(--doc-text-muted);
   margin: 0.375rem 0 0.75rem;
 }
+
 .docx-revision-markup-actions {
   flex: none;
   padding-top: 0.75rem;
@@ -9384,6 +9520,7 @@ p.docx-review__refused {
   justify-content: flex-end;
   gap: 0.5rem;
 }
+
 .docx-revision-markup-actions button {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--doc-border);
@@ -9392,30 +9529,36 @@ p.docx-review__refused {
   color: var(--doc-text);
   cursor: pointer;
 }
+
 .docx-revision-markup-actions button:first-child {
   margin-inline-end: auto;
 }
+
 .docx-revision-markup-dialog button:focus-visible,
 .docx-revision-markup-dialog select:focus-visible,
 .docx-revision-markup-dialog input:focus-visible {
   outline: 2px solid var(--doc-primary);
   outline-offset: 2px;
 }
+
 .docx-revision-markup-tableCells {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem 0.75rem;
 }
+
 .docx-revision-markup-tableCells label {
   flex-direction: column;
   align-items: stretch;
   gap: 0.25rem;
 }
+
 .docx-revision-markup-actions button:last-child {
   background: var(--doc-primary);
   color: var(--doc-on-primary);
   border-color: var(--doc-primary);
 }
+
 .docx-revision-color-picker {
   display: flex;
   flex-direction: column;
@@ -9423,6 +9566,7 @@ p.docx-review__refused {
   font-size: 0.8125rem;
   min-width: 0;
 }
+
 .docx-revision-color-trigger {
   display: flex;
   gap: 0.5rem;
@@ -9435,9 +9579,11 @@ p.docx-review__refused {
   text-align: start;
   overflow-wrap: anywhere;
 }
+
 .docx-revision-color-trigger:disabled {
   opacity: 0.5;
 }
+
 .docx-revision-color-swatch {
   display: inline-block;
   flex: none;
@@ -9446,6 +9592,7 @@ p.docx-review__refused {
   border: 1px solid var(--doc-border-dark);
   border-radius: 0.125rem;
 }
+
 .docx-revision-color-options:not([hidden]) {
   position: fixed;
   z-index: 1;
@@ -9460,6 +9607,7 @@ p.docx-review__refused {
   background: var(--doc-bg);
   box-shadow: var(--doc-shadow-lg);
 }
+
 .docx-revision-color-special {
   margin-bottom: 0.5rem;
 }
@@ -9467,8 +9615,9 @@ p.docx-review__refused {
 .docx-revision-markup-row-title {
   font-size: 0.8125rem;
 }
-.docx-revision-markup-row > label > .docx-revision-markup-field-label,
-.docx-revision-markup-row > .docx-revision-color-picker > span:first-child {
+
+.docx-revision-markup-row>label>.docx-revision-markup-field-label,
+.docx-revision-markup-row>.docx-revision-color-picker>span:first-child {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -9476,6 +9625,7 @@ p.docx-review__refused {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
 .docx-revision-color-trigger::after {
   content: '';
   flex: none;
@@ -9486,10 +9636,12 @@ p.docx-review__refused {
   border-bottom: 1px solid currentColor;
   transform: rotate(45deg);
 }
+
 @media (max-width: 540px) {
   .docx-revision-markup-row {
     grid-template-columns: 1fr 1fr;
   }
+
   .docx-revision-markup-row-title {
     grid-column: 1 / -1;
   }
@@ -9498,28 +9650,33 @@ p.docx-review__refused {
 .docx-revision-markup-background {
   margin: 0 0 0.75rem;
 }
-.docx-revision-markup-background > .docx-revision-color-picker {
+
+.docx-revision-markup-background>.docx-revision-color-picker {
   display: grid;
   grid-template-columns: 7.5rem minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
   gap: 0.75rem;
 }
-.docx-revision-markup-background > .docx-revision-color-picker > span:first-child {
+
+.docx-revision-markup-background>.docx-revision-color-picker>span:first-child {
   color: var(--doc-text-muted);
   font-size: 0.75rem;
 }
+
 @media (max-width: 540px) {
-  .docx-revision-markup-background > .docx-revision-color-picker {
+  .docx-revision-markup-background>.docx-revision-color-picker {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 440px) {
+
   .docx-revision-markup-row,
   .docx-revision-markup-tableCells,
-  .docx-revision-markup-background > .docx-revision-color-picker {
+  .docx-revision-markup-background>.docx-revision-color-picker {
     grid-template-columns: minmax(0, 1fr);
   }
+
   .docx-revision-markup-actions {
     flex-wrap: wrap;
   }
@@ -9527,7 +9684,7 @@ p.docx-review__refused {
 
 /* A rendered-graphic preview passes presses to the drawing, so it stays selectable and
    resizable. Interactive controls inside the preview keep their own input. */
-.docx-drawing[data-docx-customized] > .docx-unsupported-slot {
+.docx-drawing[data-docx-customized]>.docx-unsupported-slot {
   position: absolute;
   inset: 0;
   display: block;
@@ -9536,9 +9693,7 @@ p.docx-review__refused {
   pointer-events: none;
 }
 
-.docx-drawing[data-docx-customized]
-  > .docx-unsupported-slot
-  :is(a[href], button, input, select, textarea, [tabindex], [role='button']) {
+.docx-drawing[data-docx-customized]>.docx-unsupported-slot :is(a[href], button, input, select, textarea, [tabindex], [role='button']) {
   pointer-events: auto;
 }
 
@@ -9547,16 +9702,19 @@ p.docx-review__refused {
   position: relative;
   display: inline-flex;
 }
+
 .docx-editor .docx-toolbar__chart-insert-menu,
 .docx-toolbar__chart-insert-menu {
   min-width: 180px;
 }
+
 /* Each chart type with its icon, as in the Insert > Chart submenu. */
 .docx-editor .docx-toolbar__chart-insert-menu .docx-toolbar__image-wrap-item {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .docx-editor .docx-toolbar__chart-insert-menu .docx-toolbar__image-wrap-item svg {
   flex: none;
   width: 18px;
@@ -9580,6 +9738,7 @@ p.docx-review__refused {
   background: var(--doc-surface);
   border-inline-start: 1px solid var(--doc-border);
 }
+
 .docx-editor .docx-side-panel__head {
   display: flex;
   align-items: center;
@@ -9587,11 +9746,13 @@ p.docx-review__refused {
   gap: 8px;
   padding: 12px 12px 8px 20px;
 }
+
 .docx-editor .docx-side-panel__title {
   margin: 0;
   font-size: 15px;
   font-weight: 600;
 }
+
 .docx-editor .docx-side-panel__close,
 .docx-editor .docx-chart-pane__icon-button {
   display: inline-flex;
@@ -9611,17 +9772,21 @@ p.docx-review__refused {
     color 150ms ease,
     transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+
 @media (hover: hover) and (pointer: fine) {
+
   .docx-editor .docx-side-panel__close:where(:hover),
   .docx-editor .docx-chart-pane__icon-button:where(:hover:not(:disabled)) {
     color: var(--doc-text);
     background: var(--doc-bg-hover);
   }
 }
+
 .docx-editor .docx-chart-pane__icon-button:where(:disabled) {
   color: var(--doc-text-subtle);
   cursor: default;
 }
+
 .docx-editor .docx-side-panel__close:where(:focus-visible),
 .docx-editor .docx-chart-pane__icon-button:where(:focus-visible),
 .docx-editor .docx-chart-pane__swatch:where(:focus-visible),
@@ -9631,12 +9796,14 @@ p.docx-review__refused {
   outline: 2px solid var(--doc-focus-ring);
   outline-offset: 1px;
 }
+
 .docx-editor .docx-side-panel__close svg,
 .docx-editor .docx-chart-pane__icon-button svg {
   width: 18px;
   height: 18px;
   fill: currentColor;
 }
+
 .docx-editor .docx-side-panel__body {
   flex: 1 1 auto;
   min-height: 0;
@@ -9654,6 +9821,7 @@ p.docx-review__refused {
   line-height: 1.4;
   color: var(--doc-text);
 }
+
 .docx-editor .docx-chart-pane__alert {
   margin: 0;
   padding: 8px 12px;
@@ -9661,14 +9829,17 @@ p.docx-review__refused {
   background: var(--doc-error-bg, transparent);
   border-radius: 8px;
 }
+
 .docx-editor .docx-chart-pane__alert:where(:empty) {
   display: none;
 }
+
 .docx-editor .docx-chart-pane__section {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
 .docx-editor .docx-chart-pane__title {
   margin: 0;
   font-size: 12px;
@@ -9677,6 +9848,7 @@ p.docx-review__refused {
   text-transform: uppercase;
   color: var(--doc-text-muted);
 }
+
 .docx-editor .docx-chart-pane__field {
   display: flex;
   flex: 1 1 0;
@@ -9684,10 +9856,12 @@ p.docx-review__refused {
   gap: 6px;
   min-width: 0;
 }
+
 .docx-editor .docx-chart-pane__label {
   font-size: 13px;
   color: var(--doc-text-muted);
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__input, .docx-dialog__select) {
   box-sizing: border-box;
   width: 100%;
@@ -9700,19 +9874,23 @@ p.docx-review__refused {
   border: 1px solid var(--doc-border-input);
   border-radius: 8px;
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__input, .docx-dialog__select):focus-visible {
   outline: 2px solid var(--doc-focus-ring);
   outline-offset: -1px;
   border-color: transparent;
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__input, .docx-dialog__select):disabled {
   color: var(--doc-text-subtle);
   background-color: var(--doc-bg-subtle);
   cursor: not-allowed;
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__input)[aria-invalid='true'] {
   border-color: var(--doc-danger);
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__checkbox-row) {
   display: flex;
   align-items: center;
@@ -9721,24 +9899,29 @@ p.docx-review__refused {
   font-size: 14px;
   cursor: pointer;
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__checkbox-row) input {
   width: 16px;
   height: 16px;
   margin: 0;
   accent-color: var(--doc-primary);
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__checkbox-row):has(input:disabled) {
   color: var(--doc-text-subtle);
   cursor: not-allowed;
 }
+
 .docx-editor .docx-chart-pane__sub {
   padding-inline-start: 26px;
 }
+
 .docx-editor .docx-chart-pane__pair {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
+
 .docx-editor .docx-chart-pane__note,
 .docx-editor .docx-chart-pane__empty-body {
   margin: 0;
@@ -9746,26 +9929,32 @@ p.docx-review__refused {
   line-height: 1.45;
   color: var(--doc-text-muted);
 }
+
 .docx-editor .docx-chart-pane__status {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 .docx-editor .docx-chart-pane__status:where(:empty) {
   display: none;
 }
+
 .docx-editor .docx-chart-pane__error {
   font-size: 12px;
   color: var(--doc-danger);
 }
+
 .docx-editor .docx-chart-pane__empty {
   padding: 32px 4px;
   text-align: center;
 }
+
 .docx-editor .docx-chart-pane__empty-title {
   margin: 0 0 6px;
   font-weight: 600;
 }
+
 .docx-editor .docx-chart-pane__list {
   display: flex;
   flex-direction: column;
@@ -9774,34 +9963,41 @@ p.docx-review__refused {
   padding: 0;
   list-style: none;
 }
+
 .docx-editor .docx-chart-pane__row {
   display: flex;
   align-items: flex-start;
   gap: 6px;
 }
-.docx-editor .docx-chart-pane__row > .docx-chart-pane__icon-button {
+
+.docx-editor .docx-chart-pane__row>.docx-chart-pane__icon-button {
   height: 36px;
 }
+
 .docx-editor .docx-chart-pane__card {
   border: 1px solid var(--doc-border);
   border-radius: 10px;
 }
+
 .docx-editor .docx-chart-pane__summary {
   padding: 10px 12px;
   font-weight: 600;
   border-radius: 10px;
   cursor: pointer;
 }
-.docx-editor .docx-chart-pane__card[open] > .docx-chart-pane__summary {
+
+.docx-editor .docx-chart-pane__card[open]>.docx-chart-pane__summary {
   border-end-start-radius: 0;
   border-end-end-radius: 0;
 }
+
 .docx-editor .docx-chart-pane__card-body {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 0 12px 12px;
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__button) {
   align-self: flex-start;
   height: 32px;
@@ -9818,11 +10014,13 @@ p.docx-review__refused {
     background-color 150ms ease,
     transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+
 @media (hover: hover) and (pointer: fine) {
   .docx-editor .docx-chart-pane :where(.docx-dialog__button):hover:not(:disabled) {
     background: var(--doc-bg-hover);
   }
 }
+
 .docx-editor .docx-chart-pane :where(.docx-dialog__button):disabled {
   color: var(--doc-text-subtle);
   cursor: not-allowed;
@@ -9835,6 +10033,7 @@ p.docx-review__refused {
   align-items: flex-end;
   gap: 8px;
 }
+
 .docx-editor .docx-chart-pane__color-button {
   flex: none;
   width: 36px;
@@ -9845,10 +10044,12 @@ p.docx-review__refused {
   cursor: pointer;
   transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+
 .docx-editor .docx-chart-pane__color-button:where(:disabled) {
   opacity: 0.5;
   cursor: default;
 }
+
 .docx-editor .docx-chart-pane__grid {
   position: absolute;
   top: calc(100% + 6px);
@@ -9868,28 +10069,34 @@ p.docx-review__refused {
     opacity 150ms ease-out,
     transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+
 .docx-editor[dir='rtl'] .docx-chart-pane__grid,
 [dir='rtl'] .docx-editor .docx-chart-pane__grid {
   transform-origin: top left;
 }
+
 .docx-editor .docx-chart-pane__grid[data-align='start'] {
   inset-inline-start: 0;
   inset-inline-end: auto;
   transform-origin: top left;
 }
+
 [dir='rtl'] .docx-editor .docx-chart-pane__grid[data-align='start'] {
   transform-origin: top right;
 }
+
 @starting-style {
   .docx-editor .docx-chart-pane__grid {
     opacity: 0;
     transform: scale(0.97) translateY(-4px);
   }
 }
+
 .docx-editor .docx-chart-pane__grid-title {
   font-size: 12px;
   color: var(--doc-text-muted);
 }
+
 .docx-editor .docx-chart-pane__grid-auto {
   height: 30px;
   padding: 0 10px;
@@ -9903,11 +10110,13 @@ p.docx-review__refused {
   cursor: pointer;
   transition: background-color 150ms ease;
 }
+
 .docx-editor .docx-chart-pane__swatches {
   display: grid;
   grid-template-columns: repeat(10, 20px);
   gap: 3px;
 }
+
 .docx-editor .docx-chart-pane__swatch {
   width: 20px;
   height: 20px;
@@ -9917,14 +10126,17 @@ p.docx-review__refused {
   cursor: pointer;
   transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+
 @media (hover: hover) and (pointer: fine) {
   .docx-editor .docx-chart-pane__grid-auto:where(:hover) {
     background: var(--doc-bg-hover);
   }
+
   .docx-editor .docx-chart-pane__swatch:where(:hover) {
     transform: scale(1.12);
   }
 }
+
 /* Press feedback: the control answers the press at once. */
 .docx-editor .docx-side-panel__close:where(:active),
 .docx-editor .docx-chart-pane__icon-button:where(:active:not(:disabled)),
@@ -9932,16 +10144,20 @@ p.docx-review__refused {
 .docx-editor .docx-chart-pane :where(.docx-dialog__button):active:not(:disabled) {
   transform: scale(0.97);
 }
+
 .docx-editor .docx-chart-pane__swatch:where(:active) {
   transform: scale(0.94);
 }
+
 .docx-editor .docx-chart-pane__swatch:where([aria-pressed='true']),
 .docx-editor .docx-chart-pane__grid-auto:where([aria-pressed='true']) {
   outline: 2px solid var(--doc-primary);
   outline-offset: 1px;
 }
+
 /* Reduced motion keeps the fades and drops the movement. */
 @media (prefers-reduced-motion: reduce) {
+
   .docx-editor .docx-chart-pane__swatch,
   .docx-editor .docx-chart-pane__grid,
   .docx-editor .docx-side-panel__close,
@@ -9959,6 +10175,7 @@ p.docx-review__refused {
   align-items: stretch;
   gap: 4px;
 }
+
 .docx-editor .docx-shape-pane__color-button {
   display: flex;
   align-items: center;
@@ -9978,22 +10195,27 @@ p.docx-review__refused {
     background-color 150ms ease,
     transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+
 .docx-editor .docx-shape-pane__color-button:where(:disabled) {
   color: var(--doc-text-subtle);
   cursor: default;
 }
+
 @media (hover: hover) and (pointer: fine) {
   .docx-editor .docx-shape-pane__color-button:where(:hover:not(:disabled)) {
     background: var(--doc-bg-hover);
   }
 }
+
 .docx-editor .docx-shape-pane__color-button:where(:active:not(:disabled)) {
   transform: scale(0.98);
 }
+
 .docx-editor .docx-shape-pane__color-button:where(:focus-visible) {
   outline: 2px solid var(--doc-focus-ring);
   outline-offset: 1px;
 }
+
 .docx-editor .docx-shape-pane__chip {
   flex: none;
   width: 20px;
@@ -10001,21 +10223,22 @@ p.docx-review__refused {
   border: 1px solid var(--doc-border);
   border-radius: 4px;
 }
+
 /* No color: an empty chip crossed by one line. */
 .docx-editor .docx-shape-pane__chip:where([data-none='true']) {
-  background: linear-gradient(
-    to top right,
-    transparent calc(50% - 1px),
-    var(--doc-text-muted) calc(50% - 1px),
-    var(--doc-text-muted) calc(50% + 1px),
-    transparent calc(50% + 1px)
-  );
+  background: linear-gradient(to top right,
+      transparent calc(50% - 1px),
+      var(--doc-text-muted) calc(50% - 1px),
+      var(--doc-text-muted) calc(50% + 1px),
+      transparent calc(50% + 1px));
 }
+
 .docx-editor .docx-shape-pane__summary {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 @media (prefers-reduced-motion: reduce) {
   .docx-editor .docx-shape-pane__color-button {
     transform: none !important;
@@ -10029,6 +10252,7 @@ p.docx-review__refused {
   gap: 10px;
   margin: 0;
 }
+
 .docx-review__edit-input {
   box-sizing: border-box;
   width: 100%;
@@ -10044,15 +10268,18 @@ p.docx-review__refused {
   line-height: 1.5;
   unicode-bidi: plaintext;
 }
+
 .docx-review__edit-input:focus-visible {
   border-color: var(--doc-primary);
   outline: 2px solid var(--doc-focus-ring);
   outline-offset: 1px;
 }
+
 .docx-review__text-button:disabled {
   cursor: default;
   color: var(--doc-text-muted);
 }
+
 .docx-review__text-button:focus-visible {
   outline: 2px solid var(--doc-primary);
   outline-offset: 1px;
@@ -10063,6 +10290,7 @@ p.docx-review__refused {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
 .docx-review__draft-recovery {
   position: fixed;
   inset-inline-end: 16px;
@@ -10084,6 +10312,7 @@ p.docx-review__refused {
 .docx-review__comment-menu {
   position: relative;
 }
+
 .docx-review__comment-menu-trigger {
   display: inline-flex;
   align-items: center;
@@ -10097,14 +10326,17 @@ p.docx-review__refused {
   color: var(--doc-text-muted);
   cursor: pointer;
 }
+
 .docx-review__comment-menu-trigger:hover {
   background: var(--doc-bg-hover);
   color: var(--doc-text);
 }
+
 .docx-review__comment-menu-trigger:focus-visible {
   outline: 2px solid var(--doc-primary);
   outline-offset: 1px;
 }
+
 .docx-review__comment-menu-panel {
   position: absolute;
   inset-inline-end: 0;
@@ -10117,6 +10349,7 @@ p.docx-review__refused {
   background: var(--doc-surface);
   box-shadow: 0 4px 16px var(--doc-shadow);
 }
+
 .docx-review__comment-menu-item {
   display: block;
   width: 100%;
@@ -10131,16 +10364,19 @@ p.docx-review__refused {
   white-space: nowrap;
   cursor: pointer;
 }
+
 .docx-review__comment-menu-item:hover,
 .docx-review__comment-menu-item:focus-visible {
   background: var(--doc-bg-hover);
   outline: 2px solid var(--doc-primary);
   outline-offset: -2px;
 }
+
 .docx-review__comment-menu-item:disabled {
   opacity: 0.5;
   cursor: default;
 }
+
 .docx-review__comment-menu-item[data-destructive] {
   color: var(--doc-danger);
 }
@@ -10162,6 +10398,7 @@ p.docx-review__refused {
   font-family: var(--doc-font-ui, system-ui, sans-serif);
   color: var(--doc-text);
 }
+
 /* A grid in a host container carries the scope class itself. */
 .docx-editor.docx-color-picker__content {
   font-family: var(--doc-font-ui, system-ui, sans-serif);
@@ -10169,20 +10406,24 @@ p.docx-review__refused {
   line-height: 1.4;
   color: var(--doc-text);
 }
+
 /* It stacks No color, the titles, and the swatch rows, as the popover grid does. */
 .docx-editor.docx-color-picker__content--inline {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+
 .docx-editor .docx-color-picker__hex {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 .docx-editor .docx-color-picker__hex .docx-dialog__input {
   width: 100%;
 }
+
 /* A part placed outside the editor carries the scope class itself, so each rule on the part's own
    element also matches that element. */
 :is(.docx-editor .docx-object-control, .docx-editor.docx-object-control) {
@@ -10191,27 +10432,32 @@ p.docx-review__refused {
   line-height: 1.4;
   color: var(--doc-text);
 }
+
 :is(.docx-editor .docx-object-control--field, .docx-editor.docx-object-control--field) {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
+
 :is(.docx-editor .docx-object-control--compact, .docx-editor.docx-object-control--compact) {
   font-size: 13px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
+
 .docx-editor .docx-object-control--compact .docx-chart-pane__field {
   position: relative;
   gap: 0;
 }
+
 .docx-editor .docx-object-control--compact .docx-dialog__input {
   height: 28px;
   min-width: 0;
   max-width: 160px;
   font-size: 13px;
 }
+
 /* In a toolbar a list reads as the toolbar's own pickers (the style picker): no box, a muted
    chevron, the hover slab. The native list still opens, so the keyboard and screen readers keep
    the platform behavior. */
@@ -10230,9 +10476,8 @@ p.docx-review__refused {
   border-radius: 4px;
   transition: background-color 0.12s ease;
 }
-.docx-editor
-  .docx-object-control--compact
-  .docx-chart-pane__field:has(.docx-dialog__select)::after {
+
+.docx-editor .docx-object-control--compact .docx-chart-pane__field:has(.docx-dialog__select)::after {
   content: '▾';
   position: absolute;
   top: 50%;
@@ -10243,26 +10488,33 @@ p.docx-review__refused {
   transform: translateY(-50%);
   pointer-events: none;
 }
+
 .docx-editor .docx-object-control--compact .docx-dialog__select {
   text-overflow: ellipsis;
 }
+
 .docx-editor .docx-object-control--compact[data-slot='shape.outlineWidth'] .docx-dialog__select {
   width: 72px;
 }
+
 .docx-editor .docx-object-control--compact[data-slot='shape.outlineDash'] .docx-dialog__select {
   width: 120px;
 }
+
 .docx-editor .docx-object-control--compact .docx-dialog__select:where(:hover:not(:disabled)) {
   background: var(--doc-border);
 }
+
 .docx-editor .docx-object-control--compact .docx-dialog__select:where(:focus-visible) {
   outline: 2px solid var(--doc-focus-ring);
   outline-offset: -2px;
 }
+
 .docx-editor .docx-object-control--compact .docx-dialog__select:where(:disabled) {
   opacity: 0.5;
   cursor: default;
 }
+
 /* In a toolbar a colour reads as font colour does: the glyph over a 16×4 bar of the colour, and
    a muted chevron, on a borderless button. The bar covers the glyph's own bar. */
 .docx-editor .docx-object-control--compact .docx-color-picker__trigger {
@@ -10282,26 +10534,29 @@ p.docx-review__refused {
     background-color 0.12s ease,
     color 0.12s ease;
 }
+
 .docx-editor .docx-object-control--compact .docx-color-picker__trigger::after {
   content: '▾';
   font-size: 10px;
   line-height: 1;
   color: var(--doc-text-muted);
 }
+
 @media (hover: hover) and (pointer: fine) {
-  .docx-editor
-    .docx-object-control--compact
-    .docx-color-picker__trigger:where(:hover:not(:disabled)) {
+  .docx-editor .docx-object-control--compact .docx-color-picker__trigger:where(:hover:not(:disabled)) {
     color: var(--doc-text);
     background: var(--doc-border);
   }
 }
+
 .docx-editor .docx-object-control--compact .docx-color-picker__trigger:where(:disabled) {
   opacity: 0.5;
 }
+
 .docx-editor .docx-object-control--compact .docx-object-control__icon {
   display: inline-flex;
 }
+
 .docx-editor .docx-object-control--compact .docx-color-picker__chip {
   position: absolute;
   top: 20px;
@@ -10312,20 +10567,21 @@ p.docx-review__refused {
   border-radius: 1px;
   pointer-events: none;
 }
+
 /* White, and no colour, would vanish on the toolbar: both keep a hairline edge. */
-.docx-editor
-  .docx-object-control--compact
-  .docx-color-picker__trigger:where([data-color='#FFFFFF' i])
-  .docx-color-picker__chip,
+.docx-editor .docx-object-control--compact .docx-color-picker__trigger:where([data-color='#FFFFFF' i]) .docx-color-picker__chip,
 .docx-editor .docx-object-control--compact .docx-color-picker__chip:where([data-none='true']) {
   box-shadow: inset 0 0 0 1px var(--doc-border-dark);
 }
+
 .docx-editor .docx-object-control--compact .docx-color-picker__chip:where([data-none='true']) {
   background: var(--doc-surface);
 }
+
 .docx-editor .docx-object-control--compact .docx-color-picker__summary {
   display: none;
 }
+
 .docx-editor .docx-object-control__icon svg {
   width: 18px;
   height: 18px;
