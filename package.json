@@ -10,8 +10,8 @@
   "scripts": {
     "api:check": "node scripts/api-extractor.mjs",
     "api:extract": "node scripts/api-extractor.mjs --local",
-    "build": "bun run build:packages && bun run --filter './examples/angular' build",
-    "build:packages": "bun run --filter '@docx-editor.dev/core' build && bun run --filter '@docx-editor.dev/vue' build && bun run --filter '@docx-editor.dev/angular' build",
+    "build": "bun run build:packages && bun run --filter ./examples/angular build",
+    "build:packages": "bun run --filter '@docx-editor.dev/core' build && bun run --filter '@docx-editor.dev/angular' build",
     "check:angular-parity": "node scripts/check-angular-parity.mjs",
     "check:core-css-compiled": "node scripts/check-core-css-compiled.mjs",
     "check:font-width-fidelity": "bun scripts/fonts/check-width-fidelity.ts",
@@ -77,9 +77,7 @@
     "angular",
     "prosemirror"
   ],
-  "author": "Eigenpal, Inc.",
   "license": "Apache-2.0",
-  "homepage": "https://docx-editor.dev/",
   "repository": {
     "type": "git",
     "url": "https://github.com/eigenpal/docx-editor.git"
